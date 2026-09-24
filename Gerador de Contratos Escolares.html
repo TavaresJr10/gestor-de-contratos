@@ -1,0 +1,2758 @@
+<!DOCTYPE html>
+<html lang="pt-BR" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gerador de Contratos Escolares</title>
+  
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/basecoat-css@1.0.2/dist/basecoat.cdn.min.css">
+  <style>
+/* Skip artifact shell — fixed styles served beside every artifact.
+   Complements basecoat; artifacts override --accent for their own identity. */
+:root {
+  color-scheme: light dark;
+  --accent: #2563eb;
+  --accent-contrast: #ffffff;
+  --accent-text: color-mix(in srgb, var(--accent) 72%, #000);
+  --bg: #f8f9fb;
+  --surface: #ffffff;
+  --text: #14171f;
+  --text-muted: #5b6472;
+  --border: rgba(20, 23, 31, 0.10);
+  --radius: 10px;
+  --shadow: 0 1px 3px rgba(20, 23, 31, 0.08);
+  --space: 16px;
+}
+/* Theme resolution. Without data-theme the viewer's system preference decides,
+   as it always did. With it, the artifact's own choice wins in BOTH directions:
+   a page that hardcodes one palette must not be handed the opposite set of
+   tokens by the machine it happens to be opened on. The dark values appear
+   twice because a media query cannot be folded into a selector list.
+   The attribute sits inside :where() so these blocks keep the specificity of a
+   bare :root — the page's own <style> is linked after this file and must go on
+   overriding any token it wants, exactly as it could before. */
+@media (prefers-color-scheme: dark) {
+  :root:where(:not([data-theme="light"])) {
+    --accent-text: color-mix(in srgb, var(--accent) 78%, #fff);
+    --bg: #101318;
+    --surface: #181c23;
+    --text: #eef1f6;
+    --text-muted: #9aa4b2;
+    --border: rgba(238, 241, 246, 0.12);
+    --shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
+  }
+}
+:root:where([data-theme="dark"]) {
+  color-scheme: dark;
+  --accent-text: color-mix(in srgb, var(--accent) 78%, #fff);
+  --bg: #101318;
+  --surface: #181c23;
+  --text: #eef1f6;
+  --text-muted: #9aa4b2;
+  --border: rgba(238, 241, 246, 0.12);
+  --shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
+}
+:root:where([data-theme="light"]) { color-scheme: light; }
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+}
+img { max-width: 100%; display: block; }
+
+.shell-container { max-width: 1100px; margin: 0 auto; padding: 0 20px; }
+.shell-section { padding: calc(var(--space) * 2) 0; }
+.shell-grid { display: grid; gap: var(--space); grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); }
+.shell-toolbar { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; margin-bottom: var(--space); }
+.shell-footer { padding: 24px 0 40px; color: var(--text-muted); font-size: 13px; }
+
+.shell-hero { padding: calc(var(--space) * 3) 0 calc(var(--space) * 2); }
+.shell-hero h1 { font-size: clamp(26px, 4vw, 40px); line-height: 1.15; margin: 0 0 10px; text-wrap: balance; }
+.shell-hero p { color: var(--text-muted); max-width: 60ch; margin: 0; }
+
+.panel {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: var(--space);
+}
+
+.kpi { display: flex; flex-direction: column; gap: 4px; }
+.kpi .kpi-value { font-size: 28px; font-weight: 650; line-height: 1.1; }
+.kpi .kpi-label { font-size: 13px; color: var(--text-muted); }
+.kpi .kpi-delta { font-size: 12.5px; font-weight: 600; }
+.kpi .kpi-delta.up { color: #0a8f3c; }
+.kpi .kpi-delta.down { color: #cf3131; }
+
+table.shell-table { border-collapse: collapse; width: 100%; font-size: 14px; }
+table.shell-table th {
+  text-align: left; font-size: 11.5px; letter-spacing: 0.05em; text-transform: uppercase;
+  color: var(--text-muted); font-weight: 600;
+}
+table.shell-table th, table.shell-table td { padding: 9px 12px 9px 0; border-bottom: 1px solid var(--border); }
+table.shell-table td.num, table.shell-table th.num { text-align: right; font-variant-numeric: tabular-nums; }
+table.shell-table tbody tr:hover { background: color-mix(in srgb, var(--accent) 6%, transparent); }
+
+.chart-box { width: 100%; min-height: 220px; }
+.chart-box svg { width: 100%; height: auto; display: block; }
+
+.muted { color: var(--text-muted); }
+.accent { color: var(--accent-text); }
+.shell-badge {
+  display: inline-flex; align-items: center; gap: 6px;
+  font-size: 12px; font-weight: 600; padding: 3px 10px; border-radius: 999px;
+  background: color-mix(in srgb, var(--accent) 12%, transparent); color: var(--accent-text);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .shell-fade { animation: shell-fade 400ms ease both; }
+  @keyframes shell-fade { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+}
+
+</style>
+  
+
+  <style>
+    :root {
+      --accent: #0f766e;
+      --accent-soft: #f0fdfa;
+      --accent-hover: #115e59;
+      --border-subtle: #e2e8f0;
+      font-family: 'Plus Jakarta Sans', var(--font-sans, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif);
+    }
+
+    body {
+      background-color: #f8fafc;
+      color: #1e293b;
+      margin: 0;
+      padding: 0;
+    }
+
+    /* Top Navigation Tabs */
+    .nav-tabs-bar {
+      display: flex;
+      gap: 0.5rem;
+      border-bottom: 1px solid var(--border-subtle);
+      margin-bottom: 1.75rem;
+      background: #ffffff;
+      padding: 0.5rem 1rem;
+      border-radius: 12px;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+    }
+
+    .tab-btn {
+      padding: 0.65rem 1.25rem;
+      font-weight: 600;
+      font-size: 0.95rem;
+      border: none;
+      background: transparent;
+      color: #64748b;
+      border-radius: 8px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      transition: all 0.2s ease;
+    }
+
+    .tab-btn:hover {
+      background-color: #f1f5f9;
+      color: #0f172a;
+    }
+
+    .tab-btn.active {
+      background-color: var(--accent);
+      color: var(--accent-contrast);
+      box-shadow: 0 2px 4px rgba(15, 118, 110, 0.25);
+    }
+
+    .badge-count {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      background: #e2e8f0;
+      color: #334155;
+      border-radius: 9999px;
+      padding: 0.15rem 0.5rem;
+      font-size: 0.75rem;
+      font-weight: 700;
+    }
+
+    .tab-btn.active .badge-count {
+      background: rgba(255, 255, 255, 0.25);
+      color: #ffffff;
+    }
+
+    /* Section Cards */
+    .form-card {
+      background: #ffffff;
+      border: 1px solid var(--border-subtle);
+      border-radius: 12px;
+      padding: 1.5rem;
+      margin-bottom: 1.5rem;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.03);
+    }
+
+    .form-card-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 1.25rem;
+      padding-bottom: 0.75rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+
+    .form-card-title {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: #0f172a;
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      margin: 0;
+    }
+
+    .step-circle {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: var(--accent);
+      color: #ffffff;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.85rem;
+      font-weight: 700;
+    }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: repeat(12, 1fr);
+      gap: 1rem;
+    }
+
+    .col-12 { grid-column: span 12; }
+    .col-8 { grid-column: span 8; }
+    .col-6 { grid-column: span 6; }
+    .col-4 { grid-column: span 4; }
+    .col-3 { grid-column: span 3; }
+
+    @media (max-width: 768px) {
+      .col-8, .col-6, .col-4, .col-3 {
+        grid-column: span 12;
+      }
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 0.35rem;
+    }
+
+    .form-group label {
+      font-size: 0.825rem;
+      font-weight: 600;
+      color: #334155;
+    }
+
+    .form-control {
+      width: 100%;
+      padding: 0.6rem 0.8rem;
+      font-size: 0.9rem;
+      color: #1e293b;
+      background: #ffffff;
+      border: 1px solid #cbd5e1;
+      border-radius: 8px;
+      box-sizing: border-box;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+
+    .form-control:focus {
+      outline: none;
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(15, 118, 110, 0.15);
+    }
+
+    .form-control[readonly] {
+      background-color: #f1f5f9;
+      color: #475569;
+      cursor: not-allowed;
+      border-color: #cbd5e1;
+      user-select: none;
+    }
+
+    .badge-fixed {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.25rem;
+      background: #e2e8f0;
+      color: #334155;
+      font-size: 0.72rem;
+      font-weight: 700;
+      padding: 0.15rem 0.45rem;
+      border-radius: 4px;
+      margin-left: 0.35rem;
+    }
+
+    .school-info-banner {
+      background: #f0fdf4;
+      border: 1px solid #bbf7d0;
+      color: #166534;
+      padding: 0.65rem 0.9rem;
+      border-radius: 8px;
+      font-size: 0.85rem;
+      font-weight: 500;
+      margin-bottom: 1.15rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .checkbox-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 0.85rem;
+      margin-top: 0.5rem;
+    }
+
+    .clause-checkbox-card {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.75rem;
+      padding: 0.85rem;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      background: #fafaf9;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .clause-checkbox-card:hover {
+      background: #f0fdfa;
+      border-color: #99f6e4;
+    }
+
+    .clause-checkbox-card input[type="checkbox"] {
+      margin-top: 0.25rem;
+      accent-color: var(--accent);
+      width: 1.1rem;
+      height: 1.1rem;
+    }
+
+    .action-bar {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: flex-end;
+      background: #ffffff;
+      padding: 1.25rem;
+      border-radius: 12px;
+      border: 1px solid var(--border-subtle);
+      margin-top: 1rem;
+    }
+
+    .btn-school-primary {
+      background-color: var(--accent);
+      color: var(--accent-contrast);
+      font-weight: 700;
+      border: none;
+      padding: 0.8rem 1.6rem;
+      border-radius: 8px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      transition: background-color 0.2s;
+      font-size: 0.95rem;
+    }
+
+    .btn-school-primary:hover {
+      background-color: var(--accent-hover);
+    }
+
+    .btn-school-outline {
+      background-color: transparent;
+      color: #475569;
+      border: 1px solid #cbd5e1;
+      font-weight: 600;
+      padding: 0.75rem 1.25rem;
+      border-radius: 8px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      transition: all 0.2s;
+    }
+
+    .btn-school-outline:hover {
+      background-color: #f1f5f9;
+      color: #0f172a;
+    }
+
+    /* Contract Preview Paper Styling */
+    .contract-paper {
+      background: #ffffff;
+      border: 1px solid #cbd5e1;
+      border-radius: 8px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+      padding: 3rem 3.5rem;
+      margin: 1.5rem auto;
+      max-width: 840px;
+      line-height: 1.65;
+      color: #0f172a;
+      font-size: 0.95rem;
+    }
+
+    @media (max-width: 640px) {
+      .contract-paper {
+        padding: 1.5rem 1rem;
+      }
+    }
+
+    .contract-header {
+      text-align: center;
+      border-bottom: 2px solid #0f766e;
+      padding-bottom: 1.5rem;
+      margin-bottom: 2rem;
+    }
+
+    .contract-logo-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: var(--accent-soft);
+      color: var(--accent-text);
+      font-weight: 700;
+      padding: 0.35rem 0.85rem;
+      border-radius: 9999px;
+      font-size: 0.85rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .contract-title {
+      font-size: 1.35rem;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      color: #0f172a;
+      margin: 0.5rem 0 0.25rem;
+      text-transform: uppercase;
+    }
+
+    .contract-meta {
+      font-size: 0.85rem;
+      color: #64748b;
+    }
+
+    .contract-number-tag {
+      font-weight: 700;
+      color: #0f766e;
+    }
+
+    .contract-clause {
+      margin-bottom: 1.5rem;
+      text-align: justify;
+    }
+
+    .contract-clause h3 {
+      font-size: 1rem;
+      font-weight: 700;
+      color: #0f172a;
+      margin-bottom: 0.4rem;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      border-left: 3px solid var(--accent);
+      padding-left: 0.5rem;
+    }
+
+    .signatures-block {
+      margin-top: 3.5rem;
+      padding-top: 1.5rem;
+      border-top: 1px dashed #cbd5e1;
+    }
+
+    /* Anexo I - Ficha Médica */
+    .annex-section {
+      page-break-before: always;
+      break-before: page;
+      margin-top: 3.5rem;
+      padding-top: 2rem;
+      border-top: 2px dashed #0f766e;
+    }
+
+    .annex-header {
+      text-align: center;
+      border-bottom: 2px solid #0f766e;
+      padding-bottom: 1.25rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .annex-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      background: var(--accent-soft);
+      color: var(--accent-text);
+      font-weight: 700;
+      font-size: 0.85rem;
+      padding: 0.25rem 0.8rem;
+      border-radius: 9999px;
+      margin-bottom: 0.5rem;
+      border: 1px solid #99f6e4;
+    }
+
+    .annex-title {
+      font-size: 1.25rem;
+      font-weight: 800;
+      letter-spacing: -0.01em;
+      color: #0f172a;
+      margin: 0.25rem 0;
+      text-transform: uppercase;
+    }
+
+    .medical-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 0.85rem;
+      margin-bottom: 1rem;
+    }
+
+    @media (max-width: 640px) {
+      .medical-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .med-item {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      padding: 0.65rem 0.85rem;
+    }
+
+    .med-item-full {
+      grid-column: span 2;
+    }
+
+    @media (max-width: 640px) {
+      .med-item-full {
+        grid-column: span 1;
+      }
+    }
+
+    .med-label {
+      font-size: 0.725rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      color: #475569;
+      margin-bottom: 0.25rem;
+      display: flex;
+      align-items: center;
+      gap: 0.35rem;
+    }
+
+    .med-val {
+      font-size: 0.9rem;
+      color: #0f172a;
+      word-break: break-word;
+    }
+
+    .med-consent-card {
+      background: #f0fdfa;
+      border: 1px solid #99f6e4;
+      border-radius: 8px;
+      padding: 0.75rem 1rem;
+      margin-top: 1rem;
+      font-size: 0.875rem;
+    }
+
+    .signature-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 2.5rem;
+      margin-top: 2.5rem;
+    }
+
+    .signature-box {
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .signature-line {
+      width: 100%;
+      max-width: 280px;
+      border-top: 1px solid #334155;
+      margin-top: 3rem;
+      padding-top: 0.5rem;
+      font-size: 0.875rem;
+      font-weight: 600;
+      color: #1e293b;
+    }
+
+    .signature-sub {
+      font-size: 0.775rem;
+      color: #64748b;
+    }
+
+    .digital-signature-preview {
+      max-height: 55px;
+      margin-bottom: -15px;
+    }
+
+    /* Signature Canvas Area */
+    .signature-pad-container {
+      background: #f8fafc;
+      border: 1px dashed #94a3b8;
+      border-radius: 8px;
+      padding: 1rem;
+      margin-top: 1rem;
+    }
+
+    .canvas-wrap {
+      background: #ffffff;
+      border: 1px solid #cbd5e1;
+      border-radius: 6px;
+      display: inline-block;
+      touch-action: none;
+    }
+
+    #signatureCanvas {
+      display: block;
+      cursor: crosshair;
+    }
+
+    /* Table & List styling */
+    .contracts-table-card {
+      background: #ffffff;
+      border: 1px solid var(--border-subtle);
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.03);
+    }
+
+    .empty-state {
+      padding: 3.5rem 1.5rem;
+      text-align: center;
+      color: #64748b;
+    }
+
+    .notification-toast {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      background: #0f172a;
+      color: #ffffff;
+      padding: 0.85rem 1.4rem;
+      border-radius: 8px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+      font-size: 0.9rem;
+      display: none;
+      align-items: center;
+      gap: 0.6rem;
+      z-index: 9999;
+    }
+
+    /* Print styling strictly formatted for paper */
+    @media print {
+      body {
+        background: #ffffff !important;
+        color: #000000 !important;
+      }
+      .no-print,
+      .nav-tabs-bar,
+      .shell-hero,
+      .action-bar,
+      #tab-formulario,
+      #tab-salvos,
+      .signature-pad-container,
+      .preview-actions-bar {
+        display: none !important;
+      }
+      #tab-preview,
+      #previewSection {
+        display: block !important;
+      }
+      .contract-paper {
+        border: none !important;
+        box-shadow: none !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        max-width: 100% !important;
+        font-size: 11pt !important;
+      }
+      .contract-header {
+        border-bottom: 2px solid #000000 !important;
+      }
+      .contract-clause h3 {
+        border-left: 3px solid #000000 !important;
+        color: #000000 !important;
+      }
+      .signature-line {
+        border-top: 1px solid #000000 !important;
+      }
+      .annex-section {
+        page-break-before: always !important;
+        break-before: page !important;
+        border-top: none !important;
+        margin-top: 0 !important;
+        padding-top: 1.2cm !important;
+      }
+      .annex-header {
+        border-bottom: 2px solid #000000 !important;
+      }
+      .med-item {
+        background: #ffffff !important;
+        border: 1px solid #94a3b8 !important;
+      }
+      .med-consent-card {
+        background: #ffffff !important;
+        border: 1px solid #94a3b8 !important;
+      }
+      @page {
+        margin: 1.5cm;
+        size: A4;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="shell-container" style="padding-top: 1.5rem; padding-bottom: 3rem;">
+    
+    <!-- Hero / Header -->
+    <header class="shell-hero no-print" style="margin-bottom: 1.5rem;">
+      <div style="display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:1rem;">
+        <div>
+          <div style="display:inline-flex; align-items:center; gap:0.5rem; color:var(--accent-text); font-weight:700; font-size:0.875rem; margin-bottom:0.25rem;">
+            <span>🌿</span> SISTEMA DE MATRÍCULAS E CONTRATOS
+          </div>
+          <h1 style="margin: 0.2rem 0; font-size: 1.85rem; font-weight: 800; color: #0f172a;">Gerador de Contratos Escolares</h1>
+          <p class="muted" style="margin: 0; font-size: 0.95rem;">
+            Crie, personalize, assine digitalmente e imprima contratos jurídicos escolares completos com facilidade.
+          </p>
+        </div>
+        <div style="display:flex; gap:0.5rem;">
+          <button class="btn-school-outline" id="btnQuickSample" title="Preencher com exemplo rápido">
+            ⚡ Carregar Exemplo
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <!-- Navigation Tabs -->
+    <nav class="nav-tabs-bar no-print" aria-label="Navegação de abas">
+      <button class="tab-btn active" id="tabBtnForm" onclick="switchTab('formulario')">
+        ✏️ Preencher Contrato
+      </button>
+      <button class="tab-btn" id="tabBtnPreview" onclick="switchTab('preview')">
+        📄 Visualizar Contrato
+      </button>
+      <button class="tab-btn" id="tabBtnSaved" onclick="switchTab('salvos')">
+        💾 Contratos Salvos <span class="badge-count" id="savedCountBadge">0</span>
+      </button>
+    </nav>
+
+    <!-- ========================================== -->
+    <!-- MODO 1: FORMULÁRIO DE PREENCHIMENTO       -->
+    <!-- ========================================== -->
+    <section id="tab-formulario" class="no-print">
+      <form id="contractForm" onsubmit="event.preventDefault(); generateContract();">
+        
+        <!-- A) DADOS DA ESCOLA (BLOQUEADOS / VALORES FIXOS) -->
+        <div class="form-card">
+          <div class="form-card-header">
+            <h2 class="form-card-title">
+              <span class="step-circle">1</span> Dados da Escola / Instituição
+            </h2>
+            <span class="badge-fixed" style="font-size:0.75rem;">🔒 Fixo Institucional</span>
+          </div>
+
+          <!-- Rótulo informativo no topo da seção de dados da escola -->
+          <div class="school-info-banner">
+            <span>ℹ️</span>
+            <span>Dados institucionais fixos — entre em contato com a administração para alterações.</span>
+          </div>
+
+          <div class="form-grid">
+            <div class="col-6 form-group">
+              <label for="schoolName">Nome Fantasia / Razão Social <span class="badge-fixed">🔒 Fixo</span></label>
+              <input type="text" id="schoolName" class="form-control" value="Colégio Infantil Boreal Lumini (Colégio Boreal Lumini Ltda - ME)" readonly required>
+            </div>
+            <div class="col-6 form-group">
+              <label for="schoolCnpj">CNPJ <span class="badge-fixed">🔒 Fixo</span></label>
+              <input type="text" id="schoolCnpj" class="form-control" value="51.054.291/0001-31" readonly required>
+            </div>
+            <div class="col-8 form-group">
+              <label for="schoolAddress">Endereço Completo <span class="badge-fixed">🔒 Fixo</span></label>
+              <input type="text" id="schoolAddress" class="form-control" value="Rua São Maurício, 266, Vila Galvão, Guarulhos - SP, CEP 07073-000" readonly required>
+            </div>
+            <div class="col-4 form-group">
+              <label for="schoolPhone">Telefone / WhatsApp <span class="badge-fixed">🔒 Fixo</span></label>
+              <input type="text" id="schoolPhone" class="form-control" value="(11) 2455-8884" readonly required>
+            </div>
+            <div class="col-12 form-group">
+              <label for="schoolPrincipal">Diretor(a) / Representante Legal <span class="badge-fixed">🔒 Fixo</span></label>
+              <input type="text" id="schoolPrincipal" class="form-control" value="Tatiane Cristina Tavares Damaso" readonly required>
+            </div>
+          </div>
+        </div>
+
+        <!-- B) DADOS DO ALUNO -->
+        <div class="form-card">
+          <div class="form-card-header">
+            <h2 class="form-card-title">
+              <span class="step-circle">2</span> Dados do Aluno(a)
+            </h2>
+            <span class="muted" style="font-size:0.8rem;">Identificação educacional</span>
+          </div>
+          <div class="form-grid">
+            <div class="col-6 form-group">
+              <label for="studentName">Nome Completo do Aluno *</label>
+              <input type="text" id="studentName" class="form-control" placeholder="Ex: Arthur Benício de Albuquerque" required>
+            </div>
+            <div class="col-3 form-group">
+              <label for="studentDob">Data de Nascimento *</label>
+              <input type="date" id="studentDob" class="form-control" value="2021-04-18" required onchange="calculateStudentAge()">
+            </div>
+            <div class="col-3 form-group">
+              <label for="studentAge">Idade</label>
+              <input type="text" id="studentAge" class="form-control" placeholder="Ex: 4 anos e 10 meses" readonly>
+            </div>
+            <div class="col-4 form-group">
+              <label for="studentClass">Turma / Etapa *</label>
+              <select id="studentClass" class="form-control" required>
+                <option value="Berçário I (0 a 1 ano)">Berçário I (0 a 1 ano)</option>
+                <option value="Berçário II (1 a 2 anos)">Berçário II (1 a 2 anos)</option>
+                <option value="Maternal I (2 a 3 anos)">Maternal I (2 a 3 anos)</option>
+                <option value="Maternal II (3 a 4 anos)" selected>Maternal II (3 a 4 anos)</option>
+                <option value="Jardim I (4 a 5 anos)">Jardim I (4 a 5 anos)</option>
+                <option value="Jardim II / Pré-Escola (5 a 6 anos)">Jardim II / Pré-Escola (5 a 6 anos)</option>
+              </select>
+            </div>
+            <div class="col-4 form-group">
+              <label for="studentPeriod">Período de Atendimento *</label>
+              <select id="studentPeriod" class="form-control" required>
+                <option value="Integral (07:30 às 18:30)">Integral (07:30 às 18:30)</option>
+                <option value="Semi-Integral (07:30 às 14:00)">Semi-Integral (07:30 às 14:00)</option>
+                <option value="Parcial Manhã (07:30 às 12:00)">Parcial Manhã (07:30 às 12:00)</option>
+                <option value="Parcial Tarde (13:15 às 17:45)">Parcial Tarde (13:15 às 17:45)</option>
+              </select>
+            </div>
+            <div class="col-4 form-group">
+              <label for="studentTurno">Turno Letivo *</label>
+              <select id="studentTurno" class="form-control" required>
+                <option value="Integral">Integral</option>
+                <option value="Matutino">Matutino</option>
+                <option value="Vespertino">Vespertino</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <!-- C) DADOS DOS PAIS / RESPONSÁVEIS -->
+        <div class="form-card">
+          <div class="form-card-header">
+            <h2 class="form-card-title">
+              <span class="step-circle">3</span> Responsáveis Financeiros e Legais
+            </h2>
+            <button type="button" class="btn-school-outline" id="toggleResp2Btn" onclick="toggleSecondGuardian()" style="font-size:0.8rem; padding:0.4rem 0.8rem;">
+              ➕ Adicionar Segundo Responsável
+            </button>
+          </div>
+
+          <!-- Responsável 1 -->
+          <div style="background:#f8fafc; padding:1rem; border-radius:8px; margin-bottom:1rem; border:1px solid #e2e8f0;">
+            <div style="font-weight:700; color:var(--accent-text); margin-bottom:0.75rem; font-size:0.9rem;">
+              👤 Responsável Principal (1)
+            </div>
+            <div class="form-grid">
+              <div class="col-6 form-group">
+                <label for="resp1Name">Nome Completo *</label>
+                <input type="text" id="resp1Name" class="form-control" placeholder="Nome do pai/mãe/tutor" required>
+              </div>
+              <div class="col-3 form-group">
+                <label for="resp1Cpf">CPF *</label>
+                <input type="text" id="resp1Cpf" class="form-control" placeholder="000.000.000-00" required>
+              </div>
+              <div class="col-3 form-group">
+                <label for="resp1Rg">RG *</label>
+                <input type="text" id="resp1Rg" class="form-control" placeholder="00.000.000-0" required>
+              </div>
+              <div class="col-4 form-group">
+                <label for="resp1Profession">Profissão *</label>
+                <input type="text" id="resp1Profession" class="form-control" placeholder="Ex: Arquiteta" required>
+              </div>
+              <div class="col-4 form-group">
+                <label for="resp1Phone">Telefone / Celular *</label>
+                <input type="text" id="resp1Phone" class="form-control" placeholder="(11) 98765-4321" required>
+              </div>
+              <div class="col-4 form-group">
+                <label for="resp1Email">E-mail *</label>
+                <input type="email" id="resp1Email" class="form-control" placeholder="responsavel@email.com" required>
+              </div>
+              <div class="col-12 form-group">
+                <label for="resp1Address">Endereço Residencial *</label>
+                <input type="text" id="resp1Address" class="form-control" placeholder="Rua, número, complemento, bairro, cidade, CEP" required>
+              </div>
+            </div>
+          </div>
+
+          <!-- Responsável 2 (Opcional) -->
+          <div id="resp2Block" style="display:none; background:#f8fafc; padding:1rem; border-radius:8px; border:1px solid #e2e8f0;">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.75rem;">
+              <div style="font-weight:700; color:var(--accent-text); font-size:0.9rem;">
+                👥 Responsável Solidário (2)
+              </div>
+              <button type="button" class="btn-school-outline" onclick="toggleSecondGuardian(false)" style="font-size:0.75rem; padding:0.25rem 0.5rem; color:#dc2626;">
+                ✕ Remover
+              </button>
+            </div>
+            <div class="form-grid">
+              <div class="col-6 form-group">
+                <label for="resp2Name">Nome Completo</label>
+                <input type="text" id="resp2Name" class="form-control" placeholder="Nome do segundo responsável">
+              </div>
+              <div class="col-3 form-group">
+                <label for="resp2Cpf">CPF</label>
+                <input type="text" id="resp2Cpf" class="form-control" placeholder="000.000.000-00">
+              </div>
+              <div class="col-3 form-group">
+                <label for="resp2Rg">RG</label>
+                <input type="text" id="resp2Rg" class="form-control" placeholder="00.000.000-0">
+              </div>
+              <div class="col-4 form-group">
+                <label for="resp2Profession">Profissão</label>
+                <input type="text" id="resp2Profession" class="form-control" placeholder="Ex: Engenheiro">
+              </div>
+              <div class="col-4 form-group">
+                <label for="resp2Phone">Telefone</label>
+                <input type="text" id="resp2Phone" class="form-control" placeholder="(11) 97123-4567">
+              </div>
+              <div class="col-4 form-group">
+                <label for="resp2Email">E-mail</label>
+                <input type="email" id="resp2Email" class="form-control" placeholder="outro.resp@email.com">
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- D) ANEXO I — FICHA MÉDICA DO ALUNO -->
+        <div class="form-card" id="cardFichaMedica">
+          <div class="form-card-header">
+            <h2 class="form-card-title">
+              <span class="step-circle">4</span> 🏥 Anexo I — Ficha Médica do Aluno
+            </h2>
+            <span class="shell-badge" style="background:#ecfdf5; color:#065f46;">Documento Anexo</span>
+          </div>
+          
+          <div class="school-info-banner" style="background:#f0fdfa; border-color:#99f6e4; color:#0f766e;">
+            <span>ℹ️</span>
+            <span>Estes dados integrarão formalmente o Anexo I do contrato para pronto-atendimento e segurança da criança.</span>
+          </div>
+
+          <div class="form-grid">
+            <div class="col-6 form-group">
+              <label for="medAllergies">Alergias (alimentos, medicamentos, outros) *</label>
+              <input type="text" id="medAllergies" class="form-control" placeholder="Ex: Nenhuma alergia conhecida OU Amendoim, Dipirona" value="Intolerância leve à lactose">
+            </div>
+
+            <div class="col-6 form-group">
+              <label for="medMedications">Medicamentos em uso contínuo ou frequente *</label>
+              <input type="text" id="medMedications" class="form-control" placeholder="Ex: Nenhum uso contínuo OU Bombinha Salbutamol se crise" value="Nenhum medicamento contínuo">
+            </div>
+
+            <div class="col-6 form-group">
+              <label for="medConditions">Condições crônicas ou de saúde (asma, diabetes, epilepsia, etc.) *</label>
+              <input type="text" id="medConditions" class="form-control" placeholder="Ex: Nenhuma condição pré-existente OU Asma leve controlada" value="Nenhuma condição crônica">
+            </div>
+
+            <div class="col-6 form-group">
+              <label for="medSurgeries">Cirurgias ou internações relevantes *</label>
+              <input type="text" id="medSurgeries" class="form-control" placeholder="Ex: Nenhuma cirurgia realizada OU Cirurgia de adenoide em 2024" value="Nenhuma intervenção cirúrgica">
+            </div>
+
+            <div class="col-3 form-group">
+              <label for="medBloodType">Tipo Sanguíneo e Fator Rh</label>
+              <input type="text" id="medBloodType" class="form-control" placeholder="Ex: O+, A+, B-, etc." value="O+">
+            </div>
+
+            <div class="col-4 form-group">
+              <label for="medHealthPlan">Plano de Saúde ou Cartão SUS (operadora e número) *</label>
+              <input type="text" id="medHealthPlan" class="form-control" placeholder="Ex: Bradesco Saúde Top Nac. - nº 849204820" value="Porto Seguro Saúde - Plano Ouro nº 542.981.002">
+            </div>
+
+            <div class="col-5 form-group">
+              <label for="medDoctor">Nome do Pediatra/Médico Responsável e Telefone</label>
+              <input type="text" id="medDoctor" class="form-control" placeholder="Ex: Dra. Juliana Campos - (11) 98888-1122" value="Dra. Juliana Prado - Tel: (11) 98877-3322">
+            </div>
+
+            <div class="col-12 form-group">
+              <label for="medHospital">Hospital / Pronto-Socorro de Preferência em Emergências *</label>
+              <input type="text" id="medHospital" class="form-control" placeholder="Ex: Hospital Infantil Sabará / Hospital São Camilo" value="Hospital e Maternidade São Luiz (Unidade Anália Franco) ou Sabará Infantil">
+            </div>
+
+            <!-- Contatos de Emergência -->
+            <div class="col-6 form-group">
+              <label for="medEmerg1Name">Contato de Emergência 1 — Nome *</label>
+              <input type="text" id="medEmerg1Name" class="form-control" placeholder="Ex: Maria de Fátima (Avó Materna)" value="Maria de Fátima Mendes (Avó)">
+            </div>
+            <div class="col-6 form-group">
+              <label for="medEmerg1Phone">Contato de Emergência 1 — Telefone *</label>
+              <input type="text" id="medEmerg1Phone" class="form-control" placeholder="Ex: (11) 97766-5544" value="(11) 97766-5544">
+            </div>
+
+            <div class="col-6 form-group">
+              <label for="medEmerg2Name">Contato de Emergência 2 — Nome</label>
+              <input type="text" id="medEmerg2Name" class="form-control" placeholder="Ex: Carlos Eduardo (Tio Paterno)" value="Carlos Eduardo Silva (Tio)">
+            </div>
+            <div class="col-6 form-group">
+              <label for="medEmerg2Phone">Contato de Emergência 2 — Telefone</label>
+              <input type="text" id="medEmerg2Phone" class="form-control" placeholder="Ex: (11) 96655-4433" value="(11) 96655-4433">
+            </div>
+
+            <!-- Checkboxes de autorização médica -->
+            <div class="col-12">
+              <div class="checkbox-grid" style="margin-top:0.25rem;">
+                <label class="clause-checkbox-card" style="background:#ffffff;">
+                  <input type="checkbox" id="medAuthEmergency" checked required>
+                  <div>
+                    <strong>Autorização para Atendimento Médico de Emergência *</strong>
+                    <div class="muted" style="font-size:0.8rem; margin-top:0.2rem;">
+                      Autorizo o atendimento médico de emergência do meu filho(a) em caso de urgência, quando não for possível contato imediato.
+                    </div>
+                  </div>
+                </label>
+
+                <label class="clause-checkbox-card" style="background:#ffffff;">
+                  <input type="checkbox" id="medVaccinesOk" checked>
+                  <div>
+                    <strong>Carteira de Vacinação em Dia *</strong>
+                    <div class="muted" style="font-size:0.8rem; margin-top:0.2rem;">
+                      Vacinas em dia (declaro ter apresentado cópia da carteira de vacinação atualizada à secretaria).
+                    </div>
+                  </div>
+                </label>
+              </div>
+            </div>
+
+            <div class="col-12 form-group">
+              <label for="medNotes">Observações Médicas Adicionais</label>
+              <textarea id="medNotes" class="form-control" rows="2" placeholder="Ex: A criança não deve ingerir achocolatados normais. Em caso de febre acima de 38°C contatar mãe antes de medicar."></textarea>
+            </div>
+          </div>
+        </div>
+
+        <!-- E) DADOS DO CONTRATO E VALORES -->
+        <div class="form-card">
+          <div class="form-card-header">
+            <h2 class="form-card-title">
+              <span class="step-circle">5</span> Dados Financeiros do Contrato
+            </h2>
+            <span class="muted" style="font-size:0.8rem;">Valores e vigência</span>
+          </div>
+          <div class="form-grid">
+            <div class="col-3 form-group">
+              <label for="contractType">Tipo de Objeto *</label>
+              <select id="contractType" class="form-control">
+                <option value="Matrícula e Mensalidade">Matrícula e Mensalidade</option>
+                <option value="Apenas Matrícula">Apenas Matrícula</option>
+                <option value="Apenas Mensalidades">Apenas Mensalidades</option>
+              </select>
+            </div>
+            <div class="col-3 form-group">
+              <label for="enrollmentFee">Taxa de Matrícula (R$) *</label>
+              <input type="number" step="0.01" id="enrollmentFee" class="form-control" value="850.00" required>
+            </div>
+            <div class="col-3 form-group">
+              <label for="monthlyFee">Valor da Mensalidade (R$) *</label>
+              <input type="number" step="0.01" id="monthlyFee" class="form-control" value="1650.00" required>
+            </div>
+            <div class="col-3 form-group">
+              <label for="dueDay">Dia de Vencimento *</label>
+              <select id="dueDay" class="form-control">
+                <option value="5">Todo dia 05</option>
+                <option value="10" selected>Todo dia 10</option>
+                <option value="15">Todo dia 15</option>
+                <option value="20">Todo dia 20</option>
+              </select>
+            </div>
+
+            <div class="col-4 form-group">
+              <label for="paymentMethod">Forma de Pagamento Principal *</label>
+              <select id="paymentMethod" class="form-control">
+                <option value="Boleto Bancário Registrado">Boleto Bancário Registrado</option>
+                <option value="PIX Automático / Chave">PIX Automático / Chave</option>
+                <option value="Cartão de Crédito Recorrente">Cartão de Crédito Recorrente</option>
+              </select>
+            </div>
+            <div class="col-4 form-group">
+              <label for="startDate">Data de Início da Prestação *</label>
+              <input type="date" id="startDate" class="form-control" value="2026-02-02" required>
+            </div>
+            <div class="col-4 form-group">
+              <label for="durationMonths">Vigência Contratual *</label>
+              <select id="durationMonths" class="form-control">
+                <option value="12 meses (Ano Letivo Completo)">12 meses (Ano Letivo Completo)</option>
+                <option value="6 meses (Semestral)">6 meses (Semestral)</option>
+                <option value="Indeterminado">Tempo Indeterminado</option>
+              </select>
+            </div>
+
+            <div class="col-12 form-group">
+              <label for="contractNotes">Observações Especiais / Alergias / Recomendações</label>
+              <textarea id="contractNotes" class="form-control" rows="2" placeholder="Ex: Aluno intolerante a lactose. Autorizado embarque e desembarque pelo avô materno."></textarea>
+            </div>
+          </div>
+        </div>
+
+        <!-- F) CLÁUSULAS ADICIONAIS OPCIONAIS -->
+        <div class="form-card">
+          <div class="form-card-header">
+            <h2 class="form-card-title">
+              <span class="step-circle">6</span> Cláusulas Opcionais e Consentimentos
+            </h2>
+            <span class="muted" style="font-size:0.8rem;">Selecione conforme acordo</span>
+          </div>
+          <div class="checkbox-grid">
+            <label class="clause-checkbox-card">
+              <input type="checkbox" id="optImageRights" checked>
+              <div>
+                <strong>Autorização de Uso de Imagem</strong>
+                <div class="muted" style="font-size:0.8rem; margin-top:0.2rem;">
+                  Autoriza fotos e vídeos em eventos escolares, mural interno e redes sociais institucionais para fins pedagógicos.
+                </div>
+              </div>
+            </label>
+
+            <label class="clause-checkbox-card">
+              <input type="checkbox" id="optExtraActivities" checked>
+              <div>
+                <strong>Atividades Extracurriculares</strong>
+                <div class="muted" style="font-size:0.8rem; margin-top:0.2rem;">
+                  Inclusão de oficinas de psicomotricidade, musicalização infantil, inglês lúdico e horta educativa.
+                </div>
+              </div>
+            </label>
+
+            <label class="clause-checkbox-card">
+              <input type="checkbox" id="optTransport">
+              <div>
+                <strong>Transporte Escolar Conveniado</strong>
+                <div class="muted" style="font-size:0.8rem; margin-top:0.2rem;">
+                  Cláusula regulatória sobre embarque/desembarque e credenciamento de vans autorizadas pela escola.
+                </div>
+              </div>
+            </label>
+
+            <label class="clause-checkbox-card">
+              <input type="checkbox" id="optEmergencyMedical" checked>
+              <div>
+                <strong>Plano de Saúde e Emergências</strong>
+                <div class="muted" style="font-size:0.8rem; margin-top:0.2rem;">
+                  Autorização para primeiros socorros imediatos e encaminhamento ao pronto-atendimento em situações de urgência.
+                </div>
+              </div>
+            </label>
+          </div>
+        </div>
+
+        <!-- Botões de Ação do Formulário -->
+        <div class="action-bar">
+          <button type="button" class="btn-school-outline" onclick="resetFormToDefaults()">
+            🧹 Limpar Formulário
+          </button>
+          <button type="submit" class="btn-school-primary" style="font-size:1.05rem; padding:0.85rem 2rem;">
+            📑 GERAR CONTRATO
+          </button>
+        </div>
+
+      </form>
+    </section>
+
+    <!-- ========================================== -->
+    <!-- MODO 2: PRÉ-VISUALIZAÇÃO DO CONTRATO GERADO -->
+    <!-- ========================================== -->
+    <section id="tab-preview" style="display:none;">
+      
+      <!-- Barra de Controle de Impressão e Salvamento -->
+      <div class="action-bar preview-actions-bar no-print" style="margin-top:0; margin-bottom:1.5rem; justify-content:space-between;">
+        <div style="display:flex; align-items:center; gap:0.6rem;">
+          <span style="font-weight:700; color:#0f172a;">Contrato em exibição:</span>
+          <span class="shell-badge" id="previewBadgeContractNum">CT-2026-0001</span>
+        </div>
+        <div style="display:flex; gap:0.6rem; flex-wrap:wrap;">
+          <button type="button" class="btn-school-outline" onclick="switchTab('formulario')">
+            ✏️ Editar Dados
+          </button>
+          <button type="button" class="btn-school-outline" onclick="saveContractToStorage()">
+            💾 Salvar Contrato
+          </button>
+          <button type="button" class="btn-school-primary" onclick="printContract()">
+            🖨️ Imprimir / Salvar PDF
+          </button>
+        </div>
+      </div>
+
+      <!-- Papel do Contrato Formatado -->
+      <article class="contract-paper" id="contractPrintableDoc">
+        
+        <!-- Cabeçalho Oficial -->
+        <header class="contract-header">
+          <div class="contract-logo-badge">
+            🏫 <span id="docSchoolNameHeader">COLÉGIO INFANTIL BOREAL LUMINI</span>
+          </div>
+          <h2 class="contract-title">CONTRATO DE PRESTAÇÃO DE SERVIÇOS EDUCACIONAIS</h2>
+          <div class="contract-meta">
+            Número do Registro: <span class="contract-number-tag" id="docContractNum">CT-2026-0001</span> | 
+            Ano Letivo: <strong>2026</strong> | 
+            Emitido em: <span id="docGeneratedDate">--/--/----</span>
+          </div>
+          <div class="contract-meta" style="margin-top:0.35rem;" id="docSchoolAddressFull">
+            CNPJ: 51.054.291/0001-31 • Rua São Maurício, 266, Vila Galvão, Guarulhos - SP, CEP 07073-000 • Tel: (11) 2455-8884
+          </div>
+        </header>
+
+        <!-- Cláusula 1 -->
+        <div class="contract-clause">
+          <h3>CLÁUSULA 1ª — DAS PARTES CONTRATANTES</h3>
+          <p>
+            Pelo presente instrumento particular, de um lado:
+          </p>
+          <p>
+            <strong>CONTRATADA:</strong> <span id="docSchoolName">COLÉGIO INFANTIL BOREAL LUMINI (COLÉGIO BOREAL LUMINI LTDA - ME)</span>, 
+            pessoa jurídica de direito privado, inscrita no CNPJ sob o nº <span id="docSchoolCnpj">51.054.291/0001-31</span>, 
+            com sede em <span id="docSchoolAddress">Rua São Maurício, 266, Vila Galvão, Guarulhos - SP, CEP 07073-000</span>, 
+            neste ato representada por sua diretora/responsável legal, <strong id="docSchoolPrincipal">Tatiane Cristina Tavares Damaso</strong>;
+          </p>
+          <p>
+            E de outro lado, doravante denominados conjuntamente ou individualmente <strong>CONTRATANTE(S)</strong>:
+          </p>
+          <p id="docGuardianDetails">
+            <!-- Injetado dinamicamente -->
+          </p>
+          <p>
+            Têm entre si, justo e acordado, o presente Contrato de Prestação de Serviços Educacionais, regido pela Lei Federal nº 9.870/1999, Lei nº 8.078/1990 (Código de Defesa do Consumidor), Código Civil Brasileiro e cláusulas a seguir expressas.
+          </p>
+        </div>
+
+        <!-- Cláusula 2 -->
+        <div class="contract-clause">
+          <h3>CLÁUSULA 2ª — DO OBJETO E DA MATRÍCULA</h3>
+          <p>
+            O presente instrumento tem por objeto a prestação de serviços educacionais pela CONTRATADA em favor do(a) educando(a) beneficiário(a):
+          </p>
+          <div style="background:#f8fafc; border-left:4px solid var(--accent); padding:0.75rem 1rem; margin:0.75rem 0; font-size:0.925rem;">
+            <strong>ALUNO(A):</strong> <span id="docStudentName">Arthur Benício de Albuquerque</span><br>
+            <strong>DATA DE NASCIMENTO:</strong> <span id="docStudentDob">18/04/2021</span> (<span id="docStudentAgeText">4 anos</span>)<br>
+            <strong>TURMA / ETAPA:</strong> <span id="docStudentClass">Maternal II</span> | 
+            <strong>PERÍODO:</strong> <span id="docStudentPeriod">Integral (07:30 às 18:30)</span> | 
+            <strong>TURNO:</strong> <span id="docStudentTurno">Integral</span>
+          </div>
+          <p>
+            Parágrafo Primeiro: O serviço educacional compreende o cumprimento do plano pedagógico institucional, acompanhamento do desenvolvimento infantil, desenvolvimento social, motor e cognitivo compatível com a faixa etária.
+          </p>
+        </div>
+
+        <!-- Cláusula 3 -->
+        <div class="contract-clause">
+          <h3>CLÁUSULA 3ª — DOS VALORES, MATRÍCULA E MENSALIDADES</h3>
+          <p>
+            Pela prestação dos serviços convencionados na Cláusula 2ª, os CONTRATANTES obrigam-se ao pagamento dos seguintes valores ajustados:
+          </p>
+          <ul>
+            <li><strong>Taxa de Matrícula/Reserva de Vaga:</strong> <span id="docEnrollmentFee">R$ 850,00</span> (oitocentos e cinquenta reais), quitada na assinatura deste contrato.</li>
+            <li><strong>Contraprestação Mensal:</strong> <span id="docMonthlyFee">R$ 1.650,00</span> (um mil e seiscentos e cinquenta reais) mensais, com vencimento impreterivelmente no <strong id="docDueDayText">dia 10 de cada mês</strong>.</li>
+            <li><strong>Forma de Cobrança:</strong> Realizada através de <span id="docPaymentMethod">Boleto Bancário Registrado</span>.</li>
+            <li><strong>Vigência:</strong> <span id="docDuration">12 meses (Ano Letivo Completo)</span>, com início em <span id="docStartDate">02/02/2026</span>.</li>
+          </ul>
+          <p>
+            Parágrafo Único: Os valores das parcelas poderão ser revistos anualmente ou em consonância com as disposições da Lei Federal nº 9.870/1999 para reposição inflacionária e custeio das melhorias pedagógicas.
+          </p>
+        </div>
+
+        <!-- Cláusula 4 -->
+        <div class="contract-clause">
+          <h3>CLÁUSULA 4ª — DA IMPONTUALIDADE E INADIMPLÊNCIA</h3>
+          <p>
+            O não pagamento de qualquer mensalidade até a data de seu respectivo vencimento implicará na incidência de:
+          </p>
+          <p>
+            a) Multa moratória de 2% (dois por cento) sobre o montante em atraso, em conformidade com o artigo 52, § 1º do Código de Defesa do Consumidor;<br>
+            b) Juros moratórios de 1% (um por cento) ao mês, pro rata die, a contar do primeiro dia útil seguinte ao vencimento;<br>
+            c) Correção monetária calculada pelo índice IPCA/IBGE ou índice oficial que o substitua.
+          </p>
+          <p style="background:#f0fdfa; border-left:3px solid var(--accent); padding:0.6rem 0.8rem; margin-top:0.75rem;">
+            <strong>Cláusula 4.5 — Do Horário de Funcionamento:</strong> O <strong>Colégio Infantil Boreal Lumini</strong> funciona regularmente de <strong>segunda a sexta-feira, das 06h30 às 19h00</strong>, período no qual são realizadas as atividades educacionais, rotinas de acolhimento e turnos contratados.
+          </p>
+        </div>
+
+        <!-- Cláusula 5 -->
+        <div class="contract-clause">
+          <h3>CLÁUSULA 5ª — DAS OBRIGAÇÕES DO CONTRATANTE</h3>
+          <p>
+            Os CONTRATANTES assumem expressamente perante a instituição os seguintes deveres:
+          </p>
+          <p>
+            a) Respeitar rigorosamente os horários de entrada e saída do educando, comunicando qualquer eventual atraso;<br>
+            b) Manter atualizados os contatos de emergência, fichas de saúde e dados cadastrais;<br>
+            c) Comparecer às reuniões pedagógicas e honrar com pontualidade as obrigações financeiras assumidas nos vencimentos pactuados.
+          </p>
+          <p style="background:#f0fdfa; border-left:3px solid var(--accent); padding:0.6rem 0.8rem; margin-top:0.75rem;">
+            <strong>5.5.</strong> O CONTRATANTE declara ter fornecido à CONTRATADA informações médicas completas e verdadeiras sobre o aluno, constantes do <strong>Anexo I – Ficha Médica do Aluno</strong>, comprometendo-se a mantê-las atualizadas e a comunicar imediatamente qualquer alteração relevante de saúde.
+          </p>
+        </div>
+
+        <!-- Cláusula 6 -->
+        <div class="contract-clause">
+          <h3>CLÁUSULA 6ª — DAS OBRIGAÇÕES DA ESCOLA CONTRATADA</h3>
+          <p>
+            A CONTRATADA se compromete a:
+          </p>
+          <p>
+            a) Ministrar o programa pedagógico com corpo docente qualificado e ambiente seguro e salutar;<br>
+            b) Fornecer relatórios periódicos de acompanhamento do educando e manter canal aberto de diálogo com a família;<br>
+            c) Cumprir os horários estabelecidos para entrada, permanência, alimentação balanceada e atividades recreativas programadas;<br>
+            d) Manter em arquivo reservado e sob sigilo as informações de saúde prestadas no Anexo I, utilizando-as estritamente para o zelo, bem-estar e preservação da integridade física do educando.
+          </p>
+        </div>
+
+        <!-- Cláusula 7 -->
+        <div class="contract-clause">
+          <h3>CLÁUSULA 7ª — DA RESCISÃO, DESISTÊNCIA E CANCELAMENTO</h3>
+          <p>
+            O presente instrumento poderá ser rescindido por qualquer das partes mediante aviso prévio por escrito com antecedência mínima de 30 (trinta) dias.
+          </p>
+          <p>
+            Parágrafo Primeiro: Em caso de cancelamento anterior ao início do período letivo, a taxa de matrícula poderá ser devolvida em 80%, retendo a CONTRATADA 20% para cobrir custos administrativos e de reserva de vaga.
+          </p>
+        </div>
+
+        <!-- Cláusula 8 (Condicional) -->
+        <div class="contract-clause" id="docClauseImage">
+          <h3>CLÁUSULA 8ª — DO DIREITO DE USO DE IMAGEM E VOZ</h3>
+          <p>
+            Os CONTRATANTES <strong>AUTORIZAM</strong> a CONTRATADA a veicular, a título gratuito e pedagógico, a imagem e a voz do educando em fotos, vídeos, material institucional impresso e mídias sociais oficiais do colégio, vedada qualquer veiculação que exponha a criança a situação vexatória ou comercial indevida (conforme ECA e LGPD).
+          </p>
+        </div>
+
+        <!-- Cláusula 9 (Opcionais adicionais) -->
+        <div class="contract-clause" id="docClauseExtras" style="display:none;">
+          <h3>CLÁUSULA 9ª — ATIVIDADES EXTRACURRICULARES E EMERGÊNCIA MÉDICA</h3>
+          <div id="docClauseExtrasContent"></div>
+        </div>
+
+        <!-- Observações especiais se houver -->
+        <div class="contract-clause" id="docNotesBlock" style="display:none;">
+          <h3>DISPOSIÇÕES ESPECÍFICAS / OBSERVAÇÕES MÉDICO-PEDAGÓGICAS</h3>
+          <p id="docNotesText" style="font-style:italic; background:#f1f5f9; padding:0.6rem 0.8rem; border-radius:6px;"></p>
+        </div>
+
+        <!-- Cláusula Final / Foro -->
+        <div class="contract-clause">
+          <h3>CLÁUSULA 10ª — DO FORO DE ELEIÇÃO</h3>
+          <p>
+            Para dirimir quaisquer controvérsias decorrentes deste contrato, as partes elegem expressamente o Foro da Comarca da sede da CONTRATADA, com renúncia expressa a qualquer outro, por mais privilegiado que seja.
+          </p>
+          <p style="margin-top:1.5rem;">
+            E, por estarem assim justas e contratadas, as partes firmam o presente instrumento em vias de igual teor e forma para que produza seus jurídicos e legais efeitos.
+          </p>
+          <p style="text-align:right; margin-top:1.5rem; font-weight:600;" id="docCityDateText">
+            São Paulo, 18 de fevereiro de 2026.
+          </p>
+        </div>
+
+        <!-- Seção de Assinaturas -->
+        <div class="signatures-block">
+          <div class="signature-grid">
+            
+            <!-- Assinatura Escola -->
+            <div class="signature-box">
+              <div class="signature-line">
+                <span id="docSignPrincipal">Tatiane Cristina Tavares Damaso</span>
+              </div>
+              <div class="signature-sub"><span id="docSignSchool">Colégio Infantil Boreal Lumini</span></div>
+              <div class="signature-sub">Diretoria / Representante Legal</div>
+            </div>
+
+            <!-- Assinatura Responsável 1 -->
+            <div class="signature-box">
+              <div id="signatureImageContainer"></div>
+              <div class="signature-line">
+                <span id="docSignResp1">Responsável Legal (1)</span>
+              </div>
+              <div class="signature-sub">CPF: <span id="docSignResp1Cpf">000.000.000-00</span></div>
+              <div class="signature-sub">Responsável Financeiro / Contratante</div>
+            </div>
+
+            <!-- Assinatura Responsável 2 (se houver) -->
+            <div class="signature-box" id="docSignResp2Box" style="display:none;">
+              <div class="signature-line">
+                <span id="docSignResp2">Responsável Solidário (2)</span>
+              </div>
+              <div class="signature-sub">CPF: <span id="docSignResp2Cpf">000.000.000-00</span></div>
+              <div class="signature-sub">Responsável Solidário</div>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- ======================================================== -->
+        <!-- ANEXO I — FICHA MÉDICA DO ALUNO (DOCUMENTO ANEXO FORMAL) -->
+        <!-- ======================================================== -->
+        <section class="annex-section" id="annexMedicalDoc">
+          <header class="annex-header">
+            <div class="annex-badge">
+              🏥 ANEXO INTEGRANTE AO CONTRATO <span id="annexContractNumTag">CT-2026-0001</span>
+            </div>
+            <h2 class="annex-title">ANEXO I — FICHA MÉDICA DO ALUNO</h2>
+            <div class="contract-meta">
+              Identificação de Saúde, Emergências Médicas e Autorizações Especiais
+            </div>
+            <div class="contract-meta" style="margin-top:0.25rem;">
+              Instituição: <strong id="annexSchoolName">Colégio Infantil Boreal Lumini</strong> • Ano Letivo: <strong>2026</strong>
+            </div>
+          </header>
+
+          <!-- Identificação do Aluno no Anexo -->
+          <div style="background:#f8fafc; border-left:4px solid var(--accent); padding:0.75rem 1rem; margin-bottom:1.25rem; font-size:0.925rem;">
+            <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap:0.5rem;">
+              <div><strong>ALUNO(A):</strong> <span id="annexStudentName">Arthur Benício de Albuquerque</span></div>
+              <div><strong>NASCIMENTO:</strong> <span id="annexStudentDob">18/04/2021</span> (<span id="annexStudentAge">4 anos e 10 meses</span>)</div>
+              <div><strong>TURMA / ETAPA:</strong> <span id="annexStudentClass">Maternal II (3 a 4 anos)</span></div>
+              <div><strong>PERÍODO:</strong> <span id="annexStudentPeriod">Integral (07:30 às 18:30)</span></div>
+            </div>
+          </div>
+
+          <!-- Grade de Informações de Saúde -->
+          <div class="medical-grid">
+            
+            <div class="med-item med-item-full">
+              <div class="med-label">⚠️ Alergias (Alimentos, Medicamentos, Outros)</div>
+              <div class="med-val" id="annexMedAllergies">Intolerância leve à lactose</div>
+            </div>
+
+            <div class="med-item">
+              <div class="med-label">💊 Medicamentos em Uso</div>
+              <div class="med-val" id="annexMedMedications">Nenhum medicamento contínuo</div>
+            </div>
+
+            <div class="med-item">
+              <div class="med-label">🩺 Condições Crônicas ou de Saúde</div>
+              <div class="med-val" id="annexMedConditions">Nenhuma condição crônica</div>
+            </div>
+
+            <div class="med-item">
+              <div class="med-label">🏥 Cirurgias ou Internações Relevantes</div>
+              <div class="med-val" id="annexMedSurgeries">Nenhuma intervenção cirúrgica</div>
+            </div>
+
+            <div class="med-item">
+              <div class="med-label">🩸 Tipo Sanguíneo e Fator Rh</div>
+              <div class="med-val" id="annexMedBloodType">O+</div>
+            </div>
+
+            <div class="med-item">
+              <div class="med-label">🛡️ Plano de Saúde / Cartão SUS</div>
+              <div class="med-val" id="annexMedHealthPlan">Porto Seguro Saúde - Plano Ouro nº 542.981.002</div>
+            </div>
+
+            <div class="med-item">
+              <div class="med-label">👨‍⚕️ Pediatra / Médico Responsável e Telefone</div>
+              <div class="med-val" id="annexMedDoctor">Dra. Juliana Prado - Tel: (11) 98877-3322</div>
+            </div>
+
+            <div class="med-item med-item-full">
+              <div class="med-label">🚑 Hospital / Pronto-Socorro de Preferência</div>
+              <div class="med-val" id="annexMedHospital">Hospital e Maternidade São Luiz (Unidade Anália Franco) ou Sabará Infantil</div>
+            </div>
+
+            <div class="med-item">
+              <div class="med-label">📞 Contato de Emergência 1</div>
+              <div class="med-val">
+                <strong id="annexEmerg1Name">Maria de Fátima Mendes (Avó)</strong><br>
+                <span>Telefone: </span><span id="annexEmerg1Phone">(11) 97766-5544</span>
+              </div>
+            </div>
+
+            <div class="med-item">
+              <div class="med-label">📞 Contato de Emergência 2</div>
+              <div class="med-val">
+                <strong id="annexEmerg2Name">Carlos Eduardo Silva (Tio)</strong><br>
+                <span>Telefone: </span><span id="annexEmerg2Phone">(11) 96655-4433</span>
+              </div>
+            </div>
+
+            <div class="med-item med-item-full" id="annexMedNotesWrap">
+              <div class="med-label">📝 Observações Médicas Adicionais</div>
+              <div class="med-val" id="annexMedNotes">Não ingerir achocolatados convencionais.</div>
+            </div>
+
+          </div>
+
+          <!-- Declarações / Autorizações -->
+          <div class="med-consent-card">
+            <div style="font-weight:700; color:#0f766e; margin-bottom:0.4rem; display:flex; align-items:center; gap:0.4rem;">
+              <span>📋</span> DECLARAÇÕES E AUTORIZAÇÕES FIRMADAS PELO RESPONSÁVEL:
+            </div>
+            <ul style="margin:0; padding-left:1.25rem; line-height:1.6;">
+              <li id="annexAuthEmergencyText">
+                <strong>[ AUTORIZADO ]</strong> Autorizo o atendimento médico de emergência do meu filho(a) em caso de urgência, quando não for possível contato imediato com os responsáveis.
+              </li>
+              <li id="annexVaccinesText">
+                <strong>[ DECLARADO ]</strong> Vacinas em dia: declaro ter apresentado cópia legível da carteira de vacinação à secretaria da instituição escolar.
+              </li>
+              <li>
+                Declaro sob as penas da lei que todas as informações prestadas nesta Ficha Médica são verídicas, completas e atualizadas.
+              </li>
+            </ul>
+          </div>
+
+          <!-- Data do Anexo -->
+          <p style="text-align:right; margin-top:2rem; font-weight:600; font-size:0.9rem;" id="annexCityDateText">
+            São Paulo, 18 de fevereiro de 2026.
+          </p>
+
+          <!-- Assinaturas do Anexo I -->
+          <div class="signatures-block" style="margin-top:2rem;">
+            <div class="signature-grid">
+              
+              <!-- Assinatura Responsável Anexo -->
+              <div class="signature-box">
+                <div class="signature-line">
+                  <span id="annexSignRespName">Responsável Legal</span>
+                </div>
+                <div class="signature-sub">CPF: <span id="annexSignRespCpf">000.000.000-00</span></div>
+                <div class="signature-sub">Assinatura do Pai / Mãe / Responsável Legal</div>
+              </div>
+
+              <!-- Assinatura Escola Anexo -->
+              <div class="signature-box">
+                <div class="signature-line">
+                  <span id="annexSignPrincipal">Tatiane Cristina Tavares Damaso</span>
+                </div>
+                <div class="signature-sub"><span id="annexSignSchool">Colégio Infantil Boreal Lumini</span></div>
+                <div class="signature-sub">Recepção / Enfermagem / Coordenação Pedagógica</div>
+              </div>
+
+            </div>
+          </div>
+
+        </section>
+
+      </article>
+
+      <!-- Painel de Assinatura Digital Touch/Mouse Interativo -->
+      <div class="contract-paper no-print" style="margin-top:2rem;">
+        <h3 style="margin-top:0; font-size:1.1rem; color:#0f172a; display:flex; align-items:center; gap:0.5rem;">
+          ✍️ Assinatura Digital do Responsável
+        </h3>
+        <p class="muted" style="font-size:0.875rem; margin-top:0.25rem;">
+          Desenhe a assinatura com o mouse ou com o dedo na tela sensível ao toque. A assinatura será inserida no documento final.
+        </p>
+
+        <div class="signature-pad-container">
+          <div class="canvas-wrap">
+            <canvas id="signatureCanvas" width="460" height="150"></canvas>
+          </div>
+          <div style="margin-top: 0.75rem; display:flex; gap:0.6rem; flex-wrap:wrap; align-items:center;">
+            <button type="button" class="btn-school-outline" onclick="clearSignatureCanvas()">
+              🧹 Limpar Traço
+            </button>
+            <button type="button" class="btn-school-primary" onclick="applyDigitalSignature()">
+              ✅ Aplicar Assinatura no Contrato
+            </button>
+            <span id="signatureStatusMsg" style="font-size:0.85rem; color:#0f766e; font-weight:600; display:none;">
+              Assinatura gravada no documento!
+            </span>
+          </div>
+        </div>
+      </div>
+
+    </section>
+
+    <!-- ========================================== -->
+    <!-- MODO 3: LISTA DE CONTRATOS SALVOS         -->
+    <!-- ========================================== -->
+    <section id="tab-salvos" style="display:none;" class="no-print">
+      
+      <div class="form-card" style="margin-bottom:1.5rem;">
+        <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:1rem;">
+          <div>
+            <h2 style="font-size:1.25rem; font-weight:700; margin:0 0 0.25rem; color:#0f172a;">Contratos Registrados</h2>
+            <p class="muted" style="margin:0; font-size:0.875rem;">
+              Gerencie contratos arquivados localmente neste navegador com histórico e exportação rápida.
+            </p>
+          </div>
+          <div>
+            <button class="btn-school-outline" onclick="clearAllSavedContracts()" style="color:#b91c1c; border-color:#fca5a5;">
+              🗑️ Limpar Todos
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div class="contracts-table-card">
+        <table class="shell-table" id="savedTable" style="margin:0; width:100%;">
+          <thead>
+            <tr>
+              <th>Contrato</th>
+              <th>Aluno(a)</th>
+              <th>Responsável</th>
+              <th>Vigência / Início</th>
+              <th class="num">Mensalidade</th>
+              <th>Status</th>
+              <th style="text-align:center;">Ações</th>
+            </tr>
+          </thead>
+          <tbody id="savedContractsTableBody">
+            <!-- Injetado dinamicamente -->
+          </tbody>
+        </table>
+
+        <!-- Empty State -->
+        <div class="empty-state" id="emptySavedState" style="display:none;">
+          <div style="font-size:2.5rem; margin-bottom:0.75rem;">📋</div>
+          <h3 style="font-size:1.1rem; color:#334155; margin:0 0 0.4rem;">Nenhum contrato salvo ainda</h3>
+          <p class="muted" style="font-size:0.9rem; max-width:400px; margin:0 auto 1.25rem;">
+            Preencha o formulário e clique em <strong>Salvar Contrato</strong> para manter o histórico arquivado.
+          </p>
+          <button class="btn-school-primary" onclick="switchTab('formulario')">
+            Criar Primeiro Contrato
+          </button>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <!-- Notification Toast -->
+  <div id="toastNotification" class="notification-toast">
+    <span id="toastIcon">✨</span>
+    <span id="toastText">Operação realizada com sucesso!</span>
+  </div>
+
+    const STORAGE_KEY = 'contratos_escolares';
+    const DRAFT_KEY = 'contrato_draft_data';
+    let currentContractData = null;
+    let digitalSignatureDataUrl = null;
+=======
+    // ==========================================
+    // ESTADO GLOBAL & INICIALIZAÇÃO
+    // ==========================================
+    const STORAGE_KEY = 'contratos_escolares';
+    const DRAFT_KEY = 'contrato_draft_data';
+
+    // DADOS INSTITUCIONAIS FIXOS DA ESCOLA (SOMENTE LEITURA)
+    const FIXED_SCHOOL_DATA = {
+      name: 'Colégio Infantil Boreal Lumini',
+      legalName: 'Colégio Boreal Lumini Ltda - ME',
+      cnpj: '51.054.291/0001-31',
+      address: 'Rua São Maurício, 266, Vila Galvão, Guarulhos - SP, CEP 07073-000',
+      phone: '(11) 2455-8884',
+      principal: 'Tatiane Cristina Tavares Damaso',
+      workingHours: 'das 6h30 às 19h00, de segunda a sexta-feira'
+    };
+
+    let currentContractData = null;
+    let digitalSignatureDataUrl = null;==========================================
+    // ESTADO GLOBAL & INICIALIZAÇÃO
+    // ==========================================
+    const STORAGE_KEY = 'contratos_escolares';
+    const DRAFT_KEY = 'contrato_draft_data';
+    let currentContractData = null;
+    let digitalSignatureDataUrl = null;
+
+    // Inicialização da tela
+    document.addEventListener('DOMContentLoaded', () => {
+=======
+  <script>
+    // ==========================================
+    // ESTADO GLOBAL & INICIALIZAÇÃO
+    // ==========================================
+    const STORAGE_KEY = 'contratos_escolares';
+    const DRAFT_KEY = 'contrato_draft_data';
+
+    // DADOS INSTITUCIONAIS FIXOS DA ESCOLA (SOMENTE LEITURA)
+    const FIXED_SCHOOL_DATA = {
+      name: 'Colégio Infantil Boreal Lumini',
+      legalName: 'Colégio Boreal Lumini Ltda - ME',
+      cnpj: '51.054.291/0001-31',
+      address: 'Rua São Maurício, 266, Vila Galvão, Guarulhos - SP, CEP 07073-000',
+      phone: '(11) 2455-8884',
+      principal: 'Tatiane Cristina Tavares Damaso',
+      workingHours: 'das 6h30 às 19h00, de segunda a sexta-feira'
+    };
+
+    let currentContractData = null;
+    let digitalSignatureDataUrl = null;
+
+    // Inicialização da tela
+    document.addEventListener('DOMContentLoaded', () => {==========================================
+    const STORAGE_KEY = 'contratos_escolares';
+    const DRAFT_KEY = 'contrato_draft_data';
+    let currentContractData = null;
+    let digitalSignatureDataUrl = null;
+=======
+    // ==========================================
+    // ESTADO GLOBAL & INICIALIZAÇÃO
+    // ==========================================
+    const STORAGE_KEY = 'contratos_escolares';
+    const DRAFT_KEY = 'contrato_draft_data';
+
+    // DADOS INSTITUCIONAIS FIXOS DA ESCOLA (SOMENTE LEITURA)
+    const FIXED_SCHOOL_DATA = {
+      name: 'Colégio Infantil Boreal Lumini',
+      legalName: 'Colégio Boreal Lumini Ltda - ME',
+      cnpj: '51.054.291/0001-31',
+      address: 'Rua São Maurício, 266, Vila Galvão, Guarulhos - SP, CEP 07073-000',
+      phone: '(11) 2455-8884',
+      principal: 'Tatiane Cristina Tavares Damaso',
+      workingHours: 'das 6h30 às 19h00, de segunda a sexta-feira'
+    };
+
+    let currentContractData = null;
+    let digitalSignatureDataUrl = null;==========================================
+    // ESTADO GLOBAL & INICIALIZAÇÃO
+    // ==========================================
+    const STORAGE_KEY = 'contratos_escolares';
+    const DRAFT_KEY = 'contrato_draft_data';
+    let currentContractData = null;
+    let digitalSignatureDataUrl = null;
+
+    // Inicialização da tela
+    document.addEventListener('DOMContentLoaded', () => {
+      initSignaturePad();
+      loadDraftOrSample();
+      calculateStudentAge();
+      renderSavedContractsTable();
+
+      // Hook up quick sample button
+      document.getElementById('btnQuickSample').addEventListener('click', loadSampleContractData);
+    });
+
+    // ==========================================
+    // NAVEGAÇÃO DE ABAS
+    // ==========================================
+    function switchTab(tabId) {
+      const tabs = ['formulario', 'preview', 'salvos'];
+      tabs.forEach(t => {
+        const el = document.getElementById(`tab-${t}`);
+        if (el) el.style.display = (t === tabId) ? 'block' : 'none';
+      });
+
+      // Update tab buttons
+      document.getElementById('tabBtnForm').classList.toggle('active', tabId === 'formulario');
+      document.getElementById('tabBtnPreview').classList.toggle('active', tabId === 'preview');
+      document.getElementById('tabBtnSaved').classList.toggle('active', tabId === 'salvos');
+
+      if (tabId === 'preview') {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      } else if (tabId === 'salvos') {
+        renderSavedContractsTable();
+      }
+    }
+
+    // ==========================================
+    // GESTÃO DO SEGUNDO RESPONSÁVEL
+    // ==========================================
+    let hasSecondGuardian = false;
+
+    function toggleSecondGuardian(forceState) {
+      const block = document.getElementById('resp2Block');
+      const btn = document.getElementById('toggleResp2Btn');
+
+      if (typeof forceState === 'boolean') {
+        hasSecondGuardian = forceState;
+      } else {
+        hasSecondGuardian = !hasSecondGuardian;
+      }
+
+      if (hasSecondGuardian) {
+        block.style.display = 'block';
+        btn.style.display = 'none';
+      } else {
+        block.style.display = 'none';
+        btn.style.display = 'inline-flex';
+        // Clear inputs
+        document.getElementById('resp2Name').value = '';
+        document.getElementById('resp2Cpf').value = '';
+        document.getElementById('resp2Rg').value = '';
+        document.getElementById('resp2Profession').value = '';
+        document.getElementById('resp2Phone').value = '';
+        document.getElementById('resp2Email').value = '';
+      }
+    }
+
+    // ==========================================
+    // CÁLCULO DE IDADE DO ALUNO
+    // ==========================================
+    function calculateStudentAge() {
+      const dobInput = document.getElementById('studentDob').value;
+      const ageInput = document.getElementById('studentAge');
+      if (!dobInput) return;
+
+      const birth = new Date(dobInput + 'T00:00:00');
+      const today = new Date();
+
+      let years = today.getFullYear() - birth.getFullYear();
+      let months = today.getMonth() - birth.getMonth();
+
+      if (months < 0 || (months === 0 && today.getDate() < birth.getDate())) {
+        years--;
+        months += 12;
+      }
+
+      let text = '';
+      if (years > 0) {
+        text += `${years} ano${years > 1 ? 's' : ''}`;
+      }
+      if (months > 0) {
+        text += (text ? ' e ' : '') + `${months} m${months > 1 ? 'eses' : 'ês'}`;
+      }
+      if (!text) text = 'Menos de 1 mês';
+
+      ageInput.value = text;
+    }
+
+    // ==========================================
+    // GERAÇÃO DO NÚMERO DO CONTRATO
+    // ==========================================
+    function generateNextContractNumber() {
+      const currentYear = new Date().getFullYear();
+      const saved = getSavedContracts();
+      const nextNum = (saved.length + 1).toString().padStart(4, '0');
+      return `CT-${currentYear}-${nextNum}`;
+    }
+
+    // Formata moeda BRL
+    function formatMoney(value) {
+      return Number(value || 0).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+    }
+
+    // Formata data ISO para DD/MM/AAAA
+    function formatDateBr(isoStr) {
+      if (!isoStr) return '--/--/----';
+      const [year, month, day] = isoStr.split('-');
+      return `${day}/${month}/${year}`;
+    }
+
+    // ==========================================
+    // RECOLHER DADOS DO FORMULÁRIO
+    // ==========================================
+    function getFormData() {
+      const contractNum = (currentContractData && currentContractData.contractNum) 
+        ? currentContractData.contractNum 
+        : generateNextContractNumber();
+
+      return {
+        id: currentContractData?.id || Date.now().toString(),
+        contractNum: contractNum,
+        createdAt: currentContractData?.createdAt || new Date().toISOString(),
+        // Dados da escola sempre fixos conforme exigência institucional
+        school: {
+          name: FIXED_SCHOOL_DATA.name,
+          legalName: FIXED_SCHOOL_DATA.legalName,
+          cnpj: FIXED_SCHOOL_DATA.cnpj,
+          address: FIXED_SCHOOL_DATA.address,
+          phone: FIXED_SCHOOL_DATA.phone,
+          principal: FIXED_SCHOOL_DATA.principal
+        },
+        student: {
+          name: document.getElementById('studentName').value.trim(),
+          dob: document.getElementById('studentDob').value,
+          age: document.getElementById('studentAge').value,
+          className: document.getElementById('studentClass').value,
+          period: document.getElementById('studentPeriod').value,
+          turno: document.getElementById('studentTurno').value
+        },
+        // ANEXO I - FICHA MÉDICA
+        medical: {
+          allergies: document.getElementById('medAllergies').value.trim(),
+          medications: document.getElementById('medMedications').value.trim(),
+          conditions: document.getElementById('medConditions').value.trim(),
+          surgeries: document.getElementById('medSurgeries').value.trim(),
+          bloodType: document.getElementById('medBloodType').value.trim(),
+          healthPlan: document.getElementById('medHealthPlan').value.trim(),
+          doctor: document.getElementById('medDoctor').value.trim(),
+          hospital: document.getElementById('medHospital').value.trim(),
+          emerg1Name: document.getElementById('medEmerg1Name').value.trim(),
+          emerg1Phone: document.getElementById('medEmerg1Phone').value.trim(),
+          emerg2Name: document.getElementById('medEmerg2Name').value.trim(),
+          emerg2Phone: document.getElementById('medEmerg2Phone').value.trim(),
+          authEmergency: document.getElementById('medAuthEmergency').checked,
+          vaccinesOk: document.getElementById('medVaccinesOk').checked,
+          notes: document.getElementById('medNotes').value.trim()
+        },
+        guardians: [
+          {
+            name: document.getElementById('resp1Name').value.trim(),
+            cpf: document.getElementById('resp1Cpf').value.trim(),
+            rg: document.getElementById('resp1Rg').value.trim(),
+            profession: document.getElementById('resp1Profession').value.trim(),
+            phone: document.getElementById('resp1Phone').value.trim(),
+            email: document.getElementById('resp1Email').value.trim(),
+            address: document.getElementById('resp1Address').value.trim()
+          },
+          ...(hasSecondGuardian && document.getElementById('resp2Name').value.trim() ? [{
+            name: document.getElementById('resp2Name').value.trim(),
+            cpf: document.getElementById('resp2Cpf').value.trim(),
+            rg: document.getElementById('resp2Rg').value.trim(),
+            profession: document.getElementById('resp2Profession').value.trim(),
+            phone: document.getElementById('resp2Phone').value.trim(),
+            email: document.getElementById('resp2Email').value.trim()
+          }] : [])
+        ],
+        financial: {
+          type: document.getElementById('contractType').value,
+          enrollmentFee: parseFloat(document.getElementById('enrollmentFee').value) || 0,
+          monthlyFee: parseFloat(document.getElementById('monthlyFee').value) || 0,
+          dueDay: document.getElementById('dueDay').value,
+          paymentMethod: document.getElementById('paymentMethod').value,
+          startDate: document.getElementById('startDate').value,
+          duration: document.getElementById('durationMonths').value,
+          notes: document.getElementById('contractNotes').value.trim()
+        },
+        options: {
+          imageRights: document.getElementById('optImageRights').checked,
+          extraActivities: document.getElementById('optExtraActivities').checked,
+          transport: document.getElementById('optTransport').checked,
+          emergencyMedical: document.getElementById('optEmergencyMedical').checked
+        },
+        signatureImage: digitalSignatureDataUrl || currentContractData?.signatureImage || null
+      };
+    }
+
+    // ==========================================
+    // PREENCHER FORMULÁRIO A PARTIR DE UM OBJETO
+    // ==========================================
+    function populateForm(data) {
+      if (!data) return;
+      currentContractData = data;
+
+      // Mantém sempre os dados fixos e bloqueados da escola
+      document.getElementById('schoolName').value = `${FIXED_SCHOOL_DATA.name} (${FIXED_SCHOOL_DATA.legalName})`;
+      document.getElementById('schoolCnpj').value = FIXED_SCHOOL_DATA.cnpj;
+      document.getElementById('schoolAddress').value = FIXED_SCHOOL_DATA.address;
+      document.getElementById('schoolPhone').value = FIXED_SCHOOL_DATA.phone;
+      document.getElementById('schoolPrincipal').value = FIXED_SCHOOL_DATA.principal;
+
+      document.getElementById('studentName').value = data.student?.name || '';
+      document.getElementById('studentDob').value = data.student?.dob || '2021-04-18';
+      calculateStudentAge();
+      document.getElementById('studentClass').value = data.student?.className || 'Maternal II (3 a 4 anos)';
+      document.getElementById('studentPeriod').value = data.student?.period || 'Integral (07:30 às 18:30)';
+      document.getElementById('studentTurno').value = data.student?.turno || 'Integral';
+
+      // Ficha Médica (Anexo I)
+      if (data.medical) {
+        document.getElementById('medAllergies').value = data.medical.allergies ?? '';
+        document.getElementById('medMedications').value = data.medical.medications ?? '';
+        document.getElementById('medConditions').value = data.medical.conditions ?? '';
+        document.getElementById('medSurgeries').value = data.medical.surgeries ?? '';
+        document.getElementById('medBloodType').value = data.medical.bloodType ?? '';
+        document.getElementById('medHealthPlan').value = data.medical.healthPlan ?? '';
+        document.getElementById('medDoctor').value = data.medical.doctor ?? '';
+        document.getElementById('medHospital').value = data.medical.hospital ?? '';
+        document.getElementById('medEmerg1Name').value = data.medical.emerg1Name ?? '';
+        document.getElementById('medEmerg1Phone').value = data.medical.emerg1Phone ?? '';
+        document.getElementById('medEmerg2Name').value = data.medical.emerg2Name ?? '';
+        document.getElementById('medEmerg2Phone').value = data.medical.emerg2Phone ?? '';
+        document.getElementById('medAuthEmergency').checked = data.medical.authEmergency !== false;
+        document.getElementById('medVaccinesOk').checked = data.medical.vaccinesOk !== false;
+        document.getElementById('medNotes').value = data.medical.notes ?? '';
+      }
+
+      // Resp 1
+      if (data.guardians && data.guardians[0]) {
+        const g1 = data.guardians[0];
+        document.getElementById('resp1Name').value = g1.name || '';
+        document.getElementById('resp1Cpf').value = g1.cpf || '';
+        document.getElementById('resp1Rg').value = g1.rg || '';
+        document.getElementById('resp1Profession').value = g1.profession || '';
+        document.getElementById('resp1Phone').value = g1.phone || '';
+        document.getElementById('resp1Email').value = g1.email || '';
+        document.getElementById('resp1Address').value = g1.address || '';
+      }
+
+      // Resp 2
+      if (data.guardians && data.guardians[1]) {
+        toggleSecondGuardian(true);
+        const g2 = data.guardians[1];
+        document.getElementById('resp2Name').value = g2.name || '';
+        document.getElementById('resp2Cpf').value = g2.cpf || '';
+        document.getElementById('resp2Rg').value = g2.rg || '';
+        document.getElementById('resp2Profession').value = g2.profession || '';
+        document.getElementById('resp2Phone').value = g2.phone || '';
+        document.getElementById('resp2Email').value = g2.email || '';
+      } else {
+        toggleSecondGuardian(false);
+      }
+
+      // Financeiro
+      if (data.financial) {
+        document.getElementById('contractType').value = data.financial.type || 'Matrícula e Mensalidade';
+        document.getElementById('enrollmentFee').value = data.financial.enrollmentFee || 850;
+        document.getElementById('monthlyFee').value = data.financial.monthlyFee || 1650;
+        document.getElementById('dueDay').value = data.financial.dueDay || '10';
+        document.getElementById('paymentMethod').value = data.financial.paymentMethod || 'Boleto Bancário Registrado';
+        document.getElementById('startDate').value = data.financial.startDate || '2026-02-02';
+        document.getElementById('durationMonths').value = data.financial.duration || '12 meses (Ano Letivo Completo)';
+        document.getElementById('contractNotes').value = data.financial.notes || '';
+      }
+
+      // Checkboxes
+      if (data.options) {
+        document.getElementById('optImageRights').checked = !!data.options.imageRights;
+        document.getElementById('optExtraActivities').checked = !!data.options.extraActivities;
+        document.getElementById('optTransport').checked = !!data.options.transport;
+        document.getElementById('optEmergencyMedical').checked = !!data.options.emergencyMedical;
+      }
+
+      if (data.signatureImage) {
+        digitalSignatureDataUrl = data.signatureImage;
+      }
+    }
+
+    // ==========================================
+    // GERAÇÃO E MONTAGEM DO CONTRATO
+    // ==========================================
+    function generateContract() {
+      // Validação básica
+      const studentName = document.getElementById('studentName').value.trim();
+      const respName = document.getElementById('resp1Name').value.trim();
+      const respCpf = document.getElementById('resp1Cpf').value.trim();
+
+      if (!studentName || !respName || !respCpf) {
+        showToast('⚠️ Preencha o nome do aluno e ao menos o responsável com CPF.', '#dc2626');
+        return;
+      }
+
+      const data = getFormData();
+      currentContractData = data;
+
+      // Salva rascunho de preenchimento
+      try {
+        localStorage.setItem(DRAFT_KEY, JSON.stringify(data));
+      } catch (e) {
+        console.warn('Erro ao salvar draft:', e);
+      }
+
+      // Preenche cabeçalho com dados fixos da escola
+      document.getElementById('docSchoolNameHeader').textContent = FIXED_SCHOOL_DATA.name.toUpperCase();
+      document.getElementById('docContractNum').textContent = data.contractNum;
+      document.getElementById('previewBadgeContractNum').textContent = data.contractNum;
+      document.getElementById('docGeneratedDate').textContent = new Date().toLocaleDateString('pt-BR');
+      document.getElementById('docSchoolAddressFull').textContent = `CNPJ: ${FIXED_SCHOOL_DATA.cnpj} • ${FIXED_SCHOOL_DATA.address} • Fone: ${FIXED_SCHOOL_DATA.phone}`;
+
+      // Cláusula 1 - Partes (dados fixos da escola e diretora)
+      document.getElementById('docSchoolName').textContent = `${FIXED_SCHOOL_DATA.name.toUpperCase()} (${FIXED_SCHOOL_DATA.legalName.toUpperCase()})`;
+      document.getElementById('docSchoolCnpj').textContent = FIXED_SCHOOL_DATA.cnpj;
+      document.getElementById('docSchoolAddress').textContent = FIXED_SCHOOL_DATA.address;
+      document.getElementById('docSchoolPrincipal').textContent = FIXED_SCHOOL_DATA.principal;
+
+      // Monta Responsáveis em texto formal
+      let respHtml = `<strong>CONTRATANTE 1:</strong> ${data.guardians[0].name.toUpperCase()}, portador(a) do RG nº ${data.guardians[0].rg} e inscrito(a) no CPF/MF sob o nº ${data.guardians[0].cpf}, profissão: ${data.guardians[0].profession}, residente e domiciliado(a) à ${data.guardians[0].address}, fone: ${data.guardians[0].phone}, e-mail: ${data.guardians[0].email};`;
+      if (data.guardians[1]) {
+        respHtml += `<br><br><strong>CONTRATANTE 2 (SOLIDÁRIO):</strong> ${data.guardians[1].name.toUpperCase()}, portador(a) do RG nº ${data.guardians[1].rg} e CPF/MF sob o nº ${data.guardians[1].cpf}, profissão: ${data.guardians[1].profession}, fone: ${data.guardians[1].phone}, e-mail: ${data.guardians[1].email};`;
+      }
+      document.getElementById('docGuardianDetails').innerHTML = respHtml;
+
+      // Cláusula 2 - Objeto
+      document.getElementById('docStudentName').textContent = data.student.name.toUpperCase();
+      document.getElementById('docStudentDob').textContent = formatDateBr(data.student.dob);
+      document.getElementById('docStudentAgeText').textContent = data.student.age;
+      document.getElementById('docStudentClass').textContent = data.student.className;
+      document.getElementById('docStudentPeriod').textContent = data.student.period;
+      document.getElementById('docStudentTurno').textContent = data.student.turno;
+
+      // Cláusula 3 - Valores
+      document.getElementById('docEnrollmentFee').textContent = formatMoney(data.financial.enrollmentFee);
+      document.getElementById('docMonthlyFee').textContent = formatMoney(data.financial.monthlyFee);
+      document.getElementById('docDueDayText').textContent = `dia ${data.financial.dueDay} de cada mês`;
+      document.getElementById('docPaymentMethod').textContent = data.financial.paymentMethod;
+      document.getElementById('docDuration').textContent = data.financial.duration;
+      document.getElementById('docStartDate').textContent = formatDateBr(data.financial.startDate);
+
+      // Cláusula Imagem
+      const clauseImage = document.getElementById('docClauseImage');
+      if (data.options.imageRights) {
+        clauseImage.style.display = 'block';
+      } else {
+        clauseImage.style.display = 'none';
+      }
+
+      // Cláusula Extras
+      const clauseExtras = document.getElementById('docClauseExtras');
+      const clauseExtrasContent = document.getElementById('docClauseExtrasContent');
+      let extraItems = [];
+      if (data.options.extraActivities) {
+        extraItems.push('<p><strong>Parágrafo 1º (Extracurriculares):</strong> Estão inclusas no escopo das atividades pedagógicas as oficinas de musicalização, expressão corporal e iniciação bilíngue conforme cronograma da turma.</p>');
+      }
+      if (data.options.transport) {
+        extraItems.push('<p><strong>Parágrafo 2º (Transporte Escolar):</strong> O transporte escolar é facultativo e de contratação independente, cabendo à escola fiscalizar o credenciamento de condutores no momento do embarque e desembarque nas dependências.</p>');
+      }
+      if (data.options.emergencyMedical) {
+        extraItems.push('<p><strong>Parágrafo 3º (Atendimento Emergencial):</strong> Os responsáveis autorizam expressamente a equipe da instituição a prestar os primeiros socorros imediatos e, havendo urgência médica, encaminhar o aluno à rede hospitalar mais próxima ou conveniada à família.</p>');
+      }
+
+      if (extraItems.length > 0) {
+        clauseExtrasContent.innerHTML = extraItems.join('');
+        clauseExtras.style.display = 'block';
+      } else {
+        clauseExtras.style.display = 'none';
+      }
+
+      // Observações
+      const notesBlock = document.getElementById('docNotesBlock');
+      const notesText = document.getElementById('docNotesText');
+      if (data.financial.notes) {
+        notesText.textContent = data.financial.notes;
+        notesBlock.style.display = 'block';
+      } else {
+        notesBlock.style.display = 'none';
+      }
+
+      // Data final
+      const today = new Date();
+      const monthsArr = ['janeiro', 'fevereiro', 'março', 'abril', 'maio', 'junho', 'julho', 'agosto', 'setembro', 'outubro', 'novembro', 'dezembro'];
+      const dateFormattedStr = `São Paulo, ${today.getDate()} de ${monthsArr[today.getMonth()]} de ${today.getFullYear()}.`;
+      document.getElementById('docCityDateText').textContent = dateFormattedStr;
+
+      // ==========================================
+      // PREENCHIMENTO DO ANEXO I — FICHA MÉDICA
+      // ==========================================
+      const med = data.medical || {};
+      document.getElementById('annexContractNumTag').textContent = data.contractNum;
+      document.getElementById('annexSchoolName').textContent = FIXED_SCHOOL_DATA.name;
+      document.getElementById('annexStudentName').textContent = data.student.name.toUpperCase();
+      document.getElementById('annexStudentDob').textContent = formatDateBr(data.student.dob);
+      document.getElementById('annexStudentAge').textContent = data.student.age;
+      document.getElementById('annexStudentClass').textContent = data.student.className;
+      document.getElementById('annexStudentPeriod').textContent = data.student.period;
+
+      document.getElementById('annexMedAllergies').textContent = med.allergies || 'Nenhuma alergia relatada';
+      document.getElementById('annexMedMedications').textContent = med.medications || 'Nenhum medicamento contínuo';
+      document.getElementById('annexMedConditions').textContent = med.conditions || 'Nenhuma condição crônica pré-existente';
+      document.getElementById('annexMedSurgeries').textContent = med.surgeries || 'Nenhuma intervenção cirúrgica relatada';
+      document.getElementById('annexMedBloodType').textContent = med.bloodType || 'Não informado';
+      document.getElementById('annexMedHealthPlan').textContent = med.healthPlan || 'Não informado / SUS';
+      document.getElementById('annexMedDoctor').textContent = med.doctor || 'Não informado';
+      document.getElementById('annexMedHospital').textContent = med.hospital || 'Pronto-atendimento mais próximo';
+
+      document.getElementById('annexEmerg1Name').textContent = med.emerg1Name || 'Responsável Principal';
+      document.getElementById('annexEmerg1Phone').textContent = med.emerg1Phone || data.guardians[0]?.phone || '--';
+      
+      document.getElementById('annexEmerg2Name').textContent = med.emerg2Name || 'Não cadastrado';
+      document.getElementById('annexEmerg2Phone').textContent = med.emerg2Phone || '--';
+
+      const medNotesWrap = document.getElementById('annexMedNotesWrap');
+      if (med.notes) {
+        document.getElementById('annexMedNotes').textContent = med.notes;
+        medNotesWrap.style.display = 'block';
+      } else {
+        medNotesWrap.style.display = 'none';
+      }
+
+      document.getElementById('annexAuthEmergencyText').innerHTML = med.authEmergency
+        ? '<strong>[ AUTORIZADO ]</strong> Autorizo o atendimento médico de emergência do meu filho(a) em caso de urgência, quando não for possível contato imediato com os responsáveis.'
+        : '<span style="color:#b91c1c;"><strong>[ NÃO AUTORIZADO ]</strong> Os responsáveis optaram por não autorizar socorro emergencial sem contato prévio direto.</span>';
+
+      document.getElementById('annexVaccinesText').innerHTML = med.vaccinesOk
+        ? '<strong>[ DECLARADO ]</strong> Vacinas em dia: declaro ter apresentado cópia legível da carteira de vacinação à secretaria da instituição escolar.'
+        : '<span style="color:#b91c1c;"><strong>[ PENDENTE ]</strong> Carteira de vacinação pendente de apresentação na secretaria.</span>';
+
+      document.getElementById('annexCityDateText').textContent = dateFormattedStr;
+      document.getElementById('annexSignRespName').textContent = data.guardians[0].name;
+      document.getElementById('annexSignRespCpf').textContent = data.guardians[0].cpf;
+      document.getElementById('annexSignPrincipal').textContent = FIXED_SCHOOL_DATA.principal;
+      document.getElementById('annexSignSchool').textContent = FIXED_SCHOOL_DATA.name;
+
+      // Assinaturas do Contrato (dados fixos da diretora e escola)
+      document.getElementById('docSignPrincipal').textContent = FIXED_SCHOOL_DATA.principal;
+      document.getElementById('docSignSchool').textContent = FIXED_SCHOOL_DATA.name;
+      document.getElementById('docSignResp1').textContent = data.guardians[0].name;
+      document.getElementById('docSignResp1Cpf').textContent = data.guardians[0].cpf;
+
+      const sign2Box = document.getElementById('docSignResp2Box');
+      if (data.guardians[1]) {
+        sign2Box.style.display = 'flex';
+        document.getElementById('docSignResp2').textContent = data.guardians[1].name;
+        document.getElementById('docSignResp2Cpf').textContent = data.guardians[1].cpf;
+      } else {
+        sign2Box.style.display = 'none';
+      }
+
+      // Render digital signature if present
+      renderDigitalSignaturePreview();
+
+      // Muda para aba Preview e rola suavemente
+      switchTab('preview');
+      showToast('✅ Contrato gerado com sucesso!');
+    }
+
+    // ==========================================
+    // ASSINATURA DIGITAL NO CANVAS
+    // ==========================================
+    let canvas, ctx;
+    let isDrawing = false;
+
+    function initSignaturePad() {
+      canvas = document.getElementById('signatureCanvas');
+      if (!canvas) return;
+      ctx = canvas.getContext('2d');
+      ctx.lineWidth = 2.5;
+      ctx.lineCap = 'round';
+      ctx.strokeStyle = '#0f172a';
+
+      function getPos(e) {
+        const rect = canvas.getBoundingClientRect();
+        const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+        const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+        return {
+          x: clientX - rect.left,
+          y: clientY - rect.top
+        };
+      }
+
+      function startDraw(e) {
+        isDrawing = true;
+        const pos = getPos(e);
+        ctx.beginPath();
+        ctx.moveTo(pos.x, pos.y);
+        e.preventDefault();
+      }
+
+      function draw(e) {
+        if (!isDrawing) return;
+        const pos = getPos(e);
+        ctx.lineTo(pos.x, pos.y);
+        ctx.stroke();
+        e.preventDefault();
+      }
+
+      function stopDraw() {
+        if (isDrawing) {
+          isDrawing = false;
+        }
+      }
+
+      canvas.addEventListener('mousedown', startDraw);
+      canvas.addEventListener('mousemove', draw);
+      window.addEventListener('mouseup', stopDraw);
+
+      canvas.addEventListener('touchstart', startDraw, { passive: false });
+      canvas.addEventListener('touchmove', draw, { passive: false });
+      window.addEventListener('touchend', stopDraw);
+    }
+
+    function clearSignatureCanvas() {
+      if (!ctx || !canvas) return;
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      digitalSignatureDataUrl = null;
+      renderDigitalSignaturePreview();
+      const status = document.getElementById('signatureStatusMsg');
+      if (status) status.style.display = 'none';
+    }
+
+    function applyDigitalSignature() {
+      if (!canvas) return;
+      
+      // Verifica se o canvas está em branco
+      const pixelBuffer = new Uint32Array(
+        ctx.getImageData(0, 0, canvas.width, canvas.height).data.buffer
+      );
+      const hasDrawn = pixelBuffer.some(color => color !== 0);
+
+      if (!hasDrawn) {
+        showToast('⚠️ Desenhe sua assinatura no quadro antes de aplicar.', '#eab308');
+        return;
+      }
+
+      digitalSignatureDataUrl = canvas.toDataURL('image/png');
+      if (currentContractData) {
+        currentContractData.signatureImage = digitalSignatureDataUrl;
+      }
+      renderDigitalSignaturePreview();
+
+      const status = document.getElementById('signatureStatusMsg');
+      if (status) {
+        status.style.display = 'inline';
+        setTimeout(() => { status.style.display = 'none'; }, 3500);
+      }
+      showToast('✍️ Assinatura digital aplicada ao contrato!');
+    }
+
+    function renderDigitalSignaturePreview() {
+      const container = document.getElementById('signatureImageContainer');
+      if (!container) return;
+
+      if (digitalSignatureDataUrl) {
+        container.innerHTML = `<img src="${digitalSignatureDataUrl}" alt="Assinatura Digital" class="digital-signature-preview">`;
+      } else {
+        container.innerHTML = '';
+      }
+    }
+
+    // ==========================================
+    // IMPRESSÃO E EXPORTAÇÃO EM PDF
+    // ==========================================
+    function printContract() {
+      window.print();
+    }
+
+    // ==========================================
+    // LOCAL STORAGE: CONTRATOS SALVOS
+    // ==========================================
+    function getSavedContracts() {
+      try {
+        const raw = localStorage.getItem(STORAGE_KEY);
+        return raw ? JSON.parse(raw) : [];
+      } catch (e) {
+        console.error('Falha ao ler localStorage:', e);
+        return [];
+      }
+    }
+
+    function saveContractToStorage() {
+      if (!currentContractData) {
+        generateContract();
+      }
+
+      const list = getSavedContracts();
+      // Verifica se já existe por ID ou contractNum
+      const index = list.findIndex(item => item.id === currentContractData.id || item.contractNum === currentContractData.contractNum);
+
+      if (index >= 0) {
+        list[index] = { ...currentContractData, updatedAt: new Date().toISOString() };
+        showToast(`💾 Contrato ${currentContractData.contractNum} atualizado!`);
+      } else {
+        list.unshift({ ...currentContractData, savedAt: new Date().toISOString() });
+        showToast(`💾 Contrato ${currentContractData.contractNum} salvo na lista!`);
+      }
+
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(list));
+      renderSavedContractsTable();
+    }
+
+    function renderSavedContractsTable() {
+      const list = getSavedContracts();
+      const tbody = document.getElementById('savedContractsTableBody');
+      const emptyState = document.getElementById('emptySavedState');
+      const table = document.getElementById('savedTable');
+      const badge = document.getElementById('savedCountBadge');
+
+      badge.textContent = list.length;
+
+      if (list.length === 0) {
+        tbody.innerHTML = '';
+        table.style.display = 'none';
+        emptyState.style.display = 'block';
+        return;
+      }
+
+      table.style.display = 'table';
+      emptyState.style.display = 'none';
+
+      tbody.innerHTML = list.map((item, index) => {
+        const student = item.student?.name || 'Não informado';
+        const guardian = item.guardians?.[0]?.name || 'Não informado';
+        const fee = formatMoney(item.financial?.monthlyFee || 0);
+        const createdDate = item.createdAt ? new Date(item.createdAt).toLocaleDateString('pt-BR') : '--';
+
+        return `
+          <tr>
+            <td>
+              <strong style="color:var(--accent-text);">${item.contractNum}</strong>
+              <div class="muted" style="font-size:0.75rem;">${createdDate}</div>
+            </td>
+            <td>
+              <strong>${escapeHtml(student)}</strong>
+              <div class="muted" style="font-size:0.775rem;">${escapeHtml(item.student?.className || '')}</div>
+            </td>
+            <td>
+              ${escapeHtml(guardian)}
+              <div class="muted" style="font-size:0.75rem;">CPF: ${escapeHtml(item.guardians?.[0]?.cpf || '--')}</div>
+            </td>
+            <td>
+              ${escapeHtml(item.financial?.duration || '12 meses')}
+              <div class="muted" style="font-size:0.75rem;">Início: ${formatDateBr(item.financial?.startDate)}</div>
+            </td>
+            <td class="num font-semibold">${fee}</td>
+            <td>
+              <span class="shell-badge" style="background:#dcfce7; color:#166534;">Ativo</span>
+            </td>
+            <td style="text-align:center;">
+              <div style="display:inline-flex; gap:0.4rem;">
+                <button class="btn-school-outline" style="padding:0.3rem 0.6rem; font-size:0.8rem;" onclick="openSavedContract('${item.id}')" title="Abrir e Visualizar">
+                  Abrir
+                </button>
+                <button class="btn-school-outline" style="padding:0.3rem 0.6rem; font-size:0.8rem;" onclick="printSavedContract('${item.id}')" title="Imprimir">
+                  🖨️
+                </button>
+                <button class="btn-school-outline" style="padding:0.3rem 0.6rem; font-size:0.8rem; color:#dc2626;" onclick="deleteSavedContract('${item.id}')" title="Excluir">
+                  🗑️
+                </button>
+              </div>
+            </td>
+          </tr>
+        `;
+      }).join('');
+    }
+
+    function openSavedContract(id) {
+      const list = getSavedContracts();
+      const target = list.find(c => c.id === id);
+      if (!target) return;
+
+      populateForm(target);
+      generateContract();
+      switchTab('preview');
+    }
+
+    function printSavedContract(id) {
+      openSavedContract(id);
+      setTimeout(() => {
+        window.print();
+      }, 350);
+    }
+
+    function deleteSavedContract(id) {
+      if (!confirm('Deseja realmente remover este contrato salvo?')) return;
+      let list = getSavedContracts();
+      list = list.filter(c => c.id !== id);
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(list));
+      renderSavedContractsTable();
+      showToast('Contrato excluído da lista.');
+    }
+
+    function clearAllSavedContracts() {
+      if (!confirm('Atenção: deseja apagar todos os contratos arquivados? Esta ação não pode ser desfeita.')) return;
+      localStorage.removeItem(STORAGE_KEY);
+      renderSavedContractsTable();
+      showToast('Todos os contratos foram removidos.');
+    }
+
+    // ==========================================
+    // DADOS INICIAIS / MOCK / EXEMPLO
+    // ==========================================
+    function loadSampleContractData() {
+      const sample = {
+        id: 'sample-' + Date.now(),
+        contractNum: `CT-${new Date().getFullYear()}-0001`,
+        createdAt: new Date().toISOString(),
+        school: {
+          name: FIXED_SCHOOL_DATA.name,
+          legalName: FIXED_SCHOOL_DATA.legalName,
+          cnpj: FIXED_SCHOOL_DATA.cnpj,
+          address: FIXED_SCHOOL_DATA.address,
+          phone: FIXED_SCHOOL_DATA.phone,
+          principal: FIXED_SCHOOL_DATA.principal
+        },
+        student: {
+          name: 'Arthur Benício de Albuquerque',
+          dob: '2021-04-18',
+          age: '4 anos e 10 meses',
+          className: 'Maternal II (3 a 4 anos)',
+          period: 'Integral (07:30 às 18:30)',
+          turno: 'Integral'
+        },
+        medical: {
+          allergies: 'Intolerância leve à lactose e alergia leve a picada de pernilongo',
+          medications: 'Nenhum medicamento contínuo (em caso de febre: Paracetamol com autorização)',
+          conditions: 'Nenhuma condição crônica pré-existente (sem asma ou convulsões)',
+          surgeries: 'Nenhuma cirurgia ou internação',
+          bloodType: 'O+',
+          healthPlan: 'Porto Seguro Saúde - Plano Ouro nº 542.981.002',
+          doctor: 'Dra. Juliana Prado (Pediatra) - Tel: (11) 98877-3322',
+          hospital: 'Hospital e Maternidade São Luiz (Anália Franco) ou Sabará Infantil',
+          emerg1Name: 'Maria de Fátima Mendes (Avó Materna)',
+          emerg1Phone: '(11) 97766-5544',
+          emerg2Name: 'Carlos Eduardo Silva (Tio Paterno)',
+          emerg2Phone: '(11) 96655-4433',
+          authEmergency: true,
+          vaccinesOk: true,
+          notes: 'A criança não consome laticínios normais; substituir lanche por leite de amêndoas ou fórmula sem lactose.'
+        },
+        guardians: [
+          {
+            name: 'Carolina Mendes de Albuquerque',
+            cpf: '321.654.987-12',
+            rg: '42.871.902-5',
+            profession: 'Arquiteta e Urbanista',
+            phone: '(11) 98765-4321',
+            email: 'carolina.albuquerque@email.com',
+            address: 'Rua Bela Cintra, 1120, Apto 82 - Consolação, São Paulo - SP'
+          },
+          {
+            name: 'Rodrigo Albuquerque Silva',
+            cpf: '987.654.321-00',
+            rg: '38.123.456-7',
+            profession: 'Engenheiro de Software',
+            phone: '(11) 97123-4567',
+            email: 'rodrigo.albuquerque@email.com'
+          }
+        ],
+        financial: {
+          type: 'Matrícula e Mensalidade',
+          enrollmentFee: 850,
+          monthlyFee: 1650,
+          dueDay: '10',
+          paymentMethod: 'Boleto Bancário Registrado',
+          startDate: '2026-02-02',
+          duration: '12 meses (Ano Letivo Completo)',
+          notes: 'Aluno com intolerância leve a lactose. Autorizada saída com os avós maternos mediante aviso prévio.'
+        },
+        options: {
+          imageRights: true,
+          extraActivities: true,
+          transport: false,
+          emergencyMedical: true
+        }
+      };
+
+      populateForm(sample);
+      showToast('⚡ Exemplo carregado com sucesso!');
+    }
+
+    function loadDraftOrSample() {
+      try {
+        const draft = localStorage.getItem(DRAFT_KEY);
+        if (draft) {
+          populateForm(JSON.parse(draft));
+          return;
+        }
+      } catch (e) {
+        console.warn(e);
+      }
+      // Se não há draft, carrega mock para garantir funcionamento completo no carregamento
+      loadSampleContractData();
+    }
+
+    function resetFormToDefaults() {
+      if (!confirm('Deseja limpar todos os campos do formulário para iniciar do zero?')) return;
+      document.getElementById('contractForm').reset();
+      
+      // Restaura dados fixos da escola
+      document.getElementById('schoolName').value = `${FIXED_SCHOOL_DATA.name} (${FIXED_SCHOOL_DATA.legalName})`;
+      document.getElementById('schoolCnpj').value = FIXED_SCHOOL_DATA.cnpj;
+      document.getElementById('schoolAddress').value = FIXED_SCHOOL_DATA.address;
+      document.getElementById('schoolPhone').value = FIXED_SCHOOL_DATA.phone;
+      document.getElementById('schoolPrincipal').value = FIXED_SCHOOL_DATA.principal;
+
+      toggleSecondGuardian(false);
+      clearSignatureCanvas();
+      currentContractData = null;
+      localStorage.removeItem(DRAFT_KEY);
+      document.getElementById('studentAge').value = '';
+      // Reset ficha médica
+      document.getElementById('medAllergies').value = '';
+      document.getElementById('medMedications').value = '';
+      document.getElementById('medConditions').value = '';
+      document.getElementById('medSurgeries').value = '';
+      document.getElementById('medBloodType').value = '';
+      document.getElementById('medHealthPlan').value = '';
+      document.getElementById('medDoctor').value = '';
+      document.getElementById('medHospital').value = '';
+      document.getElementById('medEmerg1Name').value = '';
+      document.getElementById('medEmerg1Phone').value = '';
+      document.getElementById('medEmerg2Name').value = '';
+      document.getElementById('medEmerg2Phone').value = '';
+      document.getElementById('medAuthEmergency').checked = true;
+      document.getElementById('medVaccinesOk').checked = true;
+      document.getElementById('medNotes').value = '';
+      showToast('Formulário limpo.');
+    }
+
+    // ==========================================
+    // NOTIFICAÇÕES (TOAST)
+    // ==========================================
+    let toastTimeout;
+    function showToast(message, bgColor) {
+      const toast = document.getElementById('toastNotification');
+      const text = document.getElementById('toastText');
+      text.textContent = message;
+
+      if (bgColor) {
+        toast.style.background = bgColor;
+      } else {
+        toast.style.background = '#0f172a';
+      }
+
+      toast.style.display = 'flex';
+      clearTimeout(toastTimeout);
+      toastTimeout = setTimeout(() => {
+        toast.style.display = 'none';
+      }, 3500);
+    }
+
+    // Escape helper
+    function escapeHtml(str) {
+      if (!str) return '';
+      return String(str)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#039;');
+    }
+  </script>
+<script>
+/* Skip artifact shell — fixed helpers served beside every artifact. */
+(function () {
+  "use strict";
+
+  var fmt = {
+    num: function (v, opts) { return new Intl.NumberFormat("pt-BR", opts || {}).format(v); },
+    brl: function (v) { return new Intl.NumberFormat("pt-BR", { style: "currency", currency: "BRL" }).format(v); },
+    pct: function (v) { return new Intl.NumberFormat("pt-BR", { style: "percent", maximumFractionDigits: 1 }).format(v); }
+  };
+
+  // axisFmt keeps axis tick labels short (compact notation) so long values
+  // (e.g. full BRL amounts) never clip against the plot edge.
+  function axisFmt(v) {
+    return fmt.num(v, { notation: "compact", maximumFractionDigits: 1 });
+  }
+
+  // format accepts a function OR one of the fmt names ("num" | "brl" | "pct").
+  function coerceFormat(spec) {
+    if (typeof spec === "function") return spec;
+    if (typeof spec === "string" && fmt[spec]) return fmt[spec];
+    return function (v) { return fmt.num(v); };
+  }
+
+  function accent() {
+    return getComputedStyle(document.documentElement).getPropertyValue("--accent").trim() || "#2563eb";
+  }
+  function mutedColor() {
+    return getComputedStyle(document.documentElement).getPropertyValue("--text-muted").trim() || "#5b6472";
+  }
+  function svgEl(tag, attrs) {
+    var el = document.createElementNS("http://www.w3.org/2000/svg", tag);
+    for (var k in attrs) el.setAttribute(k, attrs[k]);
+    return el;
+  }
+  function frame(el, w, h) {
+    var svg = svgEl("svg", { viewBox: "0 0 " + w + " " + h, role: "img" });
+    el.innerHTML = "";
+    el.appendChild(svg);
+    return svg;
+  }
+
+  // maxOf guards the axis scale: empty values would give -Infinity (truthy,
+  // so "|| 1" can't catch it) and a non-positive max would flip the chart.
+  function maxOf(values) {
+    var m = values.length ? Math.max.apply(null, values) : 0;
+    return m > 0 ? m : 1;
+  }
+
+  // bar(el, {labels:[], values:[], color?, format?}) — vertical bar chart.
+  function bar(el, cfg) {
+    var W = 640, H = 280, padL = 46, padB = 30, padT = 12;
+    var svg = frame(el, W, H);
+    var max = maxOf(cfg.values);
+    var n = cfg.values.length;
+    var plotW = W - padL - 12, plotH = H - padT - padB;
+    var step = plotW / n, bw = Math.min(step * 0.62, 64);
+    var color = cfg.color || accent();
+    var f = coerceFormat(cfg.format);
+    for (var g = 0; g <= 4; g++) {
+      var gy = padT + plotH - (plotH * g) / 4;
+      svg.appendChild(svgEl("line", { x1: padL, y1: gy, x2: W - 12, y2: gy, stroke: "currentColor", "stroke-opacity": 0.08 }));
+      var lbl = svgEl("text", { x: padL - 8, y: gy + 4, "text-anchor": "end", "font-size": 10, fill: mutedColor() });
+      lbl.textContent = axisFmt((max * g) / 4);
+      svg.appendChild(lbl);
+    }
+    cfg.values.forEach(function (v, i) {
+      var bh = Math.max(0, (v / max) * plotH);
+      var x = padL + i * step + (step - bw) / 2;
+      var y = padT + plotH - bh;
+      var r = svgEl("rect", { x: x, y: y, width: bw, height: bh, rx: 4, fill: color });
+      var t = svgEl("title", {});
+      t.textContent = cfg.labels[i] + ": " + f(v);
+      r.appendChild(t);
+      svg.appendChild(r);
+      var tx = svgEl("text", { x: x + bw / 2, y: H - 10, "text-anchor": "middle", "font-size": 11, fill: mutedColor() });
+      tx.textContent = cfg.labels[i];
+      svg.appendChild(tx);
+    });
+  }
+
+  // line(el, {labels:[], values:[], color?, format?}) — single-series line.
+  function line(el, cfg) {
+    var W = 640, H = 280, padL = 46, padB = 30, padT = 12;
+    var svg = frame(el, W, H);
+    var max = maxOf(cfg.values);
+    var n = cfg.values.length;
+    var plotW = W - padL - 16, plotH = H - padT - padB;
+    var color = cfg.color || accent();
+    var f = coerceFormat(cfg.format);
+    for (var g = 0; g <= 4; g++) {
+      var gy = padT + plotH - (plotH * g) / 4;
+      svg.appendChild(svgEl("line", { x1: padL, y1: gy, x2: W - 16, y2: gy, stroke: "currentColor", "stroke-opacity": 0.08 }));
+      var lbl = svgEl("text", { x: padL - 8, y: gy + 4, "text-anchor": "end", "font-size": 10, fill: mutedColor() });
+      lbl.textContent = axisFmt((max * g) / 4);
+      svg.appendChild(lbl);
+    }
+    var pts = cfg.values.map(function (v, i) {
+      var x = padL + (n === 1 ? plotW / 2 : (plotW * i) / (n - 1));
+      var y = padT + plotH - (v / max) * plotH;
+      return [x, y];
+    });
+    var d = pts.map(function (p, i) { return (i ? "L" : "M") + p[0].toFixed(1) + " " + p[1].toFixed(1); }).join(" ");
+    svg.appendChild(svgEl("path", { d: d, fill: "none", stroke: color, "stroke-width": 2, "stroke-linejoin": "round" }));
+    pts.forEach(function (p, i) {
+      var c = svgEl("circle", { cx: p[0], cy: p[1], r: 3.5, fill: color });
+      var t = svgEl("title", {});
+      t.textContent = cfg.labels[i] + ": " + f(cfg.values[i]);
+      c.appendChild(t);
+      svg.appendChild(c);
+      var tx = svgEl("text", { x: p[0], y: H - 10, "text-anchor": "middle", "font-size": 11, fill: mutedColor() });
+      tx.textContent = cfg.labels[i];
+      svg.appendChild(tx);
+    });
+  }
+
+  // donut(el, {labels:[], values:[], colors?}) — donut with center total.
+  function donut(el, cfg) {
+    var W = 320, H = 280, cx = W / 2, cy = H / 2, R = 92, r = 58;
+    var svg = frame(el, W, H);
+    var total = cfg.values.reduce(function (a, b) { return a + b; }, 0) || 1;
+    var palette = cfg.colors || [accent(), "#1baf7a", "#eda100", "#e34948", "#4a3aa7", "#e87ba4"];
+    var a0 = -Math.PI / 2;
+    cfg.values.forEach(function (v, i) {
+      var a1 = a0 + (v / total) * Math.PI * 2;
+      var large = a1 - a0 > Math.PI ? 1 : 0;
+      var p = ["M", cx + R * Math.cos(a0), cy + R * Math.sin(a0),
+        "A", R, R, 0, large, 1, cx + R * Math.cos(a1), cy + R * Math.sin(a1),
+        "L", cx + r * Math.cos(a1), cy + r * Math.sin(a1),
+        "A", r, r, 0, large, 0, cx + r * Math.cos(a0), cy + r * Math.sin(a0), "Z"].join(" ");
+      var path = svgEl("path", { d: p, fill: palette[i % palette.length] });
+      var t = svgEl("title", {});
+      t.textContent = cfg.labels[i] + ": " + fmt.num(v) + " (" + fmt.pct(v / total) + ")";
+      path.appendChild(t);
+      svg.appendChild(path);
+      a0 = a1;
+    });
+    var center = svgEl("text", { x: cx, y: cy + 5, "text-anchor": "middle", "font-size": 20, "font-weight": 650, fill: "currentColor" });
+    center.textContent = fmt.num(total);
+    svg.appendChild(center);
+  }
+
+  window.skipShell = { fmt: fmt };
+  window.skipChart = { bar: bar, line: line, donut: donut };
+})();
+
+</script>
+</body>
+</html>
