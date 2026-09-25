@@ -979,7 +979,8 @@ table.shell-table tbody tr:hover { background: color-mix(in srgb, var(--accent) 
             </div>
             <div class="col-3 form-group">
               <label class="form-label" for="resp1Cpf">CPF <span class="req">*</span></label>
-              <input type="text" id="resp1Cpf" name="resp1Cpf" class="form-control" placeholder="000.000.000-00" maxlength="14" oninput="maskCpf(this)" required>
+              <input type="text" id="resp1Cpf" name="resp1Cpf" class="form-control" placeholder="000.000.000-00" maxlength="14" required>
+              <span id="resp1CpfError" class="field-error" style="display:none; color:var(--danger); font-size:0.78rem; font-weight:600; margin-top:2px;">CPF inválido</span>
             </div>
             <div class="col-3 form-group">
               <label class="form-label" for="resp1Rg">RG <span class="req">*</span></label>
@@ -997,9 +998,36 @@ table.shell-table tbody tr:hover { background: color-mix(in srgb, var(--accent) 
               <label class="form-label" for="resp1Email">E-mail <span class="req">*</span></label>
               <input type="email" id="resp1Email" name="resp1Email" class="form-control" placeholder="responsavel@email.com" required>
             </div>
-            <div class="col-12 form-group">
-              <label class="form-label" for="resp1Address">Endereço Residencial Completo <span class="req">*</span></label>
-              <input type="text" id="resp1Address" name="resp1Address" class="form-control" placeholder="Rua, número, complemento, bairro, cidade - UF, CEP" required>
+
+            <!-- CORREÇÃO 2: Endereço Detalhado com busca por CEP via ViaCEP -->
+            <div class="col-3 form-group">
+              <label class="form-label" for="resp1Cep">CEP <span class="req">*</span></label>
+              <input type="text" id="resp1Cep" name="resp1Cep" class="form-control" placeholder="00000-000" maxlength="9" required>
+              <div id="cepFeedback" style="font-size:0.78rem; font-weight:600; margin-top:3px; display:none;"></div>
+            </div>
+            <div class="col-6 form-group">
+              <label class="form-label" for="resp1Street">Logradouro (Rua / Avenida) <span class="req">*</span></label>
+              <input type="text" id="resp1Street" name="resp1Street" class="form-control" placeholder="Rua / Avenida" required>
+            </div>
+            <div class="col-3 form-group">
+              <label class="form-label" for="resp1Number">Número <span class="req">*</span></label>
+              <input type="text" id="resp1Number" name="resp1Number" class="form-control" placeholder="123" required>
+            </div>
+            <div class="col-3 form-group">
+              <label class="form-label" for="resp1Comp">Complemento</label>
+              <input type="text" id="resp1Comp" name="resp1Comp" class="form-control" placeholder="Apto, Bloco, etc.">
+            </div>
+            <div class="col-3 form-group">
+              <label class="form-label" for="resp1Neighborhood">Bairro <span class="req">*</span></label>
+              <input type="text" id="resp1Neighborhood" name="resp1Neighborhood" class="form-control" placeholder="Bairro" required>
+            </div>
+            <div class="col-4 form-group">
+              <label class="form-label" for="resp1City">Cidade <span class="req">*</span></label>
+              <input type="text" id="resp1City" name="resp1City" class="form-control" placeholder="Cidade" required>
+            </div>
+            <div class="col-2 form-group">
+              <label class="form-label" for="resp1State">UF <span class="req">*</span></label>
+              <input type="text" id="resp1State" name="resp1State" class="form-control" placeholder="SP" maxlength="2" required style="text-transform:uppercase;">
             </div>
           </div>
 
@@ -1018,7 +1046,8 @@ table.shell-table tbody tr:hover { background: color-mix(in srgb, var(--accent) 
               </div>
               <div class="col-3 form-group">
                 <label class="form-label" for="resp2Cpf">CPF</label>
-                <input type="text" id="resp2Cpf" name="resp2Cpf" class="form-control" placeholder="000.000.000-00" maxlength="14" oninput="maskCpf(this)">
+                <input type="text" id="resp2Cpf" name="resp2Cpf" class="form-control" placeholder="000.000.000-00" maxlength="14">
+                <span id="resp2CpfError" class="field-error" style="display:none; color:var(--danger); font-size:0.78rem; font-weight:600; margin-top:2px;">CPF inválido</span>
               </div>
               <div class="col-3 form-group">
                 <label class="form-label" for="resp2Rg">RG</label>
@@ -1638,6 +1667,8 @@ table.shell-table tbody tr:hover { background: color-mix(in srgb, var(--accent) 
     // Inicialização
     document.addEventListener('DOMContentLoaded', () => {
       initSignatureCanvas();
+      initCpfListeners();
+      initCepListener();
       initDraftRestoration();
       initInputWatchers();
       updateSavedCountBadge();
@@ -1727,10 +1758,10 @@ table.shell-table tbody tr:hover { background: color-mix(in srgb, var(--accent) 
     }
 
     /* ------------------------------------------------------------------------
-       3. MÁSCARAS E FORMATAÇÃO DE DADOS
+       3. MÁSCARAS E VALIDAÇÃO DE CPF (CORREÇÃO 1)
        ------------------------------------------------------------------------ */
-    function maskCpf(input) {
-      let v = input.value.replace(/\D/g, '').slice(0, 11);
+    function formatCpf(val) {
+      let v = String(val || '').replace(/\D/g, '').slice(0, 11);
       if (v.length > 9) {
         v = v.replace(/(\d{3})(\d{3})(\d{3})(\d{1,2})/, '$1.$2.$3-$4');
       } else if (v.length > 6) {
@@ -1738,7 +1769,216 @@ table.shell-table tbody tr:hover { background: color-mix(in srgb, var(--accent) 
       } else if (v.length > 3) {
         v = v.replace(/(\d{3})(\d{1,3})/, '$1.$2');
       }
-      input.value = v;
+      return v;
+    }
+
+    // Algoritmo oficial de verificação de CPF (dígitos verificadores + repetidos)
+    function isValidCpf(cpf) {
+      if (!cpf) return false;
+      const clean = String(cpf).replace(/\D/g, '');
+      if (clean.length !== 11) return false;
+      // Rejeita todos os dígitos repetidos (000...00, 111...11, etc.)
+      if (/^(\d)\1{10}$/.test(clean)) return false;
+
+      let sum = 0;
+      for (let i = 0; i < 9; i++) {
+        sum += parseInt(clean.charAt(i), 10) * (10 - i);
+      }
+      let rev = 11 - (sum % 11);
+      if (rev === 10 || rev === 11) rev = 0;
+      if (rev !== parseInt(clean.charAt(9), 10)) return false;
+
+      sum = 0;
+      for (let i = 0; i < 10; i++) {
+        sum += parseInt(clean.charAt(i), 10) * (11 - i);
+      }
+      rev = 11 - (sum % 11);
+      if (rev === 10 || rev === 11) rev = 0;
+      if (rev !== parseInt(clean.charAt(10), 10)) return false;
+
+      return true;
+    }
+
+    function handleCpfInput(e) {
+      const input = e.target;
+      input.value = formatCpf(input.value);
+
+      const errEl = document.getElementById(input.id + 'Error');
+      const clean = input.value.replace(/\D/g, '');
+
+      // Se o usuário já preencheu 11 dígitos e o CPF é válido, limpa erro em tempo real
+      if (clean.length === 11 && isValidCpf(clean)) {
+        input.classList.remove('is-invalid');
+        if (errEl) errEl.style.display = 'none';
+      }
+      saveDraft();
+    }
+
+    function handleCpfPaste(e) {
+      e.preventDefault();
+      const pasteText = (e.clipboardData || window.clipboardData).getData('text') || '';
+      const input = e.target;
+      input.value = formatCpf(pasteText);
+      handleCpfBlur({ target: input });
+      saveDraft();
+    }
+
+    function handleCpfBlur(e) {
+      const input = e.target;
+      const clean = input.value.replace(/\D/g, '');
+      const errEl = document.getElementById(input.id + 'Error');
+
+      // Se o campo for opcional e estiver vazio, limpa qualquer erro
+      if (!clean && !input.required) {
+        input.classList.remove('is-invalid');
+        if (errEl) errEl.style.display = 'none';
+        return;
+      }
+
+      if (!isValidCpf(clean)) {
+        input.classList.add('is-invalid');
+        if (errEl) {
+          errEl.textContent = 'CPF inválido';
+          errEl.style.display = 'block';
+        }
+      } else {
+        input.classList.remove('is-invalid');
+        if (errEl) errEl.style.display = 'none';
+      }
+    }
+
+    function initCpfListeners() {
+      ['resp1Cpf', 'resp2Cpf'].forEach(id => {
+        const input = document.getElementById(id);
+        if (!input) return;
+        input.addEventListener('input', handleCpfInput);
+        input.addEventListener('paste', handleCpfPaste);
+        input.addEventListener('blur', handleCpfBlur);
+      });
+    }
+
+    /* ------------------------------------------------------------------------
+       3.1 MÁSCARA E PREENCHIMENTO AUTOMÁTICO DE CEP (CORREÇÃO 2 - ViaCEP)
+       ------------------------------------------------------------------------ */
+    function formatCep(val) {
+      let v = String(val || '').replace(/\D/g, '').slice(0, 8);
+      if (v.length > 5) {
+        v = v.replace(/^(\d{5})(\d)/, '$1-$2');
+      }
+      return v;
+    }
+
+    function showCepFeedback(message, type = 'warning') {
+      const feedback = document.getElementById('cepFeedback');
+      if (!feedback) return;
+      feedback.textContent = message;
+      if (type === 'warning') {
+        feedback.style.color = '#c62828';
+      } else if (type === 'loading') {
+        feedback.style.color = '#0e2a47';
+      } else {
+        feedback.style.color = '#0d8a55';
+      }
+      feedback.style.display = 'block';
+    }
+
+    function hideCepFeedback() {
+      const feedback = document.getElementById('cepFeedback');
+      if (feedback) {
+        feedback.style.display = 'none';
+        feedback.textContent = '';
+      }
+    }
+
+    function lookupCep(rawCep) {
+      const clean = String(rawCep).replace(/\D/g, '');
+      if (clean.length !== 8) return;
+
+      showCepFeedback('Buscando endereço pelo CEP...', 'loading');
+
+      fetch(`https://viacep.com.br/ws/${clean}/json/`)
+        .then(res => {
+          if (!res.ok) throw new Error('Falha na requisição');
+          return res.json();
+        })
+        .then(data => {
+          if (data.erro) {
+            showCepFeedback('CEP não encontrado — preencha o endereço manualmente', 'warning');
+            return;
+          }
+          // Preencher campos automaticamente
+          const streetEl = document.getElementById('resp1Street');
+          const neighEl = document.getElementById('resp1Neighborhood');
+          const cityEl = document.getElementById('resp1City');
+          const stateEl = document.getElementById('resp1State');
+          const numEl = document.getElementById('resp1Number');
+
+          if (streetEl && data.logradouro) streetEl.value = data.logradouro;
+          if (neighEl && data.bairro) neighEl.value = data.bairro;
+          if (cityEl && data.localidade) cityEl.value = data.localidade;
+          if (stateEl && data.uf) stateEl.value = data.uf;
+
+          // Limpa possíveis marcações vermelhas anteriores desses campos
+          [streetEl, neighEl, cityEl, stateEl].forEach(el => {
+            if (el && el.value.trim()) el.classList.remove('is-invalid');
+          });
+
+          hideCepFeedback();
+
+          // Move foco para o campo Número
+          if (numEl) {
+            numEl.focus();
+          }
+
+          saveDraft();
+        })
+        .catch(err => {
+          console.warn('Erro ao consultar ViaCEP:', err);
+          showCepFeedback('CEP não encontrado — preencha o endereço manualmente', 'warning');
+        });
+    }
+
+    function initCepListener() {
+      const cepInput = document.getElementById('resp1Cep');
+      if (!cepInput) return;
+
+      const handleCepChange = () => {
+        cepInput.value = formatCep(cepInput.value);
+        const clean = cepInput.value.replace(/\D/g, '');
+        if (clean.length === 8) {
+          lookupCep(clean);
+        } else {
+          hideCepFeedback();
+        }
+        saveDraft();
+      };
+
+      cepInput.addEventListener('input', handleCepChange);
+      cepInput.addEventListener('paste', e => {
+        e.preventDefault();
+        const text = (e.clipboardData || window.clipboardData).getData('text') || '';
+        cepInput.value = formatCep(text);
+        const clean = cepInput.value.replace(/\D/g, '');
+        if (clean.length === 8) {
+          lookupCep(clean);
+        }
+        saveDraft();
+      });
+    }
+
+    function assembleFullAddress(street, number, comp, neighborhood, city, state, cep) {
+      let parts = [];
+      let mainPart = street || '';
+      if (number) mainPart += `, nº ${number}`;
+      if (comp) mainPart += ` (${comp})`;
+      if (mainPart) parts.push(mainPart);
+
+      if (neighborhood) parts.push(neighborhood);
+      if (city && state) parts.push(`${city} - ${state.toUpperCase()}`);
+      else if (city) parts.push(city);
+      if (cep) parts.push(`CEP ${cep}`);
+
+      return parts.join(', ');
     }
 
     function maskPhone(input) {
@@ -1851,14 +2091,23 @@ table.shell-table tbody tr:hover { background: color-mix(in srgb, var(--accent) 
       document.getElementById('studentPeriod').value = 'Integral (07:30 às 18:30)';
       document.getElementById('studentShift').value = 'Integral';
 
-      // Responsável 1
+      // Responsável 1 (com CPF matematicamente válido e endereço estruturado por CEP)
       document.getElementById('resp1Name').value = 'Juliana Martins de Albuquerque';
-      document.getElementById('resp1Cpf').value = '000.000.000-00';
+      document.getElementById('resp1Cpf').value = '111.444.777-35';
       document.getElementById('resp1Rg').value = '45.892.110-8';
       document.getElementById('resp1Prof').value = 'Arquiteta Urbanista';
       document.getElementById('resp1Phone').value = '(11) 98765-4321';
       document.getElementById('resp1Email').value = 'juliana.albuquerque@exemplo.com.br';
-      document.getElementById('resp1Address').value = 'Rua das Hortênsias, 142, Apto 51, Vila Galvão, Guarulhos - SP, CEP 07073-100';
+
+      // Endereço separado
+      document.getElementById('resp1Cep').value = '07073-100';
+      document.getElementById('resp1Street').value = 'Rua das Hortênsias';
+      document.getElementById('resp1Number').value = '142';
+      document.getElementById('resp1Comp').value = 'Apto 51';
+      document.getElementById('resp1Neighborhood').value = 'Vila Galvão';
+      document.getElementById('resp1City').value = 'Guarulhos';
+      document.getElementById('resp1State').value = 'SP';
+      hideCepFeedback();
 
       // Responsável 2 (Opcional - Fechado por padrão no exemplo)
       toggleResp2(false);
@@ -1907,6 +2156,7 @@ table.shell-table tbody tr:hover { background: color-mix(in srgb, var(--accent) 
     function toggleResp2(show) {
       const resp2Block = document.getElementById('resp2Block');
       const btnAddResp2 = document.getElementById('btnAddResp2');
+      const err2 = document.getElementById('resp2CpfError');
       if (show) {
         resp2Block.style.display = 'block';
         btnAddResp2.style.display = 'none';
@@ -1916,8 +2166,12 @@ table.shell-table tbody tr:hover { background: color-mix(in srgb, var(--accent) 
         // Limpar campos do Resp 2
         ['resp2Name', 'resp2Cpf', 'resp2Rg', 'resp2Prof', 'resp2Phone', 'resp2Email', 'resp2Address'].forEach(id => {
           const el = document.getElementById(id);
-          if (el) el.value = '';
+          if (el) {
+            el.value = '';
+            el.classList.remove('is-invalid');
+          }
         });
+        if (err2) err2.style.display = 'none';
       }
       saveDraft();
     }
@@ -1946,6 +2200,10 @@ table.shell-table tbody tr:hover { background: color-mix(in srgb, var(--accent) 
 
     function clearAllValidationErrors() {
       document.querySelectorAll('.is-invalid').forEach(el => el.classList.remove('is-invalid'));
+      const err1 = document.getElementById('resp1CpfError');
+      const err2 = document.getElementById('resp2CpfError');
+      if (err1) err1.style.display = 'none';
+      if (err2) err2.style.display = 'none';
     }
 
     function validateForm() {
@@ -1962,7 +2220,12 @@ table.shell-table tbody tr:hover { background: color-mix(in srgb, var(--accent) 
         { id: 'resp1Prof', name: 'Profissão' },
         { id: 'resp1Phone', name: 'Telefone' },
         { id: 'resp1Email', name: 'E-mail' },
-        { id: 'resp1Address', name: 'Endereço Residencial' },
+        { id: 'resp1Cep', name: 'CEP' },
+        { id: 'resp1Street', name: 'Logradouro' },
+        { id: 'resp1Number', name: 'Número' },
+        { id: 'resp1Neighborhood', name: 'Bairro' },
+        { id: 'resp1City', name: 'Cidade' },
+        { id: 'resp1State', name: 'UF' },
         { id: 'medAllergies', name: 'Alergias' },
         { id: 'medDrugs', name: 'Medicamentos' },
         { id: 'medConditions', name: 'Condições de Saúde' },
@@ -1982,12 +2245,45 @@ table.shell-table tbody tr:hover { background: color-mix(in srgb, var(--accent) 
       let firstInvalidElement = null;
       let errorCount = 0;
 
-      // Validação de campos de texto/select
+      // Validação de campos de texto/select obrigatórios
       for (const item of requiredInputs) {
         const el = document.getElementById(item.id);
         if (!el || !el.value.trim()) {
           if (el) el.classList.add('is-invalid');
           if (!firstInvalidElement) firstInvalidElement = el;
+          errorCount++;
+        }
+      }
+
+      // Validação real de CPF do Responsável 1
+      const resp1CpfEl = document.getElementById('resp1Cpf');
+      const resp1Err = document.getElementById('resp1CpfError');
+      if (resp1CpfEl) {
+        const clean1 = resp1CpfEl.value.replace(/\D/g, '');
+        if (!isValidCpf(clean1)) {
+          resp1CpfEl.classList.add('is-invalid');
+          if (resp1Err) {
+            resp1Err.textContent = 'CPF inválido';
+            resp1Err.style.display = 'block';
+          }
+          if (!firstInvalidElement) firstInvalidElement = resp1CpfEl;
+          errorCount++;
+        }
+      }
+
+      // Validação de CPF do Responsável 2 (se preenchido)
+      const resp2Block = document.getElementById('resp2Block');
+      const resp2CpfEl = document.getElementById('resp2Cpf');
+      const resp2Err = document.getElementById('resp2CpfError');
+      if (resp2Block && resp2Block.style.display !== 'none' && resp2CpfEl && resp2CpfEl.value.trim()) {
+        const clean2 = resp2CpfEl.value.replace(/\D/g, '');
+        if (!isValidCpf(clean2)) {
+          resp2CpfEl.classList.add('is-invalid');
+          if (resp2Err) {
+            resp2Err.textContent = 'CPF inválido';
+            resp2Err.style.display = 'block';
+          }
+          if (!firstInvalidElement) firstInvalidElement = resp2CpfEl;
           errorCount++;
         }
       }
@@ -2014,7 +2310,7 @@ table.shell-table tbody tr:hover { background: color-mix(in srgb, var(--accent) 
           firstInvalidElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
           if (firstInvalidElement.focus) firstInvalidElement.focus();
         }
-        showToast('⚠️ Preencha os campos obrigatórios destacados em vermelho.', 'error');
+        showToast('⚠️ Preencha os campos obrigatórios e corrija os dados em vermelho.', 'error');
         return false;
       }
 
@@ -2031,6 +2327,16 @@ table.shell-table tbody tr:hover { background: color-mix(in srgb, var(--accent) 
       const currentYear = now.getFullYear();
       const randomSeq = Math.floor(Math.random() * 900 + 100);
       const contractNumber = `CT-${currentYear}-${randomSeq}`;
+
+      // Montar endereço completo estruturado
+      const street = document.getElementById('resp1Street').value.trim();
+      const number = document.getElementById('resp1Number').value.trim();
+      const comp = document.getElementById('resp1Comp').value.trim();
+      const neighborhood = document.getElementById('resp1Neighborhood').value.trim();
+      const city = document.getElementById('resp1City').value.trim();
+      const state = document.getElementById('resp1State').value.trim().toUpperCase();
+      const cep = document.getElementById('resp1Cep').value.trim();
+      const assembledAddress = assembleFullAddress(street, number, comp, neighborhood, city, state, cep);
 
       const data = {
         contractNumber,
@@ -2052,7 +2358,14 @@ table.shell-table tbody tr:hover { background: color-mix(in srgb, var(--accent) 
         resp1Prof: document.getElementById('resp1Prof').value.trim(),
         resp1Phone: document.getElementById('resp1Phone').value.trim(),
         resp1Email: document.getElementById('resp1Email').value.trim(),
-        resp1Address: document.getElementById('resp1Address').value.trim(),
+        resp1Cep: cep,
+        resp1Street: street,
+        resp1Number: number,
+        resp1Comp: comp,
+        resp1Neighborhood: neighborhood,
+        resp1City: city,
+        resp1State: state,
+        resp1Address: assembledAddress,
 
         // Resp 2 (Solidário)
         hasResp2: document.getElementById('resp2Block').style.display !== 'none' && document.getElementById('resp2Name').value.trim() !== '',
@@ -2886,7 +3199,13 @@ table.shell-table tbody tr:hover { background: color-mix(in srgb, var(--accent) 
         resp1Prof: document.getElementById('resp1Prof').value,
         resp1Phone: document.getElementById('resp1Phone').value,
         resp1Email: document.getElementById('resp1Email').value,
-        resp1Address: document.getElementById('resp1Address').value,
+        resp1Cep: document.getElementById('resp1Cep').value,
+        resp1Street: document.getElementById('resp1Street').value,
+        resp1Number: document.getElementById('resp1Number').value,
+        resp1Comp: document.getElementById('resp1Comp').value,
+        resp1Neighborhood: document.getElementById('resp1Neighborhood').value,
+        resp1City: document.getElementById('resp1City').value,
+        resp1State: document.getElementById('resp1State').value,
 
         hasResp2: document.getElementById('resp2Block').style.display !== 'none',
         resp2Name: document.getElementById('resp2Name').value,
