@@ -214,6 +214,31 @@ table.shell-table tbody tr:hover { background: color-mix(in srgb, var(--accent) 
       height: 48px;
       flex-shrink: 0;
     }
+    .brand-logo-img {
+      max-height: 48px;
+      max-width: 140px;
+      object-fit: contain;
+      flex-shrink: 0;
+    }
+    .logo-container {
+      position: relative;
+      display: inline-flex;
+      align-items: center;
+      cursor: pointer;
+    }
+    .logo-hover-badge {
+      font-size: 0.72rem;
+      background: var(--navy-primary);
+      color: #ffffff;
+      padding: 0.15rem 0.45rem;
+      border-radius: 4px;
+      margin-left: 0.4rem;
+      opacity: 0.85;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+    .logo-hover-badge:hover {
+      opacity: 1;
+    }
     .brand-titles {
       display: flex;
       flex-direction: column;
@@ -584,194 +609,300 @@ table.shell-table tbody tr:hover { background: color-mix(in srgb, var(--accent) 
       margin: 0 auto;
       padding: 3rem 3.5rem;
       box-shadow: 0 6px 24px rgba(14, 42, 71, 0.08);
-      font-size: 0.9rem;
+      font-family: Georgia, 'Times New Roman', serif;
+      font-size: 11.5pt;
       line-height: 1.6;
       color: #1a2733;
+    }
+
+    /* Número do contrato no topo à direita */
+    .doc-contract-meta {
+      font-family: Georgia, 'Times New Roman', serif;
+      font-size: 9pt;
+      color: #555555;
+      text-align: right;
+      margin-bottom: 8px;
     }
 
     /* Cabeçalho do Documento Impresso */
     .doc-header-box {
       text-align: center;
-      padding-bottom: 1.25rem;
-      margin-bottom: 1.75rem;
+      margin-bottom: 24px;
     }
-    .doc-header-logo-container {
+    .doc-logo-wrap {
       display: flex;
       justify-content: center;
       align-items: center;
-      gap: 0.6rem;
-      margin-bottom: 0.65rem;
+      margin-bottom: 8px;
+    }
+    .doc-header-logo {
+      width: 72px;
+      height: 72px;
+      display: block;
+    }
+    .doc-header-img {
+      max-height: 72px;
+      max-width: 220px;
+      object-fit: contain;
+      display: block;
+    }
+    .doc-header-img {
+      max-height: 72px;
+      max-width: 220px;
+      object-fit: contain;
+      display: block;
     }
     .doc-school-name {
-      font-size: 1.35rem;
-      font-weight: 800;
-      color: var(--navy-primary);
-      letter-spacing: 0.04em;
-      margin: 0.25rem 0 0.25rem;
+      font-family: Georgia, 'Times New Roman', serif;
+      font-size: 14pt;
+      font-weight: bold;
+      color: #1B2A5E;
       text-transform: uppercase;
+      letter-spacing: 2px;
+      text-align: center;
+      margin: 6px 0 0;
+    }
+    .doc-decor-line {
+      width: 60px;
+      height: 2px;
+      background-color: #2E7D4F;
+      margin: 10px auto;
     }
     .doc-title {
-      font-size: 1.05rem;
-      font-weight: 700;
-      color: var(--navy-light);
-      margin: 0.25rem 0 0.5rem;
-      letter-spacing: 0.04em;
+      font-family: Georgia, 'Times New Roman', serif;
+      font-size: 13pt;
+      font-weight: bold;
+      color: #1B2A5E;
+      text-align: center;
+      margin: 6px 0 3px;
     }
-    .doc-subbar {
-      background: var(--navy-primary);
-      color: #ffffff;
-      font-size: 0.76rem;
-      font-weight: 500;
-      padding: 0.35rem 0.75rem;
-      border-radius: 4px;
-      margin: 0.5rem auto 0.6rem;
-      max-width: 95%;
-      letter-spacing: 0.02em;
-    }
-    .doc-meta-line {
-      font-size: 0.78rem;
-      color: var(--text-muted);
-      margin: 0.25rem 0;
+    .doc-subtitle {
+      font-family: Georgia, 'Times New Roman', serif;
+      font-size: 10.5pt;
+      font-style: italic;
+      color: #4a5568;
+      text-align: center;
+      margin: 0;
     }
 
-    /* Títulos de Cláusulas em Azul-escuro com detalhe em verde */
+    /* Títulos de Cláusulas em Azul-escuro institucional (#1B2A5E) */
     .doc-clause-title {
-      font-size: 0.92rem;
-      font-weight: 700;
-      color: var(--navy-primary);
-      margin-top: 1.4rem;
-      margin-bottom: 0.45rem;
+      font-family: Georgia, 'Times New Roman', serif;
+      font-size: 12.5pt;
+      font-weight: bold;
+      color: #1B2A5E;
+      margin-top: 18px;
+      margin-bottom: 8px;
       text-transform: uppercase;
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-    }
-    .doc-clause-title::before {
-      content: "";
-      display: inline-block;
-      width: 4px;
-      height: 14px;
-      background-color: var(--green-inst);
-      border-radius: 2px;
-      flex-shrink: 0;
+      page-break-after: avoid;
+      break-after: avoid;
     }
     .doc-p {
-      margin: 0.45rem 0;
+      font-family: Georgia, 'Times New Roman', serif;
+      font-size: 11.5pt;
+      line-height: 1.6;
       text-align: justify;
-      font-size: 0.88rem;
+      margin: 6px 0;
+      text-indent: 1.8em;
     }
     .doc-list {
-      margin: 0.35rem 0 0.6rem 1.25rem;
-      padding: 0;
-      font-size: 0.88rem;
+      font-family: Georgia, 'Times New Roman', serif;
+      font-size: 11.5pt;
+      line-height: 1.6;
+      text-align: justify;
+      margin: 6px 0 6px 1.8em;
+      padding-left: 1em;
     }
     .doc-list li {
-      margin-bottom: 0.25rem;
+      margin-bottom: 4px;
     }
 
-    /* Caixas de destaque em verde-água bem suave */
+    /* Caixas de destaque em verde-água suave */
     .doc-highlight-card {
-      background-color: var(--aqua-soft);
-      border: 1px solid var(--aqua-border);
-      border-radius: 8px;
-      padding: 0.75rem 1rem;
-      margin: 0.75rem 0;
+      background-color: #f7faf8;
+      border: 1px solid #c2dfd1;
+      border-radius: 6px;
+      padding: 10px 14px;
+      margin: 10px 0;
+      page-break-inside: avoid;
+      break-inside: avoid;
     }
 
-    .doc-signature-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 2rem;
-      margin-top: 2.5rem;
-      padding-top: 1.5rem;
+    /* Bloco de Assinaturas */
+    .doc-signatures-wrap {
+      margin-top: 36px;
+      page-break-inside: avoid;
+      break-inside: avoid;
     }
-    .doc-sig-box {
+    .doc-sig-block {
+      width: 280px;
+      max-width: 280px;
+      margin: 0 auto 48px auto;
       text-align: center;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
+      page-break-inside: avoid;
+      break-inside: avoid;
     }
-    .doc-sig-line {
-      width: 100%;
-      border-top: 1px solid var(--navy-primary);
-      margin-top: 3.5rem;
-      padding-top: 0.4rem;
-      font-weight: 600;
-      font-size: 0.82rem;
-      color: var(--navy-primary);
+    .doc-sig-block:last-child {
+      margin-bottom: 24px;
+    }
+    .doc-sig-img-container {
+      min-height: 48px;
+      display: flex;
+      align-items: flex-end;
+      justify-content: center;
+      margin-bottom: 4px;
     }
     .doc-sig-img {
-      max-height: 55px;
-      margin-bottom: -3.5rem;
+      max-height: 52px;
+      max-width: 240px;
       display: block;
-      z-index: 2;
+    }
+    .doc-sig-line {
+      border-top: 1px solid #333333;
+      width: 280px;
+      margin: 0 auto 8px auto;
+    }
+    .doc-sig-name {
+      font-family: Georgia, 'Times New Roman', serif;
+      font-size: 11.5pt;
+      font-weight: bold;
+      color: #1a2733;
+      line-height: 1.3;
+      margin-bottom: 2px;
     }
     .doc-sig-role {
-      font-size: 0.76rem;
-      color: var(--text-muted);
-      font-weight: 400;
+      font-family: Georgia, 'Times New Roman', serif;
+      font-size: 10pt;
+      color: #555555;
+      line-height: 1.35;
     }
 
     /* Rodapé institucional discreto no contrato */
     .doc-footer-note {
-      margin-top: 2.5rem;
-      padding-top: 0.75rem;
-      border-top: 1px solid #e1e9f0;
-      font-size: 0.72rem;
-      color: var(--navy-primary);
+      margin-top: 32px;
+      padding-top: 8px;
+      border-top: 1px solid #d1dfeb;
+      font-family: Georgia, 'Times New Roman', serif;
+      font-size: 8.5pt;
+      color: #666666;
       text-align: center;
-      opacity: 0.85;
+      line-height: 1.4;
+      page-break-inside: avoid;
+      break-inside: avoid;
     }
 
     /* Anexo I Document specifics */
     .anexo-page {
       margin-top: 3.5rem;
       padding-top: 2.5rem;
-      border-top: 2px dashed var(--aqua-border);
-    }
-    .anexo-badge {
-      display: inline-block;
-      background: var(--green-soft);
-      color: var(--green-inst-hover);
-      font-weight: 700;
-      font-size: 0.75rem;
-      padding: 0.25rem 0.65rem;
-      border-radius: 4px;
-      margin-bottom: 0.5rem;
-      border: 1px solid #bde6d0;
+      border-top: 2px dashed #bce5db;
+      page-break-before: always;
+      break-before: page;
     }
     .medical-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 0.75rem;
-      margin: 1rem 0;
+      gap: 10px;
+      margin: 12px 0;
     }
     .medical-card {
-      background: #fcfdfd;
-      border: 1px solid #d8e5ee;
-      border-radius: 8px;
-      padding: 0.65rem 0.8rem;
-      font-size: 0.82rem;
+      background: #fbfdfc;
+      border: 1px solid #cbd5e1;
+      border-radius: 6px;
+      padding: 8px 12px;
+      font-size: 10.5pt;
+      page-break-inside: avoid;
+      break-inside: avoid;
     }
     .medical-card-title {
-      font-weight: 700;
-      color: var(--navy-primary);
-      margin-bottom: 0.25rem;
+      font-weight: bold;
+      color: #1B2A5E;
+      margin-bottom: 4px;
       display: flex;
       align-items: center;
-      gap: 0.35rem;
+      gap: 4px;
     }
     .medical-card-val {
-      color: var(--text-main);
+      color: #1a2733;
       word-break: break-word;
+    }
+
+    /* Modal de Orientação para Impressão / Salvar PDF */
+    .print-guide-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(14, 42, 71, 0.65);
+      backdrop-filter: blur(2px);
+      z-index: 10000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 1rem;
+      animation: fadeIn 0.15s ease-out;
+    }
+    .print-guide-dialog {
+      background: #ffffff;
+      border-radius: 12px;
+      max-width: 490px;
+      width: 100%;
+      padding: 1.6rem;
+      box-shadow: 0 16px 36px rgba(14, 42, 71, 0.28);
+      border: 1px solid var(--border-color);
+      animation: scaleUp 0.15s ease-out;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+    @keyframes scaleUp {
+      from { transform: scale(0.96); opacity: 0; }
+      to { transform: scale(1); opacity: 1; }
+    }
+    .print-guide-icon {
+      width: 46px;
+      height: 46px;
+      border-radius: 50%;
+      background: var(--green-soft);
+      color: var(--green-inst);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+      margin-bottom: 0.85rem;
+    }
+    .print-guide-title {
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: var(--navy-primary);
+      margin: 0 0 0.5rem 0;
+    }
+    .print-guide-box {
+      background: #f4f8fb;
+      border-left: 4px solid var(--navy-primary);
+      padding: 0.85rem 1rem;
+      border-radius: 0 8px 8px 0;
+      font-size: 0.9rem;
+      color: #142e47;
+      margin: 1rem 0 1.35rem 0;
+      line-height: 1.55;
+    }
+    .print-guide-actions {
+      display: flex;
+      justify-content: flex-end;
+      gap: 0.65rem;
     }
 
     /* Print styles */
     @media print {
+      @page {
+        size: A4 portrait;
+        margin: 22mm 25mm;
+      }
       body {
         background: #ffffff !important;
-        color: #000000 !important;
-        font-size: 11pt;
+        color: #1a2733 !important;
+        font-family: Georgia, 'Times New Roman', serif !important;
+        font-size: 11.5pt !important;
       }
       .top-institutional-bar,
       .app-header,
@@ -781,6 +912,7 @@ table.shell-table tbody tr:hover { background: color-mix(in srgb, var(--accent) 
       #tab-form,
       #tab-saved,
       .toast-container,
+      .print-guide-backdrop,
       .btn-school-primary,
       .btn-school-secondary,
       .btn-school-danger {
@@ -799,9 +931,10 @@ table.shell-table tbody tr:hover { background: color-mix(in srgb, var(--accent) 
         margin: 0 !important;
       }
       .anexo-page {
-        page-break-before: always;
+        page-break-before: always !important;
+        break-before: page !important;
         margin-top: 0 !important;
-        padding-top: 2rem !important;
+        padding-top: 0 !important;
         border-top: none !important;
       }
     }
@@ -828,25 +961,36 @@ table.shell-table tbody tr:hover { background: color-mix(in srgb, var(--accent) 
     <div class="shell-container">
       <div class="brand-system-header">
         <div class="brand-identity">
-          <!-- Logo Oficial SVG: Bússola/Estrela de 4 pontas (2 navy, 2 verde) -->
-          <svg class="brand-logo-svg" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="Logo Colégio Boreal Lumini">
-            <!-- Pontas Superior e Inferior em Azul-escuro (Navy) -->
-            <polygon points="50,6 59,41 50,50 41,41" fill="#0e2a47" />
-            <polygon points="50,94 41,59 50,50 59,59" fill="#0e2a47" />
-            <!-- Pontas Direita e Esquerda em Verde Institucional -->
-            <polygon points="94,50 59,41 50,50 59,59" fill="#0d8a55" />
-            <polygon points="6,50 41,59 50,50 41,41" fill="#0d8a55" />
-            <!-- Núcleo central sutil -->
-            <circle cx="50" cy="50" r="4.5" fill="#ffffff" />
-            <circle cx="50" cy="50" r="2.5" fill="#0e2a47" />
-          </svg>
+          <!-- Logo Oficial no Cabeçalho (Clicável com opção de upload) -->
+          <div class="logo-container" id="headerLogoWrap" onclick="triggerLogoUpload()" title="Clique para trocar a logo">
+            <div id="headerLogoHolder">
+              <svg class="brand-logo-svg" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="Logo Colégio Boreal Lumini">
+                <polygon points="50,6 59,41 50,50 41,41" fill="#0e2a47" />
+                <polygon points="50,94 41,59 50,50 59,59" fill="#0e2a47" />
+                <polygon points="94,50 59,41 50,50 59,59" fill="#0d8a55" />
+                <polygon points="6,50 41,59 50,50 41,41" fill="#0d8a55" />
+                <circle cx="50" cy="50" r="4.5" fill="#ffffff" />
+                <circle cx="50" cy="50" r="2.5" fill="#0e2a47" />
+              </svg>
+            </div>
+          </div>
           <div class="brand-titles">
-            <div class="school-brand-name">Colégio <span>Boreal Lumini</span></div>
+            <div style="display:flex; align-items:center; gap:0.5rem; flex-wrap:wrap;">
+              <div class="school-brand-name">Colégio <span>Boreal Lumini</span></div>
+              <button type="button" class="btn-school-secondary" style="font-size:0.75rem; padding:0.2rem 0.55rem;" onclick="triggerLogoUpload()" title="Alterar logotipo da escola">
+                📷 Trocar logo
+              </button>
+              <button type="button" id="btnRestoreLogo" class="btn-school-secondary" style="display:none; font-size:0.75rem; padding:0.2rem 0.55rem; color:#6c8296;" onclick="restoreDefaultLogo()" title="Restaurar marcador padrão">
+                ↺ Restaurar logo padrão
+              </button>
+            </div>
             <h1 class="system-title">Gerador de Contratos Escolares</h1>
             <p class="system-desc">
               Emissão, assinatura digital e gestão de contratos educacionais e ficha médica oficial.
             </p>
           </div>
+          <!-- Input oculto para carregar nova logo -->
+          <input type="file" id="logoFileInput" accept="image/png, image/jpeg, image/svg+xml" style="display:none;" onchange="handleLogoFileSelect(event)">
         </div>
       </div>
 
@@ -942,22 +1086,26 @@ table.shell-table tbody tr:hover { background: color-mix(in srgb, var(--accent) 
             </div>
             <div class="col-4 form-group">
               <label class="form-label" for="studentPeriod">Período de Atendimento <span class="req">*</span></label>
-              <select id="studentPeriod" name="studentPeriod" class="form-control" required>
+              <select id="studentPeriod" name="studentPeriod" class="form-control" required onchange="handlePeriodChange()">
                 <option value="">Selecione o período...</option>
                 <option value="Integral (07:30 às 18:30)">Integral (07:30 às 18:30)</option>
                 <option value="Manhã (07:30 às 12:00)">Manhã (07:30 às 12:00)</option>
                 <option value="Tarde (13:00 às 17:30)">Tarde (13:00 às 17:30)</option>
                 <option value="Intermediário (08:00 às 15:00)">Intermediário (08:00 às 15:00)</option>
+                <option value="__custom__">Outro (especificar)</option>
               </select>
+              <input type="text" id="studentPeriodCustom" class="form-control" placeholder="Especifique o período (ex: Estendido 6h30 às 19h)" style="display:none; margin-top:0.4rem;">
             </div>
             <div class="col-4 form-group">
               <label class="form-label" for="studentShift">Turno Letivo <span class="req">*</span></label>
-              <select id="studentShift" name="studentShift" class="form-control" required>
+              <select id="studentShift" name="studentShift" class="form-control" required onchange="handleShiftChange()">
                 <option value="">Selecione o turno...</option>
                 <option value="Integral">Integral</option>
                 <option value="Manhã">Manhã</option>
                 <option value="Tarde">Tarde</option>
+                <option value="__custom__">Outro (especificar)</option>
               </select>
+              <input type="text" id="studentShiftCustom" class="form-control" placeholder="Especifique o turno (ex: Turno Inverso)" style="display:none; margin-top:0.4rem;">
             </div>
           </div>
         </section>
@@ -1253,14 +1401,41 @@ table.shell-table tbody tr:hover { background: color-mix(in srgb, var(--accent) 
           </div>
         </section>
 
+        <!-- SEÇÃO 7: Inclusões e Alterações (MUDANÇA 2) -->
+        <section class="form-section">
+          <div class="section-head">
+            <h2 class="section-title">📝 SEÇÃO 7 — Inclusões e Alterações</h2>
+            <span class="shell-badge" style="background:#edf7f6; color:#0d8a55; border:1px solid #bce5db; font-weight:600;">Personalização Contratual</span>
+          </div>
+          <div class="section-note">
+            Escreva aqui qualquer inclusão de informação que deva constar no contrato (novo período de atendimento, condições especiais, serviços adicionais etc.). Caso preenchido, o contrato gerará automaticamente uma cláusula especial de disposições adicionais.
+          </div>
+          <div class="form-grid">
+            <div class="col-12 form-group">
+              <label class="form-label" for="customClauseNotes">Observações, alterações e inclusões ao contrato</label>
+              <textarea id="customClauseNotes" name="customClauseNotes" class="form-control" rows="3" placeholder="Escreva aqui qualquer inclusão de informação que deva constar no contrato (novo período de atendimento, condições especiais, serviços adicionais etc.)"></textarea>
+              <span style="font-size:0.8rem; color:var(--text-muted); margin-top:2px;">
+                💡 Se preenchido, o texto gerará uma cláusula especial antes do foro com renumeração automática.
+              </span>
+            </div>
+          </div>
+        </section>
+
         <!-- Ações do Formulário -->
         <div style="display:flex; flex-wrap:wrap; justify-content:space-between; align-items:center; gap:1rem; margin-top:2rem;">
           <button type="button" class="btn-school-danger" onclick="confirmResetForm()">
             🧹 Limpar Formulário
           </button>
-          <button type="submit" class="btn-school-primary" style="font-size:1.05rem; padding:0.75rem 1.75rem;">
-            📑 GERAR CONTRATO
-          </button>
+          
+          <div style="display:flex; flex-direction:column; align-items:flex-end; gap:0.25rem;">
+            <!-- Indicador discreto do próximo número previsto -->
+            <span id="nextContractHint" style="font-size:0.82rem; color:var(--text-muted); font-weight:500;">
+              Próximo contrato: 2026-001
+            </span>
+            <button type="submit" class="btn-school-primary" style="font-size:1.05rem; padding:0.75rem 1.75rem;">
+              📑 GERAR CONTRATO
+            </button>
+          </div>
         </div>
       </form>
     </div>
@@ -1313,27 +1488,28 @@ table.shell-table tbody tr:hover { background: color-mix(in srgb, var(--accent) 
       <div class="doc-preview-container" style="margin-top:1.5rem;">
         <article class="doc-sheet" id="contractDocument">
           
-          <!-- Cabeçalho Institucional do Contrato com Logo SVG -->
+          <!-- Número do Contrato no topo da primeira página (alinhado à direita em 9pt cinza) -->
+          <div class="doc-contract-meta" id="docRegNumber">CT-2026-0001</div>
+
+          <!-- Cabeçalho Oficial da Primeira Página -->
           <div class="doc-header-box">
-            <div class="doc-header-logo-container">
-              <svg style="width:44px; height:44px;" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <!-- Pontas Navy -->
-                <polygon points="50,6 59,41 50,50 41,41" fill="#0e2a47" />
-                <polygon points="50,94 41,59 50,50 59,59" fill="#0e2a47" />
-                <!-- Pontas Verde Institucional -->
-                <polygon points="94,50 59,41 50,50 59,59" fill="#0d8a55" />
-                <polygon points="6,50 41,59 50,50 41,41" fill="#0d8a55" />
-                <circle cx="50" cy="50" r="4.5" fill="#ffffff" />
-                <circle cx="50" cy="50" r="2.5" fill="#0e2a47" />
-              </svg>
-              <div style="font-size:0.95rem; color:#0e2a47; font-family:'Inter', sans-serif;">
-                Colégio <strong style="font-weight:800;">Boreal Lumini</strong>
+            <div class="doc-logo-wrap" id="docMainLogoWrap" onclick="triggerLogoUpload()" title="Clique para trocar a logo" style="cursor:pointer;">
+              <div id="docMainLogoHolder">
+                <!-- Logo de quatro pontas SVG centralizada com 72px de altura -->
+                <svg class="doc-header-logo" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="Logo Colégio Boreal Lumini">
+                  <polygon points="50,6 59,41 50,50 41,41" fill="#1B2A5E" />
+                  <polygon points="50,94 41,59 50,50 59,59" fill="#1B2A5E" />
+                  <polygon points="94,50 59,41 50,50 59,59" fill="#2E7D4F" />
+                  <polygon points="6,50 41,59 50,50 41,41" fill="#2E7D4F" />
+                  <circle cx="50" cy="50" r="4.5" fill="#ffffff" />
+                  <circle cx="50" cy="50" r="2.5" fill="#1B2A5E" />
+                </svg>
               </div>
             </div>
-            <h2 class="doc-school-name">COLÉGIO INFANTIL BOREAL LUMINI</h2>
+            <div class="doc-school-name">COLÉGIO INFANTIL BOREAL LUMINI</div>
+            <div class="doc-decor-line"></div>
             <div class="doc-title">CONTRATO DE PRESTAÇÃO DE SERVIÇOS EDUCACIONAIS</div>
-            <div class="doc-subbar">CNPJ: 51.054.291/0001-31 • Rua São Maurício, 266, Vila Galvão, Guarulhos - SP • Tel: (11) 2455-8884</div>
-            <div class="doc-meta-line" id="docRegNumber">Número do Registro: CT-2026-0001 | Ano Letivo: 2026 | Emitido em: --/--/----</div>
+            <div class="doc-subtitle">Instrumento Particular — Educação Infantil</div>
           </div>
 
           <!-- CLÁUSULA 1ª -->
@@ -1376,7 +1552,7 @@ table.shell-table tbody tr:hover { background: color-mix(in srgb, var(--accent) 
               <li><strong>Início da Prestação:</strong> <span id="docStartDate">--/--/----</span> | <strong>Vigência:</strong> <span id="docContractPeriod">12 meses</span>.</li>
             </ul>
           </div>
-          <div id="docFinancialNotesBox" style="display:none;" class="doc-p">
+          <div id="docFinancialNotesBox" style="display:none;" class="doc-p" style="text-indent:0;">
             <strong>Observações Financeiras Especiais:</strong> <span id="docFinancialNotes">---</span>
           </div>
           <p class="doc-p">
@@ -1389,7 +1565,7 @@ table.shell-table tbody tr:hover { background: color-mix(in srgb, var(--accent) 
             O não pagamento da mensalidade até a data de vencimento sujeitará o(s) <strong>CONTRATANTE(S)</strong> à incidência de multa moratória de 2% (dois por cento) sobre o valor do débito, nos termos do art. 52, § 1º do Código de Defesa do Consumidor, acrescida de juros de mora de 1% (um por cento) ao mês apurados <em>pro rata die</em>, e atualização monetária pelo índice oficial do IPCA/IBGE.
           </p>
           <p class="doc-p">
-            <strong>Cláusula 4.5 — Do Horário de Funcionamento:</strong> O Colégio Infantil Boreal Lumini funciona regularmente de segunda a sexta-feira, das 06h30 às 19h00. O desrespeito reiterado aos horários limites de entrada e de saída fixados para o período contratado acarretará cobrança adicional por hora de permanência excedente, com vistas à garantia do dimensionamento da equipe de monitores.
+            <strong>4.5 — Do Horário de Funcionamento:</strong> O Colégio Infantil Boreal Lumini funciona regularmente de segunda a sexta-feira, das 06h30 às 19h00. O desrespeito reiterado aos horários limites de entrada e de saída fixados para o período contratado acarretará cobrança adicional por hora de permanência excedente, com vistas à garantia do dimensionamento da equipe de monitores.
           </p>
 
           <!-- CLÁUSULA 5ª -->
@@ -1401,7 +1577,7 @@ table.shell-table tbody tr:hover { background: color-mix(in srgb, var(--accent) 
             <li><strong>a)</strong> Respeitar integralmente os horários regulamentares de entrada e saída da escola;</li>
             <li><strong>b)</strong> Manter sempre atualizados os contatos telefônicos de emergência e todas as informações cadastrais e de saúde infantil perante a Secretaria;</li>
             <li><strong>c)</strong> Participar ativamente das reuniões pedagógicas e manter a regularidade dos pagamentos pactuados;</li>
-            <li><strong>d)</strong> <strong>Cláusula 5.5:</strong> Declarar sob as penas da lei a veracidade irrevogável de todos os dados clínicos consignados no <strong>Anexo I – Ficha Médica do Aluno</strong>, comprometendo-se a comunicar qualquer nova alergia, sintoma ou prescrição médica por escrito dentro do prazo de 24 horas.</li>
+            <li><strong>d)</strong> <strong>5.5:</strong> Declarar sob as penas da lei a veracidade irrevogável de todos os dados clínicos consignados no <strong>Anexo I – Ficha Médica do Aluno</strong>, comprometendo-se a comunicar qualquer nova alergia, sintoma ou prescrição médica por escrito dentro do prazo de 24 horas.</li>
           </ul>
 
           <!-- CLÁUSULA 6ª -->
@@ -1432,13 +1608,21 @@ table.shell-table tbody tr:hover { background: color-mix(in srgb, var(--accent) 
           </div>
 
           <!-- CLÁUSULA 9ª -->
-          <div class="doc-clause-title">CLÁUSULA 9ª — ATIVIDADES EXTRACURRICULARES E EMERGÊNCIA MÉDICA</div>
+          <div class="doc-clause-title" id="docClause9Title">CLÁUSULA 9ª — ATIVIDADES EXTRACURRICULARES E EMERGÊNCIA MÉDICA</div>
           <div id="docOptionalClauses">
             <!-- Dynamic content -->
           </div>
 
-          <!-- CLÁUSULA 10ª -->
-          <div class="doc-clause-title">CLÁUSULA 10ª — DO FORO DE ELEIÇÃO</div>
+          <!-- CLÁUSULA ESPECIAL ADICIONAL (Inclusões e Alterações) -->
+          <div id="docSpecialClauseContainer" style="display:none;">
+            <div class="doc-clause-title" id="docSpecialClauseTitle">CLÁUSULA 10ª — DAS DISPOSIÇÕES ESPECIAIS</div>
+            <div id="docSpecialClauseBody">
+              <!-- Dynamic user additions -->
+            </div>
+          </div>
+
+          <!-- CLÁUSULA FINAL (FORO) -->
+          <div class="doc-clause-title" id="docForoTitle">CLÁUSULA 10ª — DO FORO DE ELEIÇÃO</div>
           <p class="doc-p">
             Para dirimir quaisquer controvérsias decorrentes da execução deste contrato, as partes elegem com renúncia a qualquer outro, por mais privilegiado que seja, o Foro da Comarca da sede da <strong>CONTRATADA</strong> (Guarulhos / SP).
           </p>
@@ -1447,62 +1631,69 @@ table.shell-table tbody tr:hover { background: color-mix(in srgb, var(--accent) 
             E, por estarem assim justas e contratadas, assinam o presente instrumento em vias de igual teor e forma para que produza todos os seus efeitos legais.
           </p>
 
-          <p class="doc-p" style="margin-top:1rem; text-align:right;">
+          <p class="doc-p" style="margin-top:1.2rem; text-align:right; text-indent:0;">
             <span id="docLocationDate">São Paulo, -- de -------- de ----.</span>
           </p>
 
-          <!-- Bloco de Assinaturas -->
-          <div class="doc-signature-grid">
-            <div class="doc-sig-box">
-              <div class="doc-sig-line">
-                Tatiane Cristina Tavares Damaso<br>
-                <span class="doc-sig-role">Colégio Infantil Boreal Lumini — Diretoria</span>
-              </div>
+          <!-- Bloco de Assinaturas: CONTRATADA primeiro, depois CONTRATANTE 1 e CONTRATANTE 2 -->
+          <div class="doc-signatures-wrap">
+            
+            <!-- CONTRATADA -->
+            <div class="doc-sig-block">
+              <div class="doc-sig-line"></div>
+              <div class="doc-sig-name">Tatiane Cristina Tavares Damaso</div>
+              <div class="doc-sig-role">COLÉGIO INFANTIL BOREAL LUMINI</div>
+              <div class="doc-sig-role">Diretoria / Representante Legal</div>
+              <div class="doc-sig-role">CNPJ: 51.054.291/0001-31</div>
             </div>
 
-            <div class="doc-sig-box">
-              <img id="docRespSigImg1" class="doc-sig-img" style="display:none;" alt="Assinatura Digital Responsável">
-              <div class="doc-sig-line">
-                <span id="docSigResp1Name">Responsável Legal Principal</span><br>
-                <span class="doc-sig-role">CPF: <span id="docSigResp1Cpf">---</span></span>
+            <!-- CONTRATANTE 1 -->
+            <div class="doc-sig-block">
+              <div class="doc-sig-img-container">
+                <img id="docRespSigImg1" class="doc-sig-img" style="display:none;" alt="Assinatura Digital Responsável">
               </div>
+              <div class="doc-sig-line"></div>
+              <div class="doc-sig-name" id="docSigResp1Name">Responsável Legal Principal</div>
+              <div class="doc-sig-role">CONTRATANTE</div>
+              <div class="doc-sig-role">CPF: <span id="docSigResp1Cpf">---</span></div>
             </div>
 
-            <div class="doc-sig-box" id="docSigResp2Container" style="display:none; grid-column:span 2; max-width:320px; margin:0 auto;">
-              <div class="doc-sig-line">
-                <span id="docSigResp2Name">Segundo Responsável Solidário</span><br>
-                <span class="doc-sig-role">CPF: <span id="docSigResp2Cpf">---</span></span>
-              </div>
+            <!-- CONTRATANTE 2 (se houver) -->
+            <div class="doc-sig-block" id="docSigResp2Container" style="display:none;">
+              <div class="doc-sig-line"></div>
+              <div class="doc-sig-name" id="docSigResp2Name">Segundo Responsável Solidário</div>
+              <div class="doc-sig-role">CONTRATANTE SOLIDÁRIO</div>
+              <div class="doc-sig-role">CPF: <span id="docSigResp2Cpf">---</span></div>
             </div>
+
           </div>
 
           <!-- Rodapé do Contrato -->
           <div class="doc-footer-note">
-            Colégio Infantil Boreal Lumini Ltda • CNPJ: 51.054.291/0001-31 • Rua São Maurício, 266, Vila Galvão, Guarulhos - SP • Fone: (11) 2455-8884
+            Colégio Infantil Boreal Lumini — Rua São Maurício, 266, Vila Galvão, Guarulhos/SP — (11) 2455-8884
           </div>
 
-          <!-- ANEXO I — FICHA MÉDICA DO ALUNO -->
+          <!-- ANEXO I — FICHA MÉDICA DO ALUNO (Página Separada) -->
           <section class="anexo-page">
-            <div class="doc-header-box" style="border-bottom:1px solid #d1dfeb;">
-              <div class="doc-header-logo-container">
-                <svg style="width:36px; height:36px;" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <polygon points="50,6 59,41 50,50 41,41" fill="#0e2a47" />
-                  <polygon points="50,94 41,59 50,50 59,59" fill="#0e2a47" />
-                  <polygon points="94,50 59,41 50,50 59,59" fill="#0d8a55" />
-                  <polygon points="6,50 41,59 50,50 41,41" fill="#0d8a55" />
-                  <circle cx="50" cy="50" r="4.5" fill="#ffffff" />
-                  <circle cx="50" cy="50" r="2.5" fill="#0e2a47" />
-                </svg>
-                <div style="font-size:0.88rem; color:#0e2a47; font-family:'Inter', sans-serif;">
-                  Colégio <strong style="font-weight:800;">Boreal Lumini</strong>
+            <div class="doc-contract-meta" id="anexoRegNumber">CT-2026-0001</div>
+            
+            <div class="doc-header-box">
+              <div class="doc-logo-wrap" id="docAnexoLogoWrap" onclick="triggerLogoUpload()" title="Clique para trocar a logo" style="cursor:pointer;">
+                <div id="docAnexoLogoHolder">
+                  <svg class="doc-header-logo" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="Logo Colégio Boreal Lumini">
+                    <polygon points="50,6 59,41 50,50 41,41" fill="#1B2A5E" />
+                    <polygon points="50,94 41,59 50,50 59,59" fill="#1B2A5E" />
+                    <polygon points="94,50 59,41 50,50 59,59" fill="#2E7D4F" />
+                    <polygon points="6,50 41,59 50,50 41,41" fill="#2E7D4F" />
+                    <circle cx="50" cy="50" r="4.5" fill="#ffffff" />
+                    <circle cx="50" cy="50" r="2.5" fill="#1B2A5E" />
+                  </svg>
                 </div>
               </div>
-              <span class="anexo-badge">ANEXO INTEGRANTE AO CONTRATO</span>
-              <h2 style="font-size:1.15rem; font-weight:800; color:#0e2a47; margin:0 0 0.25rem;">
-                ANEXO I — FICHA MÉDICA E DE PRONTO-ATENDIMENTO DA CRIANÇA
-              </h2>
-              <div class="doc-subbar">Registro Oficial Escolar • Segurança e Saúde Infantil</div>
-              <div class="doc-meta-line" id="anexoRegNumber">Referência Contratual: CT-2026-0001</div>
+              <div class="doc-school-name">COLÉGIO INFANTIL BOREAL LUMINI</div>
+              <div class="doc-decor-line"></div>
+              <div class="doc-title">ANEXO I — FICHA MÉDICA DO ALUNO</div>
+              <div class="doc-subtitle">Instrumento Integrante ao Contrato de Prestação de Serviços Educacionais</div>
             </div>
 
             <p class="doc-p">
@@ -1557,38 +1748,39 @@ table.shell-table tbody tr:hover { background: color-mix(in srgb, var(--accent) 
               <div class="medical-card-val" id="anexoNotes">Nenhuma recomendação especial cadastrada.</div>
             </div>
 
-            <div class="doc-highlight-card" style="margin-top:1rem; font-size:0.82rem;">
-              <p style="margin:0 0 0.35rem;">
-                <span id="anexoStatusEmergency" style="font-weight:700; color:#0d8a55;">[AUTORIZADO]</span> <strong>Atendimento de Emergência:</strong> Autorizado atendimento médico emergencial hospitalar e primeiros socorros quando não for possível o contato imediato prévio com a família.
+            <div class="doc-highlight-card" style="margin-top:1rem; font-size:10pt;">
+              <p style="margin:0 0 0.35rem; text-indent:0;">
+                <span id="anexoStatusEmergency" style="font-weight:700; color:#2E7D4F;">[AUTORIZADO]</span> <strong>Atendimento de Emergência:</strong> Autorizado atendimento médico emergencial hospitalar e primeiros socorros quando não for possível o contato imediato prévio com a família.
               </p>
-              <p style="margin:0;">
-                <span id="anexoStatusVaccine" style="font-weight:700; color:#0d8a55;">[DECLARADO]</span> <strong>Carteira de Vacinação:</strong> Responsáveis declaram documentalmente ter apresentado a cópia da caderneta de vacinas do aluno em dia com o calendário nacional.
+              <p style="margin:0; text-indent:0;">
+                <span id="anexoStatusVaccine" style="font-weight:700; color:#2E7D4F;">[DECLARADO]</span> <strong>Carteira de Vacinação:</strong> Responsáveis declaram documentalmente ter apresentado a cópia da caderneta de vacinas do aluno em dia com o calendário nacional.
               </p>
             </div>
 
-            <p class="doc-p" style="margin-top:1.2rem; font-size:0.8rem; color:#405244;">
+            <p class="doc-p" style="margin-top:1.2rem; font-size:10.5pt; color:#3b4d3f;">
               Declaro sob as penas legais que as informações clínicas acima prestadas retratam fielmente a condição de saúde da criança nesta data, ficando a escola isenta de qualquer responsabilidade médica decorrente de omissão culposa ou dolosa de dados pelos signatários.
             </p>
 
-            <div class="doc-signature-grid" style="margin-top:2rem;">
-              <div class="doc-sig-box">
-                <div class="doc-sig-line">
-                  Secretaria e Coordenação Pedagógica<br>
-                  <span class="doc-sig-role">Colégio Infantil Boreal Lumini</span>
-                </div>
+            <div class="doc-signatures-wrap" style="margin-top:2.5rem;">
+              <div class="doc-sig-block">
+                <div class="doc-sig-line"></div>
+                <div class="doc-sig-name">Secretaria e Coordenação Pedagógica</div>
+                <div class="doc-sig-role">Colégio Infantil Boreal Lumini</div>
               </div>
-              <div class="doc-sig-box">
-                <img id="anexoRespSigImg" class="doc-sig-img" style="display:none;" alt="Assinatura do Responsável">
-                <div class="doc-sig-line">
-                  <span id="anexoSigRespName">Responsável Legal</span><br>
-                  <span class="doc-sig-role">CPF: <span id="anexoSigRespCpf">---</span></span>
+
+              <div class="doc-sig-block">
+                <div class="doc-sig-img-container">
+                  <img id="anexoRespSigImg" class="doc-sig-img" style="display:none;" alt="Assinatura do Responsável">
                 </div>
+                <div class="doc-sig-line"></div>
+                <div class="doc-sig-name" id="anexoSigRespName">Responsável Legal</div>
+                <div class="doc-sig-role">CPF: <span id="anexoSigRespCpf">---</span></div>
               </div>
             </div>
 
             <!-- Rodapé Anexo I -->
             <div class="doc-footer-note">
-              Anexo I integrante ao Contrato de Prestação de Serviços Educacionais • Colégio Boreal Lumini Ltda
+              Colégio Infantil Boreal Lumini — Rua São Maurício, 266, Vila Galvão, Guarulhos/SP — (11) 2455-8884
             </div>
           </section>
 
@@ -1643,6 +1835,29 @@ table.shell-table tbody tr:hover { background: color-mix(in srgb, var(--accent) 
 
   </main>
 
+  <!-- Modal de Orientação: Impressão / Salvar como PDF -->
+  <div id="printGuideModal" class="print-guide-backdrop" style="display:none;" role="dialog" aria-modal="true" aria-labelledby="printGuideTitle" onclick="if(event.target===this) closePrintGuideModal();">
+    <div class="print-guide-dialog">
+      <div class="print-guide-icon">🖨️</div>
+      <h3 class="print-guide-title" id="printGuideTitle">Imprimir / Salvar em PDF</h3>
+      <p style="font-size:0.9rem; color:var(--text-muted); margin:0 0 0.5rem; line-height:1.5;">
+        O documento foi diagramado no formato A4 oficial com cabeçalho institucional, assinaturas e Anexo I.
+      </p>
+      <div class="print-guide-box">
+        💡 <strong>Como salvar em formato PDF:</strong><br>
+        Na janela de impressão que será aberta, escolha <strong>"Salvar como PDF"</strong> no campo <strong>Destino</strong> (Impressora) para gerar o arquivo PDF. Se desejar cópia física em papel, selecione sua impressora habitual.
+      </div>
+      <div class="print-guide-actions">
+        <button type="button" class="btn-school-secondary" onclick="closePrintGuideModal()">
+          Cancelar
+        </button>
+        <button type="button" class="btn-school-primary" onclick="confirmAndExecutePrint()">
+          Entendi, abrir impressão
+        </button>
+      </div>
+    </div>
+  </div>
+
   <!-- Container de Toasts -->
   <div class="toast-container" id="toastContainer" aria-live="polite"></div>
 
@@ -1657,21 +1872,30 @@ table.shell-table tbody tr:hover { background: color-mix(in srgb, var(--accent) 
     // Constantes e Chaves de LocalStorage
     const STORAGE_KEY_CONTRACTS = 'contratos_escolares';
     const STORAGE_KEY_DRAFT = 'contrato_draft_data';
+    const STORAGE_KEY_CUSTOM_LOGO = 'escola_custom_logo';
 
     // Estado da Aplicação
     let currentContractData = null;
     let digitalSignatureDataUrl = null;
     let isDrawing = false;
     let sigCanvas, sigCtx;
+    let customLogoBase64 = null;
 
     // Inicialização
     document.addEventListener('DOMContentLoaded', () => {
       initSignatureCanvas();
       initCpfListeners();
       initCepListener();
+      initLogoState();
+      updateNextContractHint();
       initDraftRestoration();
       initInputWatchers();
       updateSavedCountBadge();
+
+      // Fechar modal de impressão via teclado (Esc)
+      window.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') closePrintGuideModal();
+      });
 
       // Se houver data de nascimento prévia, calcular idade
       const birthInput = document.getElementById('studentBirth');
@@ -1679,6 +1903,300 @@ table.shell-table tbody tr:hover { background: color-mix(in srgb, var(--accent) 
         calculateAge();
       }
     });
+
+    /* ------------------------------------------------------------------------
+       0. GERENCIAMENTO DE LOGO PERSONALIZADA (MUDANÇA 3)
+       ------------------------------------------------------------------------ */
+    const DEFAULT_HEADER_SVG = `
+      <svg class="brand-logo-svg" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="Logo Colégio Boreal Lumini">
+        <polygon points="50,6 59,41 50,50 41,41" fill="#0e2a47" />
+        <polygon points="50,94 41,59 50,50 59,59" fill="#0e2a47" />
+        <polygon points="94,50 59,41 50,50 59,59" fill="#0d8a55" />
+        <polygon points="6,50 41,59 50,50 41,41" fill="#0d8a55" />
+        <circle cx="50" cy="50" r="4.5" fill="#ffffff" />
+        <circle cx="50" cy="50" r="2.5" fill="#0e2a47" />
+      </svg>
+    `;
+
+    const DEFAULT_DOC_SVG = `
+      <svg class="doc-header-logo" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="Logo Colégio Boreal Lumini">
+        <polygon points="50,6 59,41 50,50 41,41" fill="#1B2A5E" />
+        <polygon points="50,94 41,59 50,50 59,59" fill="#1B2A5E" />
+        <polygon points="94,50 59,41 50,50 59,59" fill="#2E7D4F" />
+        <polygon points="6,50 41,59 50,50 41,41" fill="#2E7D4F" />
+        <circle cx="50" cy="50" r="4.5" fill="#ffffff" />
+        <circle cx="50" cy="50" r="2.5" fill="#1B2A5E" />
+      </svg>
+    `;
+
+    function initLogoState() {
+      try {
+        const savedLogo = localStorage.getItem(STORAGE_KEY_CUSTOM_LOGO);
+        if (savedLogo) {
+          customLogoBase64 = savedLogo;
+          applyLogoToAll(savedLogo);
+        } else {
+          applyDefaultLogoToAll();
+        }
+      } catch (e) {
+        console.warn('Erro ao carregar logo do localStorage:', e);
+        try {
+          applyDefaultLogoToAll();
+        } catch (_) {}
+      }
+    }
+
+    function triggerLogoUpload() {
+      try {
+        const fileInput = document.getElementById('logoFileInput');
+        if (fileInput) fileInput.click();
+      } catch (e) {
+        console.error('Erro ao abrir seletor de arquivo:', e);
+      }
+    }
+
+    // Redimensiona imagem usando canvas mantendo proporção e limite de altura de 400px
+    function resizeLogoImage(file, callback) {
+      // Se for SVG, não precisa de canvas
+      if (file.type === 'image/svg+xml') {
+        const reader = new FileReader();
+        reader.onload = e => callback(null, e.target.result);
+        reader.onerror = err => callback(err);
+        reader.readAsDataURL(file);
+        return;
+      }
+
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        const img = new Image();
+        img.onload = function() {
+          try {
+            const maxHeight = 400;
+            const maxWidth = 800;
+            let width = img.width || 400;
+            let height = img.height || 400;
+
+            if (height > maxHeight) {
+              width = Math.round(width * (maxHeight / height));
+              height = maxHeight;
+            }
+            if (width > maxWidth) {
+              height = Math.round(height * (maxWidth / width));
+              width = maxWidth;
+            }
+
+            const canvas = document.createElement('canvas');
+            canvas.width = width;
+            canvas.height = height;
+            const ctx = canvas.getContext('2d');
+
+            const isPng = file.type === 'image/png';
+            if (!isPng) {
+              ctx.fillStyle = '#ffffff';
+              ctx.fillRect(0, 0, width, height);
+            }
+
+            ctx.drawImage(img, 0, 0, width, height);
+
+            // Se for PNG mantém PNG; se JPEG ou outro comprime a 0.85
+            const outputMime = isPng ? 'image/png' : 'image/jpeg';
+            const quality = isPng ? undefined : 0.85;
+            const optimizedBase64 = canvas.toDataURL(outputMime, quality);
+
+            callback(null, optimizedBase64);
+          } catch (canvasErr) {
+            // Em caso de erro no canvas, usa imagem original lida
+            callback(null, e.target.result);
+          }
+        };
+        img.onerror = function(err) {
+          callback(err);
+        };
+        img.src = e.target.result;
+      };
+      reader.onerror = function(err) {
+        callback(err);
+      };
+      reader.readAsDataURL(file);
+    }
+
+    function handleLogoFileSelect(event) {
+      try {
+        const file = event.target.files && event.target.files[0];
+        if (!file) return;
+
+        const validTypes = ['image/png', 'image/jpeg', 'image/jpg', 'image/svg+xml'];
+        if (!validTypes.includes(file.type)) {
+          showToast('⚠️ Formato inválido! Por favor envie PNG, JPG ou SVG.', 'error');
+          event.target.value = '';
+          return;
+        }
+
+        if (file.size > 8 * 1024 * 1024) {
+          showToast('⚠️ A imagem deve ter menos de 8MB.', 'error');
+          event.target.value = '';
+          return;
+        }
+
+        resizeLogoImage(file, (err, optimizedData) => {
+          if (err || !optimizedData) {
+            showToast('⚠️ Erro ao processar a imagem da logo. Tente outra foto.', 'error');
+            return;
+          }
+
+          customLogoBase64 = optimizedData;
+          applyLogoToAll(optimizedData);
+
+          let savedToStorage = false;
+          try {
+            localStorage.setItem(STORAGE_KEY_CUSTOM_LOGO, optimizedData);
+            savedToStorage = true;
+          } catch (storageErr) {
+            console.warn('Cota de armazenamento excedida ao salvar logo:', storageErr);
+            showToast('⚠️ Não foi possível salvar a logo no navegador (armazenamento cheio). A logo foi aplicada nesta sessão, mas use uma imagem menor para mantê-la salva.', 'error', 6000);
+          }
+
+          if (savedToStorage) {
+            showToast('🎨 Logo da escola otimizada e atualizada com sucesso!', 'success');
+          }
+        });
+
+        event.target.value = '';
+      } catch (err) {
+        console.error('Erro ao processar seleção de logo:', err);
+        showToast('⚠️ Ocorreu um erro ao carregar a logo.', 'error');
+      }
+    }
+
+    function applyLogoToAll(base64Data) {
+      try {
+        const headerHolder = document.getElementById('headerLogoHolder');
+        const docMainHolder = document.getElementById('docMainLogoHolder');
+        const docAnexoHolder = document.getElementById('docAnexoLogoHolder');
+        const btnRestore = document.getElementById('btnRestoreLogo');
+
+        const imgTagHeader = `<img src="${base64Data}" alt="Logo da Escola" class="brand-logo-img">`;
+        const imgTagDoc = `<img src="${base64Data}" alt="Logo da Escola" class="doc-header-img">`;
+
+        if (headerHolder) headerHolder.innerHTML = imgTagHeader;
+        if (docMainHolder) docMainHolder.innerHTML = imgTagDoc;
+        if (docAnexoHolder) docAnexoHolder.innerHTML = imgTagDoc;
+        if (btnRestore) btnRestore.style.display = 'inline-flex';
+      } catch (e) {
+        console.warn('Erro ao renderizar logo na tela:', e);
+      }
+    }
+
+    function applyDefaultLogoToAll() {
+      try {
+        const headerHolder = document.getElementById('headerLogoHolder');
+        const docMainHolder = document.getElementById('docMainLogoHolder');
+        const docAnexoHolder = document.getElementById('docAnexoLogoHolder');
+        const btnRestore = document.getElementById('btnRestoreLogo');
+
+        if (headerHolder) headerHolder.innerHTML = DEFAULT_HEADER_SVG;
+        if (docMainHolder) docMainHolder.innerHTML = DEFAULT_DOC_SVG;
+        if (docAnexoHolder) docAnexoHolder.innerHTML = DEFAULT_DOC_SVG;
+        if (btnRestore) btnRestore.style.display = 'none';
+      } catch (e) {
+        console.warn('Erro ao restaurar logo padrão:', e);
+      }
+    }
+
+    function restoreDefaultLogo() {
+      try {
+        if (!confirm('Deseja restaurar a logo padrão institucional?')) return;
+        customLogoBase64 = null;
+        try {
+          localStorage.removeItem(STORAGE_KEY_CUSTOM_LOGO);
+        } catch (e) {
+          console.warn('Erro ao remover logo do storage:', e);
+        }
+        applyDefaultLogoToAll();
+        showToast('Logotipo padrão restaurado com sucesso.', 'info');
+      } catch (err) {
+        console.error('Erro ao restaurar logo:', err);
+      }
+    }
+
+    /* ------------------------------------------------------------------------
+       0.1 GERENCIAMENTO DO NÚMERO DO CONTRATO AUTOMÁTICO COM RESILIÊNCIA
+       ------------------------------------------------------------------------ */
+    function getNextContractNumber(increment = false) {
+      const currentYear = new Date().getFullYear();
+      const storageKey = `contador_${currentYear}`;
+      let count = 0;
+
+      try {
+        const val = localStorage.getItem(storageKey);
+        if (val !== null) {
+          count = parseInt(val, 10);
+          if (isNaN(count) || count < 0) count = 0;
+        }
+      } catch (e) {
+        console.warn('Falha na leitura do contador no localStorage, usando valor padrão:', e);
+        count = 0;
+      }
+
+      if (increment) {
+        count += 1;
+        try {
+          localStorage.setItem(storageKey, String(count));
+        } catch (e) {
+          console.warn('Falha ao persistir contador de contrato:', e);
+        }
+        try {
+          updateNextContractHint();
+        } catch (_) {}
+        return `${currentYear}-${String(count).padStart(3, '0')}`;
+      }
+
+      const nextNum = count + 1;
+      return `${currentYear}-${String(nextNum).padStart(3, '0')}`;
+    }
+
+    function updateNextContractHint() {
+      const hintEl = document.getElementById('nextContractHint');
+      if (hintEl) {
+        const nextNum = getNextContractNumber(false);
+        hintEl.textContent = `Próximo contrato: ${nextNum}`;
+      }
+    }
+
+    /* ------------------------------------------------------------------------
+       0.2 CAMPOS PERSONALIZADOS DE PERÍODO E TURNO (MUDANÇA 2a)
+       ------------------------------------------------------------------------ */
+    function handlePeriodChange() {
+      const select = document.getElementById('studentPeriod');
+      const customInput = document.getElementById('studentPeriodCustom');
+      if (!select || !customInput) return;
+      if (select.value === '__custom__') {
+        customInput.style.display = 'block';
+        customInput.required = true;
+        customInput.focus();
+      } else {
+        customInput.style.display = 'none';
+        customInput.required = false;
+        customInput.value = '';
+      }
+      saveDraft();
+    }
+
+    function handleShiftChange() {
+      const select = document.getElementById('studentShift');
+      const customInput = document.getElementById('studentShiftCustom');
+      if (!select || !customInput) return;
+      if (select.value === '__custom__') {
+        customInput.style.display = 'block';
+        customInput.required = true;
+        customInput.focus();
+      } else {
+        customInput.style.display = 'none';
+        customInput.required = false;
+        customInput.value = '';
+      }
+      saveDraft();
+    }
 
     /* ------------------------------------------------------------------------
        1. NAVEGAÇÃO DE ABAS
@@ -1891,51 +2409,60 @@ table.shell-table tbody tr:hover { background: color-mix(in srgb, var(--accent) 
     }
 
     function lookupCep(rawCep) {
-      const clean = String(rawCep).replace(/\D/g, '');
-      if (clean.length !== 8) return;
+      try {
+        const clean = String(rawCep).replace(/\D/g, '');
+        if (clean.length !== 8) return;
 
-      showCepFeedback('Buscando endereço pelo CEP...', 'loading');
+        showCepFeedback('Buscando endereço pelo CEP...', 'loading');
 
-      fetch(`https://viacep.com.br/ws/${clean}/json/`)
-        .then(res => {
-          if (!res.ok) throw new Error('Falha na requisição');
-          return res.json();
-        })
-        .then(data => {
-          if (data.erro) {
+        fetch(`https://viacep.com.br/ws/${clean}/json/`)
+          .then(res => {
+            if (!res.ok) throw new Error('Falha na requisição');
+            return res.json();
+          })
+          .then(data => {
+            try {
+              if (data.erro) {
+                showCepFeedback('CEP não encontrado — preencha o endereço manualmente', 'warning');
+                return;
+              }
+              // Preencher campos automaticamente
+              const streetEl = document.getElementById('resp1Street');
+              const neighEl = document.getElementById('resp1Neighborhood');
+              const cityEl = document.getElementById('resp1City');
+              const stateEl = document.getElementById('resp1State');
+              const numEl = document.getElementById('resp1Number');
+
+              if (streetEl && data.logradouro) streetEl.value = data.logradouro;
+              if (neighEl && data.bairro) neighEl.value = data.bairro;
+              if (cityEl && data.localidade) cityEl.value = data.localidade;
+              if (stateEl && data.uf) stateEl.value = data.uf;
+
+              // Limpa possíveis marcações vermelhas anteriores desses campos
+              [streetEl, neighEl, cityEl, stateEl].forEach(el => {
+                if (el && el.value.trim()) el.classList.remove('is-invalid');
+              });
+
+              hideCepFeedback();
+
+              // Move foco para o campo Número
+              if (numEl) {
+                numEl.focus();
+              }
+
+              saveDraft();
+            } catch (innerErr) {
+              console.warn('Erro ao processar dados do CEP:', innerErr);
+              showCepFeedback('CEP não encontrado — preencha o endereço manualmente', 'warning');
+            }
+          })
+          .catch(err => {
+            console.warn('Erro ao consultar ViaCEP:', err);
             showCepFeedback('CEP não encontrado — preencha o endereço manualmente', 'warning');
-            return;
-          }
-          // Preencher campos automaticamente
-          const streetEl = document.getElementById('resp1Street');
-          const neighEl = document.getElementById('resp1Neighborhood');
-          const cityEl = document.getElementById('resp1City');
-          const stateEl = document.getElementById('resp1State');
-          const numEl = document.getElementById('resp1Number');
-
-          if (streetEl && data.logradouro) streetEl.value = data.logradouro;
-          if (neighEl && data.bairro) neighEl.value = data.bairro;
-          if (cityEl && data.localidade) cityEl.value = data.localidade;
-          if (stateEl && data.uf) stateEl.value = data.uf;
-
-          // Limpa possíveis marcações vermelhas anteriores desses campos
-          [streetEl, neighEl, cityEl, stateEl].forEach(el => {
-            if (el && el.value.trim()) el.classList.remove('is-invalid');
           });
-
-          hideCepFeedback();
-
-          // Move foco para o campo Número
-          if (numEl) {
-            numEl.focus();
-          }
-
-          saveDraft();
-        })
-        .catch(err => {
-          console.warn('Erro ao consultar ViaCEP:', err);
-          showCepFeedback('CEP não encontrado — preencha o endereço manualmente', 'warning');
-        });
+      } catch (e) {
+        console.warn('Falha no lookupCep:', e);
+      }
     }
 
     function initCepListener() {
@@ -2089,7 +2616,9 @@ table.shell-table tbody tr:hover { background: color-mix(in srgb, var(--accent) 
       calculateAge();
       document.getElementById('studentGrade').value = 'Maternal II';
       document.getElementById('studentPeriod').value = 'Integral (07:30 às 18:30)';
+      handlePeriodChange();
       document.getElementById('studentShift').value = 'Integral';
+      handleShiftChange();
 
       // Responsável 1 (com CPF matematicamente válido e endereço estruturado por CEP)
       document.getElementById('resp1Name').value = 'Juliana Martins de Albuquerque';
@@ -2144,6 +2673,9 @@ table.shell-table tbody tr:hover { background: color-mix(in srgb, var(--accent) 
       document.getElementById('clauseExtra').checked = true;
       document.getElementById('clauseTransport').checked = false;
       document.getElementById('clauseHealthEmergency').checked = true;
+
+      // Inclusões e Alterações (Exemplo)
+      document.getElementById('customClauseNotes').value = 'Aluno matriculado com horário estendido de acolhimento matinal a partir das 07h00 sem custos adicionais nos primeiros 6 meses.';
 
       clearAllValidationErrors();
       saveDraft();
@@ -2242,6 +2774,18 @@ table.shell-table tbody tr:hover { background: color-mix(in srgb, var(--accent) 
         { id: 'contractPeriod', name: 'Vigência Contratual' }
       ];
 
+      // Se selecionou "Outro" em Período, o campo de texto passa a ser obrigatório
+      const periodSel = document.getElementById('studentPeriod');
+      if (periodSel && periodSel.value === '__custom__') {
+        requiredInputs.push({ id: 'studentPeriodCustom', name: 'Especificação do Período' });
+      }
+
+      // Se selecionou "Outro" em Turno, o campo de texto passa a ser obrigatório
+      const shiftSel = document.getElementById('studentShift');
+      if (shiftSel && shiftSel.value === '__custom__') {
+        requiredInputs.push({ id: 'studentShiftCustom', name: 'Especificação do Turno' });
+      }
+
       let firstInvalidElement = null;
       let errorCount = 0;
 
@@ -2321,231 +2865,359 @@ table.shell-table tbody tr:hover { background: color-mix(in srgb, var(--accent) 
        7. GERAR CONTRATO E MONTAR VISUALIZAÇÃO
        ------------------------------------------------------------------------ */
     function handleGenerateContract() {
-      if (!validateForm()) return;
+      try {
+        if (!validateForm()) return;
 
-      const now = new Date();
-      const currentYear = now.getFullYear();
-      const randomSeq = Math.floor(Math.random() * 900 + 100);
-      const contractNumber = `CT-${currentYear}-${randomSeq}`;
-
-      // Montar endereço completo estruturado
-      const street = document.getElementById('resp1Street').value.trim();
-      const number = document.getElementById('resp1Number').value.trim();
-      const comp = document.getElementById('resp1Comp').value.trim();
-      const neighborhood = document.getElementById('resp1Neighborhood').value.trim();
-      const city = document.getElementById('resp1City').value.trim();
-      const state = document.getElementById('resp1State').value.trim().toUpperCase();
-      const cep = document.getElementById('resp1Cep').value.trim();
-      const assembledAddress = assembleFullAddress(street, number, comp, neighborhood, city, state, cep);
-
-      const data = {
-        contractNumber,
-        generatedAt: now.toISOString(),
-        formattedDate: getFormattedFullDate(now),
+        const now = new Date();
         
-        // Aluno
-        studentName: document.getElementById('studentName').value.trim(),
-        studentBirth: document.getElementById('studentBirth').value,
-        studentAge: document.getElementById('studentAge').value,
-        studentGrade: document.getElementById('studentGrade').value,
-        studentPeriod: document.getElementById('studentPeriod').value,
-        studentShift: document.getElementById('studentShift').value,
+        // Geração isolada de número do contrato
+        let contractNumber = `${now.getFullYear()}-001`;
+        try {
+          contractNumber = getNextContractNumber(true);
+        } catch (numErr) {
+          console.warn('Erro ao calcular próximo número de contrato, usando padrão:', numErr);
+        }
 
-        // Resp 1
-        resp1Name: document.getElementById('resp1Name').value.trim(),
-        resp1Cpf: document.getElementById('resp1Cpf').value.trim(),
-        resp1Rg: document.getElementById('resp1Rg').value.trim(),
-        resp1Prof: document.getElementById('resp1Prof').value.trim(),
-        resp1Phone: document.getElementById('resp1Phone').value.trim(),
-        resp1Email: document.getElementById('resp1Email').value.trim(),
-        resp1Cep: cep,
-        resp1Street: street,
-        resp1Number: number,
-        resp1Comp: comp,
-        resp1Neighborhood: neighborhood,
-        resp1City: city,
-        resp1State: state,
-        resp1Address: assembledAddress,
+        // Montar endereço completo estruturado
+        let assembledAddress = '';
+        let street = '', number = '', comp = '', neighborhood = '', city = '', state = '', cep = '';
+        try {
+          street = (document.getElementById('resp1Street')?.value || '').trim();
+          number = (document.getElementById('resp1Number')?.value || '').trim();
+          comp = (document.getElementById('resp1Comp')?.value || '').trim();
+          neighborhood = (document.getElementById('resp1Neighborhood')?.value || '').trim();
+          city = (document.getElementById('resp1City')?.value || '').trim();
+          state = (document.getElementById('resp1State')?.value || '').trim().toUpperCase();
+          cep = (document.getElementById('resp1Cep')?.value || '').trim();
+          assembledAddress = assembleFullAddress(street, number, comp, neighborhood, city, state, cep);
+        } catch (addrErr) {
+          console.warn('Erro ao montar endereço:', addrErr);
+          assembledAddress = `${street} ${number} ${neighborhood} ${city} ${state} ${cep}`;
+        }
 
-        // Resp 2 (Solidário)
-        hasResp2: document.getElementById('resp2Block').style.display !== 'none' && document.getElementById('resp2Name').value.trim() !== '',
-        resp2Name: document.getElementById('resp2Name').value.trim(),
-        resp2Cpf: document.getElementById('resp2Cpf').value.trim(),
-        resp2Rg: document.getElementById('resp2Rg').value.trim(),
-        resp2Prof: document.getElementById('resp2Prof').value.trim(),
-        resp2Phone: document.getElementById('resp2Phone').value.trim(),
-        resp2Email: document.getElementById('resp2Email').value.trim(),
-        resp2Address: document.getElementById('resp2Address').value.trim(),
+        // Período e Turno
+        const periodSelectVal = document.getElementById('studentPeriod')?.value || '';
+        const periodCustomVal = (document.getElementById('studentPeriodCustom')?.value || '').trim();
+        const finalPeriod = (periodSelectVal === '__custom__') ? periodCustomVal : periodSelectVal;
 
-        // Ficha Médica
-        medAllergies: document.getElementById('medAllergies').value.trim(),
-        medDrugs: document.getElementById('medDrugs').value.trim(),
-        medConditions: document.getElementById('medConditions').value.trim(),
-        medSurgeries: document.getElementById('medSurgeries').value.trim(),
-        medBlood: document.getElementById('medBlood').value.trim(),
-        medInsurance: document.getElementById('medInsurance').value.trim(),
-        medPediatrician: document.getElementById('medPediatrician').value.trim(),
-        medHospital: document.getElementById('medHospital').value.trim(),
-        medContact1Name: document.getElementById('medContact1Name').value.trim(),
-        medContact1Phone: document.getElementById('medContact1Phone').value.trim(),
-        medContact2Name: document.getElementById('medContact2Name').value.trim(),
-        medContact2Phone: document.getElementById('medContact2Phone').value.trim(),
-        medNotes: document.getElementById('medNotes').value.trim(),
-        checkMedEmergency: document.getElementById('checkMedEmergency').checked,
-        checkVaccine: document.getElementById('checkVaccine').checked,
+        const shiftSelectVal = document.getElementById('studentShift')?.value || '';
+        const shiftCustomVal = (document.getElementById('studentShiftCustom')?.value || '').trim();
+        const finalShift = (shiftSelectVal === '__custom__') ? shiftCustomVal : shiftSelectVal;
 
-        // Financeiro
-        contractType: document.getElementById('contractType').value,
-        taxaMatricula: document.getElementById('taxaMatricula').value.trim(),
-        valorMensalidade: document.getElementById('valorMensalidade').value.trim(),
-        dueDay: document.getElementById('dueDay').value.trim(),
-        payMethod: document.getElementById('payMethod').value,
-        startDate: document.getElementById('startDate').value,
-        contractPeriod: document.getElementById('contractPeriod').value,
-        financialNotes: document.getElementById('financialNotes').value.trim(),
+        // Inclusões, alterações e observações
+        const customClauseNotes = (document.getElementById('customClauseNotes')?.value || '').trim();
 
-        // Cláusulas Opcionais
-        clauseImage: document.getElementById('clauseImage').checked,
-        clauseExtra: document.getElementById('clauseExtra').checked,
-        clauseTransport: document.getElementById('clauseTransport').checked,
-        clauseHealthEmergency: document.getElementById('clauseHealthEmergency').checked
-      };
+        const data = {
+          contractNumber,
+          generatedAt: now.toISOString(),
+          formattedDate: getFormattedFullDate(now),
+          
+          // Aluno
+          studentName: (document.getElementById('studentName')?.value || '').trim(),
+          studentBirth: document.getElementById('studentBirth')?.value || '',
+          studentAge: document.getElementById('studentAge')?.value || '',
+          studentGrade: document.getElementById('studentGrade')?.value || '',
+          studentPeriod: finalPeriod,
+          studentPeriodRaw: periodSelectVal,
+          studentPeriodCustom: periodCustomVal,
+          studentShift: finalShift,
+          studentShiftRaw: shiftSelectVal,
+          studentShiftCustom: shiftCustomVal,
+          customClauseNotes: customClauseNotes,
 
-      currentContractData = data;
-      renderContractDocument(data);
-      switchTab('preview');
-      showToast('✨ Contrato gerado com sucesso! Pronto para revisão e assinatura.', 'success');
+          // Resp 1
+          resp1Name: (document.getElementById('resp1Name')?.value || '').trim(),
+          resp1Cpf: (document.getElementById('resp1Cpf')?.value || '').trim(),
+          resp1Rg: (document.getElementById('resp1Rg')?.value || '').trim(),
+          resp1Prof: (document.getElementById('resp1Prof')?.value || '').trim(),
+          resp1Phone: (document.getElementById('resp1Phone')?.value || '').trim(),
+          resp1Email: (document.getElementById('resp1Email')?.value || '').trim(),
+          resp1Cep: cep,
+          resp1Street: street,
+          resp1Number: number,
+          resp1Comp: comp,
+          resp1Neighborhood: neighborhood,
+          resp1City: city,
+          resp1State: state,
+          resp1Address: assembledAddress,
+
+          // Resp 2 (Solidário)
+          hasResp2: document.getElementById('resp2Block')?.style.display !== 'none' && (document.getElementById('resp2Name')?.value || '').trim() !== '',
+          resp2Name: (document.getElementById('resp2Name')?.value || '').trim(),
+          resp2Cpf: (document.getElementById('resp2Cpf')?.value || '').trim(),
+          resp2Rg: (document.getElementById('resp2Rg')?.value || '').trim(),
+          resp2Prof: (document.getElementById('resp2Prof')?.value || '').trim(),
+          resp2Phone: (document.getElementById('resp2Phone')?.value || '').trim(),
+          resp2Email: (document.getElementById('resp2Email')?.value || '').trim(),
+          resp2Address: (document.getElementById('resp2Address')?.value || '').trim(),
+
+          // Ficha Médica
+          medAllergies: (document.getElementById('medAllergies')?.value || '').trim(),
+          medDrugs: (document.getElementById('medDrugs')?.value || '').trim(),
+          medConditions: (document.getElementById('medConditions')?.value || '').trim(),
+          medSurgeries: (document.getElementById('medSurgeries')?.value || '').trim(),
+          medBlood: (document.getElementById('medBlood')?.value || '').trim(),
+          medInsurance: (document.getElementById('medInsurance')?.value || '').trim(),
+          medPediatrician: (document.getElementById('medPediatrician')?.value || '').trim(),
+          medHospital: (document.getElementById('medHospital')?.value || '').trim(),
+          medContact1Name: (document.getElementById('medContact1Name')?.value || '').trim(),
+          medContact1Phone: (document.getElementById('medContact1Phone')?.value || '').trim(),
+          medContact2Name: (document.getElementById('medContact2Name')?.value || '').trim(),
+          medContact2Phone: (document.getElementById('medContact2Phone')?.value || '').trim(),
+          medNotes: (document.getElementById('medNotes')?.value || '').trim(),
+          checkMedEmergency: !!document.getElementById('checkMedEmergency')?.checked,
+          checkVaccine: !!document.getElementById('checkVaccine')?.checked,
+
+          // Financeiro
+          contractType: document.getElementById('contractType')?.value || 'Matrícula Escolar',
+          taxaMatricula: (document.getElementById('taxaMatricula')?.value || '0,00').trim(),
+          valorMensalidade: (document.getElementById('valorMensalidade')?.value || '0,00').trim(),
+          dueDay: (document.getElementById('dueDay')?.value || '10').trim(),
+          payMethod: document.getElementById('payMethod')?.value || 'Boleto Bancário',
+          startDate: document.getElementById('startDate')?.value || '',
+          contractPeriod: document.getElementById('contractPeriod')?.value || '12 meses',
+          financialNotes: (document.getElementById('financialNotes')?.value || '').trim(),
+
+          // Cláusulas Opcionais
+          clauseImage: !!document.getElementById('clauseImage')?.checked,
+          clauseExtra: !!document.getElementById('clauseExtra')?.checked,
+          clauseTransport: !!document.getElementById('clauseTransport')?.checked,
+          clauseHealthEmergency: !!document.getElementById('clauseHealthEmergency')?.checked
+        };
+
+        currentContractData = data;
+        renderContractDocument(data);
+        switchTab('preview');
+        showToast('✨ Contrato gerado com sucesso! Pronto para revisão e assinatura.', 'success');
+      } catch (err) {
+        console.error('Erro ao gerar contrato:', err);
+        showToast('⚠️ Ocorreu um erro ao gerar o documento. Verifique os dados e tente novamente.', 'error');
+      }
     }
 
     function renderContractDocument(data) {
-      // Cabeçalho e Registro
-      const currentYear = new Date().getFullYear();
-      document.getElementById('docRegNumber').textContent = `Número do Registro: ${data.contractNumber} | Ano Letivo: ${currentYear} | Emitido em: ${formatDatePtBr(data.generatedAt.slice(0, 10))}`;
-      document.getElementById('anexoRegNumber').textContent = `Referência Contratual: ${data.contractNumber}`;
+      if (!data) return;
 
-      // Cláusula 1ª - Responsáveis
-      let respHtml = `<strong>${data.resp1Name}</strong>, inscrito(a) no CPF nº ${data.resp1Cpf}, portador(a) do RG nº ${data.resp1Rg}, de profissão ${data.resp1Prof}, residente e domiciliado(a) em ${data.resp1Address}, telefone ${data.resp1Phone}, e-mail ${data.resp1Email}`;
+      // Isolamento 1: Cabeçalho com logo e número de registro
+      try {
+        const regEl = document.getElementById('docRegNumber');
+        const anexoRegEl = document.getElementById('anexoRegNumber');
+        if (regEl) regEl.textContent = data.contractNumber || '2026-001';
+        if (anexoRegEl) anexoRegEl.textContent = `Referência: ${data.contractNumber || '2026-001'}`;
 
-      if (data.hasResp2) {
-        respHtml += `; e como Responsável Solidário: <strong>${data.resp2Name}</strong>, inscrito(a) no CPF nº ${data.resp2Cpf || 'N/I'}, portador(a) do RG nº ${data.resp2Rg || 'N/I'}, profissão ${data.resp2Prof || 'N/I'}, residente em ${data.resp2Address || data.resp1Address}, telefone ${data.resp2Phone || 'N/I'}, e-mail ${data.resp2Email || 'N/I'}`;
-      }
-      document.getElementById('docRespParties').innerHTML = respHtml;
-
-      // Cláusula 2ª - Objeto
-      document.getElementById('docStudentName').textContent = data.studentName;
-      document.getElementById('docStudentBirth').textContent = formatDatePtBr(data.studentBirth);
-      document.getElementById('docStudentAge').textContent = data.studentAge || 'Não informada';
-      document.getElementById('docStudentGrade').textContent = data.studentGrade;
-      document.getElementById('docStudentPeriod').textContent = data.studentPeriod;
-      document.getElementById('docStudentShift').textContent = data.studentShift;
-
-      // Cláusula 3ª - Valores
-      document.getElementById('docTaxaMatricula').textContent = data.taxaMatricula;
-      const numMatricula = parseFloat(data.taxaMatricula.replace(/\./g, '').replace(',', '.')) || 0;
-      document.getElementById('docTaxaMatriculaExtenso').textContent = numberToWordsPtBr(numMatricula);
-
-      document.getElementById('docValorMensalidade').textContent = data.valorMensalidade;
-      const numMensalidade = parseFloat(data.valorMensalidade.replace(/\./g, '').replace(',', '.')) || 0;
-      document.getElementById('docValorMensalidadeExtenso').textContent = numberToWordsPtBr(numMensalidade);
-
-      document.getElementById('docDueDay').textContent = data.dueDay;
-      document.getElementById('docPayMethod').textContent = data.payMethod;
-      document.getElementById('docStartDate').textContent = formatDatePtBr(data.startDate);
-      document.getElementById('docContractPeriod').textContent = data.contractPeriod;
-
-      const financialNotesBox = document.getElementById('docFinancialNotesBox');
-      if (data.financialNotes) {
-        document.getElementById('docFinancialNotes').textContent = data.financialNotes;
-        financialNotesBox.style.display = 'block';
-      } else {
-        financialNotesBox.style.display = 'none';
+        if (customLogoBase64) {
+          applyLogoToAll(customLogoBase64);
+        } else {
+          applyDefaultLogoToAll();
+        }
+      } catch (headErr) {
+        console.warn('Erro isolado ao renderizar cabeçalho/logo:', headErr);
       }
 
-      // Cláusula 8ª - Imagem
-      const imageContainer = document.getElementById('docImageClauseText');
-      if (data.clauseImage) {
-        imageContainer.innerHTML = `
-          <p class="doc-p">
-            <strong>8.1 — Autorização Concedida:</strong> O(s) CONTRATANTE(S) concede(m) expressamente à CONTRATADA o direito de fotografar, filmar e registrar a voz e imagem do educando exclusivamente em atividades curriculares, apresentações comemorativas e projetos internos, autorizando a divulgação estrita em canais pedagógicos, murais físicos e páginas oficiais do Colégio Infantil Boreal Lumini.
-          </p>
-          <p class="doc-p">
-            <strong>8.2 — Proteção e Resguardo:</strong> É terminantemente vedada a utilização da imagem da criança em qualquer contexto comercial abusivo, desabonador ou vexatório, respeitando-se as diretrizes protetivas do Estatuto da Criança e do Adolescente (Lei 8.069/1990) e da LGPD (Lei 13.709/2018).
-          </p>
-        `;
-      } else {
-        imageContainer.innerHTML = `
-          <p class="doc-p">
-            <strong>8.1 — Não Autorização Prévia:</strong> O(s) CONTRATANTE(S) opta(m) por não conceder autorização genérica de uso de imagem e voz para redes sociais. Todo e qualquer eventual registro institucional para fins pedagógicos externos dependerá de termo prévio, específico e expresso formulado pela direção da escola.
-          </p>
-        `;
+      // Isolamento 2: Cláusula 1ª - Responsáveis
+      try {
+        let respHtml = `<strong>${escapeHtml(data.resp1Name)}</strong>, inscrito(a) no CPF nº ${escapeHtml(data.resp1Cpf)}, portador(a) do RG nº ${escapeHtml(data.resp1Rg)}, de profissão ${escapeHtml(data.resp1Prof)}, residente e domiciliado(a) em ${escapeHtml(data.resp1Address)}, telefone ${escapeHtml(data.resp1Phone)}, e-mail ${escapeHtml(data.resp1Email)}`;
+
+        if (data.hasResp2) {
+          respHtml += `; e como Responsável Solidário: <strong>${escapeHtml(data.resp2Name)}</strong>, inscrito(a) no CPF nº ${escapeHtml(data.resp2Cpf || 'N/I')}, portador(a) do RG nº ${escapeHtml(data.resp2Rg || 'N/I')}, profissão ${escapeHtml(data.resp2Prof || 'N/I')}, residente em ${escapeHtml(data.resp2Address || data.resp1Address)}, telefone ${escapeHtml(data.resp2Phone || 'N/I')}, e-mail ${escapeHtml(data.resp2Email || 'N/I')}`;
+        }
+        const respEl = document.getElementById('docRespParties');
+        if (respEl) respEl.innerHTML = respHtml;
+      } catch (respErr) {
+        console.warn('Erro ao renderizar dados dos responsáveis:', respErr);
       }
 
-      // Cláusula 9ª - Opcionais
-      let extraHtml = '';
-      if (data.clauseExtra) {
-        extraHtml += `
-          <p class="doc-p">
-            <strong>9.1 — Programa Extracurricular Integrado:</strong> A matrícula engloba as oficinas pedagógicas de psicomotricidade infantil, musicalização sensório-motora, introdução lúdica à língua inglesa e horta educativa sustentável, coordenadas pelo corpo docente da escola.
-          </p>
-        `;
-      }
-      if (data.clauseTransport) {
-        extraHtml += `
-          <p class="doc-p">
-            <strong>9.2 — Transporte Escolar:</strong> Caso a família contrate condutor de van escolar, este deverá possuir credenciamento ativo perante o órgão de trânsito competente e registro junto à secretaria do Colégio para autorização de embarque e desembarque seguro.
-          </p>
-        `;
-      }
-      if (data.clauseHealthEmergency) {
-        extraHtml += `
-          <p class="doc-p">
-            <strong>9.3 — Atendimento Imediato e Urgências:</strong> Diante de mal súbito, febre súbita ou pequenos acidentes comuns na infância, a equipe escolar prestará os primeiros socorros imediatos e entrará em contato via telefônica nos números de emergência, podendo acionar o SAMU ou encaminhar a criança ao hospital de preferência indicado.
-          </p>
-        `;
-      }
-      if (!extraHtml) {
-        extraHtml = '<p class="doc-p">Não há cláusulas adicionais contratadas.</p>';
-      }
-      document.getElementById('docOptionalClauses').innerHTML = extraHtml;
-
-      // Data final e Assinaturas
-      document.getElementById('docLocationDate').textContent = `São Paulo, ${data.formattedDate}.`;
-      document.getElementById('docSigResp1Name').textContent = data.resp1Name;
-      document.getElementById('docSigResp1Cpf').textContent = data.resp1Cpf;
-
-      const resp2Box = document.getElementById('docSigResp2Container');
-      if (data.hasResp2) {
-        document.getElementById('docSigResp2Name').textContent = data.resp2Name;
-        document.getElementById('docSigResp2Cpf').textContent = data.resp2Cpf || '---';
-        resp2Box.style.display = 'block';
-      } else {
-        resp2Box.style.display = 'none';
+      // Isolamento 3: Cláusula 2ª - Objeto e Aluno
+      try {
+        const setTxt = (id, val) => { const el = document.getElementById(id); if (el) el.textContent = val || '---'; };
+        setTxt('docStudentName', data.studentName);
+        setTxt('docStudentBirth', formatDatePtBr(data.studentBirth));
+        setTxt('docStudentAge', data.studentAge || 'Não informada');
+        setTxt('docStudentGrade', data.studentGrade);
+        setTxt('docStudentPeriod', data.studentPeriod);
+        setTxt('docStudentShift', data.studentShift);
+      } catch (objErr) {
+        console.warn('Erro ao renderizar dados do aluno:', objErr);
       }
 
-      // Render Anexo I - Ficha Médica
-      document.getElementById('anexoStudentName').textContent = data.studentName;
-      document.getElementById('anexoStudentBirth').textContent = formatDatePtBr(data.studentBirth);
-      document.getElementById('anexoStudentAge').textContent = data.studentAge || 'Não informada';
-      document.getElementById('anexoStudentGrade').textContent = data.studentGrade;
+      // Isolamento 4: Cláusula 3ª - Valores
+      try {
+        const matriculaVal = data.taxaMatricula || '0,00';
+        const mensalidadeVal = data.valorMensalidade || '0,00';
+        const numMatricula = parseFloat(String(matriculaVal).replace(/\./g, '').replace(',', '.')) || 0;
+        const numMensalidade = parseFloat(String(mensalidadeVal).replace(/\./g, '').replace(',', '.')) || 0;
 
-      document.getElementById('anexoAllergies').textContent = data.medAllergies;
-      document.getElementById('anexoDrugs').textContent = data.medDrugs;
-      document.getElementById('anexoConditions').textContent = data.medConditions;
-      document.getElementById('anexoSurgeries').textContent = data.medSurgeries;
-      document.getElementById('anexoBlood').textContent = data.medBlood || 'Não informado';
-      document.getElementById('anexoInsurance').textContent = data.medInsurance;
-      document.getElementById('anexoPediatrician').textContent = data.medPediatrician || 'Não informado';
-      document.getElementById('anexoHospital').textContent = data.medHospital;
-      document.getElementById('anexoContact1').textContent = `${data.medContact1Name} - ${data.medContact1Phone}`;
-      document.getElementById('anexoContact2').textContent = data.medContact2Name ? `${data.medContact2Name} - ${data.medContact2Phone}` : 'Não informado';
-      document.getElementById('anexoNotes').textContent = data.medNotes || 'Nenhuma recomendação especial cadastrada.';
+        const setTxt = (id, val) => { const el = document.getElementById(id); if (el) el.textContent = val; };
+        setTxt('docTaxaMatricula', matriculaVal);
+        setTxt('docTaxaMatriculaExtenso', numberToWordsPtBr(numMatricula));
+        setTxt('docValorMensalidade', mensalidadeVal);
+        setTxt('docValorMensalidadeExtenso', numberToWordsPtBr(numMensalidade));
+        setTxt('docDueDay', data.dueDay || '10');
+        setTxt('docPayMethod', data.payMethod || 'Boleto Bancário');
+        setTxt('docStartDate', formatDatePtBr(data.startDate));
+        setTxt('docContractPeriod', data.contractPeriod || '12 meses');
 
-      document.getElementById('anexoSigRespName').textContent = data.resp1Name;
-      document.getElementById('anexoSigRespCpf').textContent = data.resp1Cpf;
+        const financialNotesBox = document.getElementById('docFinancialNotesBox');
+        if (financialNotesBox) {
+          if (data.financialNotes) {
+            setTxt('docFinancialNotes', data.financialNotes);
+            financialNotesBox.style.display = 'block';
+          } else {
+            financialNotesBox.style.display = 'none';
+          }
+        }
+      } catch (finErr) {
+        console.warn('Erro ao renderizar valores:', finErr);
+      }
 
-      // Restaurar assinatura digital se já existia
-      if (digitalSignatureDataUrl) {
-        applySignatureImageToDoc(digitalSignatureDataUrl);
+      // Isolamento 5: Cláusula 8ª - Imagem
+      try {
+        const imageContainer = document.getElementById('docImageClauseText');
+        if (imageContainer) {
+          if (data.clauseImage) {
+            imageContainer.innerHTML = `
+              <p class="doc-p">
+                <strong>8.1 — Autorização Concedida:</strong> O(s) CONTRATANTE(S) concede(m) expressamente à CONTRATADA o direito de fotografar, filmar e registrar a voz e imagem do educando exclusivamente em atividades curriculares, apresentações comemorativas e projetos internos, autorizando a divulgação estrita em canais pedagógicos, murais físicos e páginas oficiais do Colégio Infantil Boreal Lumini.
+              </p>
+              <p class="doc-p">
+                <strong>8.2 — Proteção e Resguardo:</strong> É terminantemente vedada a utilização da imagem da criança em qualquer contexto comercial abusivo, desabonador ou vexatório, respeitando-se as diretrizes protetivas do Estatuto da Criança e do Adolescente (Lei 8.069/1990) e da LGPD (Lei 13.709/2018).
+              </p>
+            `;
+          } else {
+            imageContainer.innerHTML = `
+              <p class="doc-p">
+                <strong>8.1 — Não Autorização Prévia:</strong> O(s) CONTRATANTE(S) opta(m) por não conceder autorização genérica de uso de imagem e voz para redes sociais. Todo e qualquer eventual registro institucional para fins pedagógicos externos dependerá de termo prévio, específico e expresso formulado pela direção da escola.
+              </p>
+            `;
+          }
+        }
+      } catch (imgClauseErr) {
+        console.warn('Erro na cláusula de imagem:', imgClauseErr);
+      }
+
+      // Isolamento 6: Cláusula 9ª - Opcionais
+      try {
+        let extraHtml = '';
+        if (data.clauseExtra) {
+          extraHtml += `
+            <p class="doc-p">
+              <strong>9.1 — Programa Extracurricular Integrado:</strong> A matrícula engloba as oficinas pedagógicas de psicomotricidade infantil, musicalização sensório-motora, introdução lúdica à língua inglesa e horta educativa sustentável, coordenadas pelo corpo docente da escola.
+            </p>
+          `;
+        }
+        if (data.clauseTransport) {
+          extraHtml += `
+            <p class="doc-p">
+              <strong>9.2 — Transporte Escolar:</strong> Caso a família contrate condutor de van escolar, este deverá possuir credenciamento ativo perante o órgão de trânsito competente e registro junto à secretaria do Colégio para autorização de embarque e desembarque seguro.
+            </p>
+          `;
+        }
+        if (data.clauseHealthEmergency) {
+          extraHtml += `
+            <p class="doc-p">
+              <strong>9.3 — Atendimento Imediato e Urgências:</strong> Diante de mal súbito, febre súbita ou pequenos acidentes comuns na infância, a equipe escolar prestará os primeiros socorros imediatos e entrará em contato via telefônica nos números de emergência, podendo acionar o SAMU ou encaminhar a criança ao hospital de preferência indicado.
+            </p>
+          `;
+        }
+        if (!extraHtml) {
+          extraHtml = '<p class="doc-p">Não há cláusulas adicionais contratadas.</p>';
+        }
+        const optEl = document.getElementById('docOptionalClauses');
+        if (optEl) optEl.innerHTML = extraHtml;
+      } catch (optClauseErr) {
+        console.warn('Erro nas cláusulas opcionais:', optClauseErr);
+      }
+
+      // Isolamento 7: Disposições especiais (Inclusões e Alterações)
+      try {
+        const specialClauseContainer = document.getElementById('docSpecialClauseContainer');
+        const specialClauseBody = document.getElementById('docSpecialClauseBody');
+        const specialClauseTitle = document.getElementById('docSpecialClauseTitle');
+        const docForoTitle = document.getElementById('docForoTitle');
+
+        const hasCustomNotes = !!(data.customClauseNotes && data.customClauseNotes.trim());
+        const hasCustomPeriod = data.studentPeriodRaw === '__custom__' && !!data.studentPeriodCustom;
+        const hasCustomShift = data.studentShiftRaw === '__custom__' && !!data.studentShiftCustom;
+
+        if (specialClauseContainer && specialClauseBody && specialClauseTitle && docForoTitle) {
+          if (hasCustomNotes || hasCustomPeriod || hasCustomShift) {
+            specialClauseContainer.style.display = 'block';
+            specialClauseTitle.textContent = 'CLÁUSULA 10ª — DAS DISPOSIÇÕES ESPECIAIS';
+            docForoTitle.textContent = 'CLÁUSULA 11ª — DO FORO DE ELEIÇÃO';
+
+            let specialContent = '';
+            if (hasCustomPeriod || hasCustomShift) {
+              specialContent += `<p class="doc-p"><strong>10.1 — Da Especificação de Horário e Turno:</strong> Fica expressamente convencionado que o(a) aluno(a) frequentará a instituição no seguinte regime especial: <em>Período: ${escapeHtml(data.studentPeriod)}</em> e <em>Turno: ${escapeHtml(data.studentShift)}</em>, devendo as partes observar rigorosamente as condições de acolhimento e pontualidade pactuadas.</p>`;
+            }
+            if (hasCustomNotes) {
+              const itemNum = (hasCustomPeriod || hasCustomShift) ? '10.2' : '10.1';
+              specialContent += `<p class="doc-p"><strong>${itemNum} — Das Inclusões e Condições Particulares:</strong> ${escapeHtml(data.customClauseNotes)}</p>`;
+            }
+            specialClauseBody.innerHTML = specialContent;
+          } else {
+            specialClauseContainer.style.display = 'none';
+            specialClauseBody.innerHTML = '';
+            docForoTitle.textContent = 'CLÁUSULA 10ª — DO FORO DE ELEIÇÃO';
+          }
+        }
+      } catch (specialClauseErr) {
+        console.warn('Erro ao renderizar disposições especiais:', specialClauseErr);
+      }
+
+      // Isolamento 8: Data final e Assinaturas
+      try {
+        const setTxt = (id, val) => { const el = document.getElementById(id); if (el) el.textContent = val; };
+        setTxt('docLocationDate', `São Paulo, ${data.formattedDate}.`);
+        setTxt('docSigResp1Name', data.resp1Name || 'Responsável Legal');
+        setTxt('docSigResp1Cpf', data.resp1Cpf || '---');
+
+        const resp2Box = document.getElementById('docSigResp2Container');
+        if (resp2Box) {
+          if (data.hasResp2) {
+            setTxt('docSigResp2Name', data.resp2Name || 'Segundo Responsável Solidário');
+            setTxt('docSigResp2Cpf', data.resp2Cpf || '---');
+            resp2Box.style.display = 'block';
+          } else {
+            resp2Box.style.display = 'none';
+          }
+        }
+      } catch (sigWrapErr) {
+        console.warn('Erro ao renderizar assinaturas:', sigWrapErr);
+      }
+
+      // Isolamento 9: Render Anexo I - Ficha Médica
+      try {
+        const setTxt = (id, val) => { const el = document.getElementById(id); if (el) el.textContent = val; };
+        setTxt('anexoStudentName', data.studentName || '---');
+        setTxt('anexoStudentBirth', formatDatePtBr(data.studentBirth));
+        setTxt('anexoStudentAge', data.studentAge || 'Não informada');
+        setTxt('anexoStudentGrade', data.studentGrade || '---');
+
+        setTxt('anexoAllergies', data.medAllergies || 'Nenhuma declarada');
+        setTxt('anexoDrugs', data.medDrugs || 'Nenhum no momento');
+        setTxt('anexoConditions', data.medConditions || 'Nenhuma diagnosticada');
+        setTxt('anexoSurgeries', data.medSurgeries || 'Nenhuma cirurgia prévia');
+        setTxt('anexoBlood', data.medBlood || 'Não informado');
+        setTxt('anexoInsurance', data.medInsurance || 'SUS');
+        setTxt('anexoPediatrician', data.medPediatrician || 'Não informado');
+        setTxt('anexoHospital', data.medHospital || 'Pronto Socorro Local');
+        setTxt('anexoContact1', `${data.medContact1Name || ''} - ${data.medContact1Phone || ''}`);
+        setTxt('anexoContact2', data.medContact2Name ? `${data.medContact2Name} - ${data.medContact2Phone}` : 'Não informado');
+        setTxt('anexoNotes', data.medNotes || 'Nenhuma recomendação especial cadastrada.');
+
+        setTxt('anexoSigRespName', data.resp1Name || 'Responsável Legal');
+        setTxt('anexoSigRespCpf', data.resp1Cpf || '---');
+      } catch (anexoErr) {
+        console.warn('Erro ao renderizar anexo médico:', anexoErr);
+      }
+
+      // Isolamento 10: Restaurar assinatura digital se já existia
+      try {
+        if (digitalSignatureDataUrl) {
+          applySignatureImageToDoc(digitalSignatureDataUrl);
+        }
+      } catch (sigImgErr) {
+        console.warn('Erro ao aplicar imagem de assinatura no doc:', sigImgErr);
       }
     }
 
@@ -2674,7 +3346,7 @@ table.shell-table tbody tr:hover { background: color-mix(in srgb, var(--accent) 
     }
 
     /* ------------------------------------------------------------------------
-       9. SALVAR E GERENCIAR CONTRATOS (LOCALSTORAGE)
+       9. SALVAR E GERENCIAR CONTRATOS (LOCALSTORAGE RESILIENTE COM FEEDBACK VISÍVEL)
        ------------------------------------------------------------------------ */
     function saveCurrentContract() {
       if (!currentContractData) {
@@ -2682,25 +3354,52 @@ table.shell-table tbody tr:hover { background: color-mix(in srgb, var(--accent) 
         return;
       }
 
-      let list = getSavedContracts();
-      // Checar se já existe contrato com este mesmo número
-      const existingIdx = list.findIndex(c => c.contractNumber === currentContractData.contractNumber);
-      
-      const payload = {
-        ...currentContractData,
-        signature: digitalSignatureDataUrl,
-        savedAt: new Date().toISOString()
-      };
+      const contractNum = currentContractData.contractNumber || 'Contrato';
 
-      if (existingIdx >= 0) {
-        list[existingIdx] = payload;
-      } else {
-        list.unshift(payload);
+      try {
+        let list = getSavedContracts();
+        // Checar se já existe contrato com este mesmo número
+        const existingIdx = list.findIndex(c => c.contractNumber === currentContractData.contractNumber);
+        
+        const payload = {
+          ...currentContractData,
+          signature: digitalSignatureDataUrl,
+          savedAt: new Date().toISOString()
+        };
+
+        if (existingIdx >= 0) {
+          list[existingIdx] = payload;
+        } else {
+          list.unshift(payload);
+        }
+
+        try {
+          localStorage.setItem(STORAGE_KEY_CONTRACTS, JSON.stringify(list));
+          updateSavedCountBadge();
+          showToast(`Contrato ${contractNum} salvo com sucesso!`, 'success');
+        } catch (quotaErr) {
+          console.warn('Falha de cota ao salvar no localStorage:', quotaErr);
+          // Tenta salvar sem a assinatura se ela for grande
+          if (payload.signature) {
+            try {
+              const lighterPayload = { ...payload, signature: null };
+              if (existingIdx >= 0) {
+                list[existingIdx] = lighterPayload;
+              } else {
+                list[0] = lighterPayload;
+              }
+              localStorage.setItem(STORAGE_KEY_CONTRACTS, JSON.stringify(list));
+              updateSavedCountBadge();
+              showToast(`Contrato ${contractNum} salvo com sucesso (sem imagem da assinatura para poupar espaço).`, 'success');
+              return;
+            } catch (_) {}
+          }
+          showToast('⚠️ Não foi possível salvar no navegador (armazenamento cheio). O contrato foi gerado normalmente, mas não ficará salvo na lista. Tente usar uma logo menor.', 'error', 7000);
+        }
+      } catch (err) {
+        console.error('Erro inesperado ao salvar contrato:', err);
+        showToast(`⚠️ Não foi possível salvar o contrato: ${err.message || 'Erro interno'}.`, 'error');
       }
-
-      localStorage.setItem(STORAGE_KEY_CONTRACTS, JSON.stringify(list));
-      updateSavedCountBadge();
-      showToast(`💾 Contrato ${currentContractData.contractNumber} salvo no histórico!`, 'success');
     }
 
     function getSavedContracts() {
@@ -2708,15 +3407,19 @@ table.shell-table tbody tr:hover { background: color-mix(in srgb, var(--accent) 
         const raw = localStorage.getItem(STORAGE_KEY_CONTRACTS);
         return raw ? JSON.parse(raw) : [];
       } catch (e) {
-        console.error('Erro ao ler localStorage', e);
+        console.warn('Erro ao ler localStorage de contratos:', e);
         return [];
       }
     }
 
     function updateSavedCountBadge() {
-      const count = getSavedContracts().length;
-      const badge = document.getElementById('savedCountBadge');
-      if (badge) badge.textContent = count;
+      try {
+        const count = getSavedContracts().length;
+        const badge = document.getElementById('savedCountBadge');
+        if (badge) badge.textContent = count;
+      } catch (e) {
+        console.warn('Erro ao atualizar badge de salvos:', e);
+      }
     }
 
     function renderSavedContractsTable() {
@@ -2780,230 +3483,270 @@ table.shell-table tbody tr:hover { background: color-mix(in srgb, var(--accent) 
     }
 
     function deleteSavedContract(index) {
-      if (!confirm('Deseja realmente excluir este contrato do histórico?')) return;
-      const list = getSavedContracts();
-      list.splice(index, 1);
-      localStorage.setItem(STORAGE_KEY_CONTRACTS, JSON.stringify(list));
-      updateSavedCountBadge();
-      renderSavedContractsTable();
-      showToast('Contrato excluído com sucesso.', 'info');
+      try {
+        if (!confirm('Deseja realmente excluir este contrato do histórico?')) return;
+        const list = getSavedContracts();
+        list.splice(index, 1);
+        try {
+          localStorage.setItem(STORAGE_KEY_CONTRACTS, JSON.stringify(list));
+        } catch (e) {
+          console.warn('Falha ao atualizar localStorage após exclusão:', e);
+        }
+        updateSavedCountBadge();
+        renderSavedContractsTable();
+        showToast('Contrato excluído com sucesso.', 'info');
+      } catch (err) {
+        console.error('Erro ao excluir contrato salvo:', err);
+        showToast('⚠️ Erro ao excluir o contrato.', 'error');
+      }
     }
 
     function clearAllSavedContracts() {
-      const list = getSavedContracts();
-      if (list.length === 0) {
-        showToast('Nenhum contrato para excluir.', 'info');
-        return;
+      try {
+        const list = getSavedContracts();
+        if (list.length === 0) {
+          showToast('Nenhum contrato para excluir.', 'info');
+          return;
+        }
+        if (!confirm('Tem certeza de que deseja apagar TODOS os contratos salvos? Esta ação não pode ser desfeita.')) return;
+        try {
+          localStorage.removeItem(STORAGE_KEY_CONTRACTS);
+        } catch (e) {
+          console.warn('Falha ao limpar contratos do localStorage:', e);
+        }
+        updateSavedCountBadge();
+        renderSavedContractsTable();
+        showToast('Todos os contratos foram apagados.', 'info');
+      } catch (err) {
+        console.error('Erro ao limpar contratos:', err);
+        showToast('⚠️ Erro ao limpar histórico de contratos.', 'error');
       }
-      if (!confirm('Tem certeza de que deseja apagar TODOS os contratos salvos? Esta ação não pode ser desfeita.')) return;
-      localStorage.removeItem(STORAGE_KEY_CONTRACTS);
-      updateSavedCountBadge();
-      renderSavedContractsTable();
-      showToast('Todos os contratos foram apagados.', 'info');
     }
 
     /* ------------------------------------------------------------------------
-       10. IMPRESSÃO ROBUSTA (SEM TRAVAMENTO / CASCATA TOTAL / A4 COMPLETO)
+       10. IMPRESSÃO DEFINITIVA COM IFRAME OCULTO (A4 E SALVAR COMO PDF)
        ------------------------------------------------------------------------ */
     function buildPrintDocumentHtml(docElement) {
-      const studentTitle = currentContractData?.studentName ? ` - ${escapeHtml(currentContractData.studentName)}` : '';
+      const studentName = currentContractData?.studentName ? ` - ${escapeHtml(currentContractData.studentName)}` : '';
+      const docReg = currentContractData?.contractNumber ? ` (${escapeHtml(currentContractData.contractNumber)})` : '';
       return `<!DOCTYPE html>
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8">
-  <title>Contrato Escolar${studentTitle}</title>
+  <title>Contrato Escolar${studentName}${docReg}</title>
   <style>
     @page {
       size: A4 portrait;
-      margin: 12mm 15mm 15mm 15mm;
+      margin: 22mm 25mm;
     }
     * {
       box-sizing: border-box;
       -webkit-print-color-adjust: exact !important;
       print-color-adjust: exact !important;
+      color-adjust: exact !important;
     }
     html, body {
       margin: 0;
       padding: 0;
       background: #ffffff;
       color: #1a2733;
-      font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-      font-size: 11pt;
-      line-height: 1.55;
+      font-family: Georgia, 'Times New Roman', serif;
+      font-size: 11.5pt;
+      line-height: 1.6;
     }
     .doc-sheet {
       width: 100%;
-      max-width: 820px;
+      max-width: 100%;
       margin: 0 auto;
-      padding: 10px;
+      padding: 0;
+    }
+    .doc-contract-meta {
+      font-family: Georgia, 'Times New Roman', serif;
+      font-size: 9pt;
+      color: #555555;
+      text-align: right;
+      margin-bottom: 8px;
     }
     .doc-header-box {
       text-align: center;
-      padding-bottom: 1.15rem;
-      margin-bottom: 1.4rem;
+      margin-bottom: 24px;
     }
-    .doc-header-logo-container {
+    .doc-logo-wrap {
       display: flex;
       justify-content: center;
       align-items: center;
-      gap: 0.6rem;
-      margin-bottom: 0.5rem;
+      margin-bottom: 8px;
+    }
+    .doc-header-logo {
+      width: 72px;
+      height: 72px;
+      display: block;
+    }
+    .doc-header-img {
+      max-height: 72px;
+      max-width: 220px;
+      object-fit: contain;
+      display: block;
     }
     .doc-school-name {
-      font-size: 1.3rem;
-      font-weight: 800;
-      color: #0e2a47;
-      letter-spacing: 0.04em;
-      margin: 0 0 0.25rem;
+      font-family: Georgia, 'Times New Roman', serif;
+      font-size: 14pt;
+      font-weight: bold;
+      color: #1B2A5E !important;
       text-transform: uppercase;
+      letter-spacing: 2px;
+      text-align: center;
+      margin: 6px 0 0;
+    }
+    .doc-decor-line {
+      width: 60px;
+      height: 2px;
+      background-color: #2E7D4F !important;
+      margin: 10px auto;
     }
     .doc-title {
-      font-size: 1.05rem;
-      font-weight: 700;
-      color: #163e66;
-      margin: 0.25rem 0 0.45rem;
-      letter-spacing: 0.03em;
+      font-family: Georgia, 'Times New Roman', serif;
+      font-size: 13pt;
+      font-weight: bold;
+      color: #1B2A5E !important;
+      text-align: center;
+      margin: 6px 0 3px;
     }
-    .doc-subbar {
-      background: #0e2a47 !important;
-      color: #ffffff !important;
-      font-size: 0.74rem;
-      font-weight: 500;
-      padding: 0.35rem 0.75rem;
-      border-radius: 4px;
-      margin: 0.4rem auto 0.5rem;
-      max-width: 95%;
-      letter-spacing: 0.02em;
-    }
-    .doc-meta-line {
-      font-size: 0.78rem;
-      color: #4e6578;
-      margin: 0.2rem 0;
+    .doc-subtitle {
+      font-family: Georgia, 'Times New Roman', serif;
+      font-size: 10.5pt;
+      font-style: italic;
+      color: #4a5568;
+      text-align: center;
+      margin: 0;
     }
     .doc-clause-title {
-      font-size: 0.92rem;
-      font-weight: 700;
-      color: #0e2a47;
-      margin-top: 1.25rem;
-      margin-bottom: 0.4rem;
+      font-family: Georgia, 'Times New Roman', serif;
+      font-size: 12.5pt;
+      font-weight: bold;
+      color: #1B2A5E !important;
+      margin-top: 18px;
+      margin-bottom: 8px;
       text-transform: uppercase;
-      display: flex;
-      align-items: center;
-      gap: 0.45rem;
-    }
-    .doc-clause-title::before {
-      content: "";
-      display: inline-block;
-      width: 4px;
-      height: 14px;
-      background-color: #0d8a55 !important;
-      border-radius: 2px;
+      page-break-after: avoid;
+      break-after: avoid;
     }
     .doc-p {
-      margin: 0.45rem 0;
+      font-family: Georgia, 'Times New Roman', serif;
+      font-size: 11.5pt;
+      line-height: 1.6;
       text-align: justify;
-      font-size: 0.88rem;
-      line-height: 1.55;
+      margin: 6px 0;
+      text-indent: 1.8em;
     }
     .doc-list {
-      margin: 0.35rem 0 0.6rem 1.25rem;
-      padding: 0;
-      font-size: 0.88rem;
-      line-height: 1.5;
+      font-family: Georgia, 'Times New Roman', serif;
+      font-size: 11.5pt;
+      line-height: 1.6;
+      text-align: justify;
+      margin: 6px 0 6px 1.8em;
+      padding-left: 1em;
     }
     .doc-list li {
-      margin-bottom: 0.25rem;
+      margin-bottom: 4px;
     }
     .doc-highlight-card {
-      background-color: #edf7f6 !important;
-      border: 1px solid #bce5db !important;
-      border-radius: 8px;
-      padding: 0.7rem 0.9rem;
-      margin: 0.6rem 0;
-    }
-    .doc-signature-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 2rem;
-      margin-top: 2.2rem;
-      padding-top: 1rem;
+      background-color: #f7faf8 !important;
+      border: 1px solid #c2dfd1 !important;
+      border-radius: 6px;
+      padding: 10px 14px;
+      margin: 10px 0;
       page-break-inside: avoid;
       break-inside: avoid;
     }
-    .doc-sig-box {
-      text-align: center;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
+    .doc-signatures-wrap {
+      margin-top: 36px;
+      page-break-inside: avoid;
+      break-inside: avoid;
     }
-    .doc-sig-line {
-      width: 100%;
-      border-top: 1px solid #0e2a47;
-      margin-top: 3.5rem;
-      padding-top: 0.4rem;
-      font-weight: 600;
-      font-size: 0.82rem;
-      color: #0e2a47;
+    .doc-sig-block {
+      width: 280px;
+      max-width: 280px;
+      margin: 0 auto 48px auto;
+      text-align: center;
+      page-break-inside: avoid;
+      break-inside: avoid;
+    }
+    .doc-sig-block:last-child {
+      margin-bottom: 24px;
+    }
+    .doc-sig-img-container {
+      min-height: 48px;
+      display: flex;
+      align-items: flex-end;
+      justify-content: center;
+      margin-bottom: 4px;
     }
     .doc-sig-img {
-      max-height: 55px;
-      margin-bottom: -3.5rem;
+      max-height: 52px;
+      max-width: 240px;
       display: block;
-      z-index: 2;
+    }
+    .doc-sig-line {
+      border-top: 1px solid #333333 !important;
+      width: 280px;
+      margin: 0 auto 8px auto;
+    }
+    .doc-sig-name {
+      font-family: Georgia, 'Times New Roman', serif;
+      font-size: 11.5pt;
+      font-weight: bold;
+      color: #1a2733;
+      line-height: 1.3;
+      margin-bottom: 2px;
     }
     .doc-sig-role {
-      font-size: 0.76rem;
-      color: #4e6578;
-      font-weight: 400;
+      font-family: Georgia, 'Times New Roman', serif;
+      font-size: 10pt;
+      color: #555555;
+      line-height: 1.35;
     }
     .doc-footer-note {
-      margin-top: 2rem;
-      padding-top: 0.5rem;
-      border-top: 1px solid #e1e9f0;
-      font-size: 0.72rem;
-      color: #0e2a47;
+      margin-top: 32px;
+      padding-top: 8px;
+      border-top: 1px solid #d1dfeb;
+      font-family: Georgia, 'Times New Roman', serif;
+      font-size: 8.5pt;
+      color: #666666;
       text-align: center;
+      line-height: 1.4;
+      page-break-inside: avoid;
+      break-inside: avoid;
     }
     .anexo-page {
-      page-break-before: always;
-      break-before: page;
-      margin-top: 1.5rem;
-      padding-top: 1rem;
-      border-top: none;
-    }
-    .anexo-badge {
-      display: inline-block;
-      background: #eef8f3 !important;
-      color: #0d8a55 !important;
-      font-weight: 700;
-      font-size: 0.75rem;
-      padding: 0.25rem 0.6rem;
-      border-radius: 4px;
-      margin-bottom: 0.5rem;
-      border: 1px solid #bde6d0 !important;
+      page-break-before: always !important;
+      break-before: page !important;
+      margin-top: 0 !important;
+      padding-top: 0 !important;
+      border-top: none !important;
     }
     .medical-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 0.75rem;
-      margin: 1rem 0;
+      gap: 10px;
+      margin: 12px 0;
     }
     .medical-card {
       background: #fbfdfc;
-      border: 1px solid #d8e5ee;
-      border-radius: 8px;
-      padding: 0.65rem 0.8rem;
-      font-size: 0.82rem;
+      border: 1px solid #cbd5e1;
+      border-radius: 6px;
+      padding: 8px 12px;
+      font-size: 10.5pt;
       page-break-inside: avoid;
       break-inside: avoid;
     }
     .medical-card-title {
-      font-weight: 700;
-      color: #0e2a47;
-      margin-bottom: 0.25rem;
+      font-weight: bold;
+      color: #1B2A5E;
+      margin-bottom: 4px;
       display: flex;
       align-items: center;
-      gap: 0.35rem;
+      gap: 4px;
     }
     .medical-card-val {
       color: #1a2733;
@@ -3029,153 +3772,148 @@ table.shell-table tbody tr:hover { background: color-mix(in srgb, var(--accent) 
 </html>`;
     }
 
+    // Abre o aviso prévio explicativo para orientar sobre a escolha de "Salvar como PDF"
     function printContract() {
       const docEl = document.getElementById('contractDocument');
       if (!currentContractData || !docEl) {
         showToast('⚠️ Gere o contrato antes de imprimir.', 'error');
         return;
       }
+      openPrintGuideModal();
+    }
 
-      // Inicia toast de preparação
-      const loadingToast = showToast('Preparando documento para impressão...', 'info', 0);
-      let isFinalized = false;
-
-      // 1. Timeout máximo incondicional de segurança de 4 segundos
-      const safetyTimer = setTimeout(() => {
-        if (!isFinalized && loadingToast) {
-          loadingToast.dismiss();
-        }
-      }, 4000);
-
-      const markSuccess = () => {
-        if (isFinalized) return;
-        isFinalized = true;
-        clearTimeout(safetyTimer);
-        if (loadingToast) {
-          loadingToast.update('✅ Documento enviado para impressão.', 'success', 3000);
-        }
-      };
-
-      const markFailure = () => {
-        if (isFinalized) return;
-        isFinalized = true;
-        clearTimeout(safetyTimer);
-        if (loadingToast) {
-          loadingToast.update('⚠️ A impressão não pôde ser aberta neste visualizador. Baixe o arquivo e abra diretamente no navegador, ou pressione Ctrl+P na página do contrato.', 'error', 6000);
-        }
-      };
-
-      try {
-        // a) Montar o HTML completo 100% autônomo (SVG e imagens em data URI, sem dependências remotas)
-        const printHtml = buildPrintDocumentHtml(docEl);
-
-        // b) Tentar window.open('about:blank')
-        let printWin = null;
-        try {
-          printWin = window.open('about:blank', '_blank');
-        } catch (e) {
-          printWin = null;
-        }
-
-        if (printWin && !printWin.closed && printWin.document) {
-          let printed = false;
-          const doWinPrint = () => {
-            if (printed) return;
-            printed = true;
-            try {
-              printWin.focus();
-              printWin.print();
-            } catch (err) {
-              console.warn('Erro ao chamar print() na janela:', err);
-            }
-          };
-
-          try {
-            printWin.document.open();
-            printWin.document.write(printHtml);
-            printWin.document.close();
-
-            // Dispara por onload OU setTimeout de 500ms (o que ocorrer primeiro)
-            printWin.onload = doWinPrint;
-            setTimeout(doWinPrint, 500);
-
-            markSuccess();
-            return;
-          } catch (writeErr) {
-            console.warn('Falha ao escrever na janela aberta:', writeErr);
-            try { printWin.close(); } catch (_) {}
-          }
-        }
-
-        // c) Fallback: Se window.open foi bloqueado (null), usar iframe oculto com srcdoc
-        try {
-          let printIframe = document.getElementById('contractPrintIframe');
-          if (printIframe) {
-            printIframe.remove();
-          }
-
-          printIframe = document.createElement('iframe');
-          printIframe.id = 'contractPrintIframe';
-          printIframe.setAttribute('style', 'position:fixed; top:-9999px; left:-9999px; width:1px; height:1px; opacity:0; pointer-events:none; border:none;');
-          printIframe.srcdoc = printHtml;
-          document.body.appendChild(printIframe);
-
-          let iframePrinted = false;
-          const doIframePrint = () => {
-            if (iframePrinted) return;
-            iframePrinted = true;
-            try {
-              if (printIframe.contentWindow) {
-                printIframe.contentWindow.focus();
-                printIframe.contentWindow.print();
-              }
-            } catch (err) {
-              console.warn('Erro ao chamar print() no iframe:', err);
-              executeDirectPrintFallback(markSuccess, markFailure);
-            }
-          };
-
-          // Chama após 400ms fixos sem depender de onload
-          setTimeout(doIframePrint, 400);
-
-          // Remover o iframe após 60 segundos
-          setTimeout(() => {
-            try {
-              if (printIframe && printIframe.parentNode) {
-                printIframe.parentNode.removeChild(printIframe);
-              }
-            } catch (_) {}
-          }, 60000);
-
-          markSuccess();
-          return;
-        } catch (iframeErr) {
-          console.warn('Iframe fallback falhou:', iframeErr);
-        }
-
-        // d) Fallback final: window.print() na própria página
-        executeDirectPrintFallback(markSuccess, markFailure);
-
-      } catch (globalErr) {
-        console.error('Erro geral no processo de impressão:', globalErr);
-        markFailure();
-      } finally {
-        // Garantia de segurança adicional: nunca deixar o toast de preparação ativo
-        setTimeout(() => {
-          if (!isFinalized && loadingToast) {
-            loadingToast.dismiss();
-          }
-        }, 4100);
+    function openPrintGuideModal() {
+      const modal = document.getElementById('printGuideModal');
+      if (modal) {
+        modal.style.display = 'flex';
+      } else {
+        confirmAndExecutePrint();
       }
     }
 
-    function executeDirectPrintFallback(onSuccess, onFailure) {
+    function closePrintGuideModal() {
+      const modal = document.getElementById('printGuideModal');
+      if (modal) modal.style.display = 'none';
+    }
+
+    function confirmAndExecutePrint() {
+      closePrintGuideModal();
+      showToast('Abrindo documento para impressão...', 'info', 2800);
+      executeIframePrint();
+    }
+
+    // Execução da impressão via iframe oculto
+    function executeIframePrint() {
+      const docEl = document.getElementById('contractDocument');
+      if (!docEl) {
+        showToast('⚠️ Documento do contrato não encontrado na tela.', 'error');
+        return;
+      }
+
       try {
-        window.print();
-        if (typeof onSuccess === 'function') onSuccess();
-      } catch (err) {
-        console.error('window.print() direto falhou:', err);
-        if (typeof onFailure === 'function') onFailure();
+        const printHtml = buildPrintDocumentHtml(docEl);
+
+        // Remove iframe anterior se existir
+        let printIframe = document.getElementById('contractHiddenPrintIframe');
+        if (printIframe) {
+          try { printIframe.remove(); } catch (_) {}
+        }
+
+        // 1. Criar iframe oculto no corpo da página
+        printIframe = document.createElement('iframe');
+        printIframe.id = 'contractHiddenPrintIframe';
+        printIframe.setAttribute('style', 'position:fixed; width:0; height:0; border:0; visibility:hidden; pointer-events:none;');
+        document.body.appendChild(printIframe);
+
+        let isTriggered = false;
+        const doTriggerPrint = () => {
+          if (isTriggered) return;
+          isTriggered = true;
+
+          try {
+            const frameWin = printIframe.contentWindow;
+            if (!frameWin) throw new Error('Janela do iframe indisponível');
+
+            frameWin.focus();
+
+            // Agenda remoção segura do iframe para não interromper a janela de impressão
+            const scheduleCleanup = () => {
+              setTimeout(() => {
+                try {
+                  if (printIframe && printIframe.parentNode) {
+                    printIframe.remove();
+                  }
+                } catch (_) {}
+              }, 8000);
+            };
+
+            if ('onafterprint' in frameWin) {
+              frameWin.onafterprint = () => {
+                scheduleCleanup();
+                showToast('Diálogo de impressão finalizado.', 'success', 3000);
+              };
+            } else {
+              scheduleCleanup();
+            }
+
+            frameWin.print();
+            showToast('Janela de impressão aberta com sucesso!', 'success', 3500);
+
+          } catch (invokeErr) {
+            console.warn('Falha no print do iframe, tentando fallback:', invokeErr);
+            fallbackPrintWindow(printHtml);
+          }
+        };
+
+        // 2. Escrever documento no iframe usando contentDocument
+        const frameDoc = printIframe.contentDocument || printIframe.contentWindow?.document;
+        if (!frameDoc) {
+          throw new Error('contentDocument inacessível');
+        }
+
+        frameDoc.open();
+        frameDoc.write(printHtml);
+        frameDoc.close();
+
+        // 3. Aguardar evento load ou timeout de segurança de 300ms
+        printIframe.onload = () => {
+          setTimeout(doTriggerPrint, 150);
+        };
+        setTimeout(doTriggerPrint, 350);
+
+      } catch (globalErr) {
+        console.error('Erro no fluxo principal de impressão por iframe:', globalErr);
+        try {
+          const printHtml = buildPrintDocumentHtml(docEl);
+          fallbackPrintWindow(printHtml);
+        } catch (fbErr) {
+          showToast('Não foi possível abrir a impressão. Verifique se o navegador permite pop-ups para esta página.', 'error', 6000);
+        }
+      }
+    }
+
+    // Fallback caso o navegador restrinja iframes locais
+    function fallbackPrintWindow(printHtml) {
+      try {
+        const printWin = window.open('about:blank', '_blank');
+        if (!printWin) {
+          throw new Error('Pop-up bloqueado');
+        }
+        printWin.document.open();
+        printWin.document.write(printHtml);
+        printWin.document.close();
+        setTimeout(() => {
+          try {
+            printWin.focus();
+            printWin.print();
+            showToast('Janela de impressão aberta.', 'info', 3000);
+          } catch (e) {
+            showToast('Não foi possível abrir a impressão. Verifique se o navegador permite pop-ups para esta página.', 'error', 6000);
+          }
+        }, 400);
+      } catch (winErr) {
+        console.warn('Fallback de nova janela também falhou:', winErr);
+        showToast('Não foi possível abrir a impressão. Verifique se o navegador permite pop-ups para esta página.', 'error', 6000);
       }
     }
 
@@ -3191,7 +3929,10 @@ table.shell-table tbody tr:hover { background: color-mix(in srgb, var(--accent) 
         studentBirth: document.getElementById('studentBirth').value,
         studentGrade: document.getElementById('studentGrade').value,
         studentPeriod: document.getElementById('studentPeriod').value,
+        studentPeriodCustom: document.getElementById('studentPeriodCustom').value,
         studentShift: document.getElementById('studentShift').value,
+        studentShiftCustom: document.getElementById('studentShiftCustom').value,
+        customClauseNotes: document.getElementById('customClauseNotes').value,
 
         resp1Name: document.getElementById('resp1Name').value,
         resp1Cpf: document.getElementById('resp1Cpf').value,
@@ -3276,6 +4017,8 @@ table.shell-table tbody tr:hover { background: color-mix(in srgb, var(--accent) 
           if (d.hasResp2) {
             toggleResp2(true);
           }
+          handlePeriodChange();
+          handleShiftChange();
           calculateAge();
         }
       } catch (e) {
@@ -3287,8 +4030,11 @@ table.shell-table tbody tr:hover { background: color-mix(in srgb, var(--accent) 
       if (!confirm('Deseja realmente limpar todo o formulário? Todas as informações digitadas serão apagadas.')) return;
       document.getElementById('contractForm').reset();
       document.getElementById('studentAge').value = '';
+      handlePeriodChange();
+      handleShiftChange();
       toggleResp2(false);
       clearAllValidationErrors();
+      updateNextContractHint();
       localStorage.removeItem(STORAGE_KEY_DRAFT);
       showToast('Formulário limpo com sucesso.', 'info');
     }
