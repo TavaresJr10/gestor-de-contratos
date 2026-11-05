@@ -1042,7 +1042,7 @@ body { background: var(--bg); }
 @media (max-width: 760px) { .bar-grid { grid-template-columns: 1fr; } }
 .drop-zone { border: 2px dashed var(--border); border-radius: var(--radius); padding: 14px; text-align: center; cursor: pointer; transition: border-color .2s, background .2s; }
 .drop-zone:hover, .drop-zone.over { border-color: var(--navy); background: rgba(27,42,94,.05); }
-.logo-preview { height: 55px; max-width: 220px; object-fit: contain; }
+.logo-preview { height: 80px; width: auto; max-width: 260px; object-fit: contain; }
 .num-big { font-family: Georgia, serif; font-size: 1.6rem; font-weight: 700; color: var(--navy); letter-spacing: .04em; }
 .test-bar { background: #fff8d6; border: 2px dashed #c9a400; border-radius: var(--radius); padding: 12px 16px; }
 .section-num { display: inline-flex; width: 28px; height: 28px; align-items: center; justify-content: center; border-radius: 50%; background: var(--navy); color: #fff; font-size: .8rem; font-weight: 700; }
@@ -1070,10 +1070,10 @@ body.printing-doc #doc-root { display: block; }
 .doc-page { min-height: 240mm; }
 .doc-header { text-align: center; }
 .doc-num { text-align: right; font-size: 9pt; font-weight: 700; color: #1B2A5E; font-family: Arial, sans-serif; }
-.doc-logo { height: 55px; display: block; margin: 4px auto; }
-.doc-brand { font-size: 15pt; font-weight: 700; color: #1B2A5E; text-transform: uppercase; margin: 6px 0; }
-.doc-rule { height: 1.5px; background: #2E7D32; border: 0; margin: 6px 0 10px; }
-.doc-title { text-align: center; font-size: 10.5pt; font-weight: 700; text-transform: uppercase; color: #1B2A5E; margin-bottom: 14px; }
+.doc-logo { height: 95px; width: auto; display: block; margin: 4px auto; object-fit: contain; }
+.doc-brand { font-size: 17pt; font-weight: 700; color: #1B2A5E; text-transform: uppercase; margin: 6px 0; letter-spacing: 0.08em; }
+.doc-rule { height: 1.5px; background: #2E7D32; border: 0; margin: 8px 0 12px; }
+.doc-title { text-align: center; font-size: 12pt; font-weight: 700; text-transform: uppercase; color: #1B2A5E; margin-bottom: 14px; }
 .doc-foot { position: fixed; bottom: 0; left: 0; right: 0; text-align: center; font-size: 8.5pt; color: #777; border-top: 1px solid #2E7D32; padding-top: 4px; font-family: "Times New Roman", Georgia, serif; }
 .doc-foot-screen { position: static; margin-top: 30px; }
 .cl-title { font-weight: 700; text-transform: uppercase; color: #1B2A5E; font-size: 10.5pt; margin: 14px 0 6px; page-break-after: avoid; }
@@ -1355,14 +1355,7 @@ body.printing-doc #doc-root { display: block; }
           </div>
           <div class="field"><label for="v-venc">Dia de vencimento</label>
             <select class="input" id="v-venc"></select></div>
-          <div class="field"><label for="v-alim">Alimentação incluída</label>
-            <select class="input" id="v-alim"><option value="nao">Não</option><option value="sim">Sim</option></select></div>
-          <div class="field"><label for="v-parceiro">Parceiro de cobrança</label>
-            <select class="input" id="v-parceiro">
-              <option value="pagedu">PagEdu Bank (padrão)</option>
-              <option value="nenhum">Nenhum — cobrança direta pela escola</option>
-              <option value="outro">Outro parceiro</option>
-            </select></div>
+
           <div class="field"><label for="v-data-reserva">Data da reserva de vaga</label><input class="input" type="date" id="v-data-reserva"><span class="muted text-xs">Padrão: data de hoje.</span></div>
           <div class="field"><label for="v-forma-res">Forma de pagamento da reserva</label>
             <select class="input" id="v-forma-res">
@@ -1654,8 +1647,7 @@ body.printing-doc #doc-root { display: block; }
     $('v-desc-modo').value = 'pct';
     $('v-desc-val').value = '10';
     $('v-venc').value = '5';
-    $('v-alim').value = 'nao';
-    $('v-parceiro').value = 'pagedu';
+
     $('v-data-reserva').value = new Date().toISOString().slice(0, 10);
     $('v-forma-res').value = 'avista';
     $('v-valor-res').value = '300';
@@ -1713,7 +1705,7 @@ body.printing-doc #doc-root { display: block; }
       isencao: $('v-isencao').checked,
       descPct: desc.pct, descFinal: desc.final,
       venc: parseInt(v('v-venc'), 10) || 5,
-      alim: v('v-alim'), parceiro: v('v-parceiro'),
+
       dataReserva: v('v-data-reserva'), formaRes: v('v-forma-res'),
       valorRes: parseFloat(v('v-valor-res').replace(',', '.')) || 0,
       obs: v('v-obs')
@@ -1784,13 +1776,12 @@ body.printing-doc #doc-root { display: block; }
     var mensDescTxt = va.descPct > 0 ? brl(va.descFinal) : '';
     var matTxt = va.isencao ? '' : (va.matricula > 0 ? brl(va.matricula) : '');
     var nContr = c2 ? 'CONTRATANTE(s)' : 'CONTRATANTE';
-    var alimTxt = va.alim === 'sim'
-      ? 'A alimentação no período integral — compreendendo desjejum, almoço, lanche da tarde e jantar, conforme o horário de permanência contratado — está incluída no valor da mensalidade, observado o cardápio elaborado pela CONTRATADA com orientação nutricional adequada à faixa etária atendida.'
-      : 'A alimentação não está incluída no valor da mensalidade, devendo o(a) CONTRATANTE providenciar as refeições do(a) aluno(a) ou contratar o serviço de alimentação oferecido pela CONTRATADA, mediante valor adicional informado na tabela de serviços vigente.';
 
-    var pagParceiro = va.parceiro === 'pagedu'
-      ? '<p class="cl-item"><b class="n">3.5.</b> Fica registrado que a forma de pagamento eleita pelo(a) CONTRATANTE é operacionalizada por meio do parceiro de cobrança PagEdu Bank, com o qual a CONTRATADA mantém relação comercial para fins de registro, processamento e liquidação dos pagamentos. O pagamento efetuado por meio do parceiro produz quitação integral da parcela respectiva, vedada a cobrança em duplicidade, permanecendo a CONTRATADA integralmente responsável pela prestação dos serviços educacionais objeto deste contrato, ficando a atuação do parceiro restrita ao processamento da forma de pagamento ora registrada.</p>'
-      : (va.parceiro === 'outro' ? '<p class="cl-item"><b class="n">3.5.</b> Fica registrado que a forma de pagamento eleita pelo(a) CONTRATANTE é operacionalizada por meio de parceiro de cobrança indicado pela CONTRATADA, permanecendo esta integralmente responsável pela prestação dos serviços educacionais objeto deste contrato.</p>' : '');
+    var pagParceiro =
+      '<p class="cl-item"><b class="n">3.5.</b> A forma de pagamento eleita pelas partes é exclusivamente por meio do parceiro de cobrança PagEdu Bank, com o qual a CONTRATADA mantém relação comercial para fins de registro, processamento e liquidação dos pagamentos das mensalidades e demais valores previstos neste contrato. O(a) CONTRATANTE obriga-se a efetuar todos os pagamentos pelos canais disponibilizados pelo parceiro, vedado o pagamento diretamente à CONTRATADA.</p>' +
+      '<p class="cl-item"><b class="n">3.6.</b> O pagamento realizado por meio do PagEdu Bank produz quitação integral da parcela respectiva na data de sua confirmação pelo parceiro, vedada a cobrança em duplicidade, permanecendo a CONTRATADA integralmente responsável pela prestação dos serviços educacionais objeto deste contrato, ficando a atuação do parceiro restrita ao processamento da forma de pagamento ora registrada.</p>' +
+      '<p class="cl-item"><b class="n">3.7.</b> A CONTRATADA poderá ceder ou antecipar os créditos decorrentes deste contrato a instituição financeira ou ao próprio parceiro de cobrança, hipótese em que o(a) CONTRATANTE fica desde já cientificado(a) de que o pagamento deverá ser realizado exclusivamente ao cessionário indicado, nos termos do art. 290 e seguintes do Código Civil, sendo-lhe vedado opor ao cessionário as exceções pessoais que tivesse contra a CONTRATADA, nos limites do art. 294 do mesmo diploma.</p>' +
+      '<p class="cl-item"><b class="n">3.8.</b> O(a) CONTRATANTE declara-se ciente de que a inadimplência poderá ser comunicada ao parceiro de cobrança e a órgãos de proteção ao crédito, respondendo pelos encargos previstos na Cláusula Quarta.</p>';
 
     var isencaoTxt = va.isencao ? '<p class="cl-item"><b class="n">3.2.</b> A CONTRATADA CONCEDE ISENÇÃO da taxa de matrícula para esta matrícula, a título de cortesia, não sendo devido qualquer valor a esse título.</p>' : '';
     var descontoTxt = va.descPct > 0 ? '<p class="cl-item"><b class="n">3.3.</b> O(a) CONTRATANTE fará jus ao desconto de ' + String(va.descPct).replace('.', ',') + '% por pontualidade, desde que efetue o pagamento das mensalidades até seus respectivos vencimentos, passando cada parcela a ' + brl(va.descFinal) + '.</p>' : '';
@@ -1815,7 +1806,7 @@ body.printing-doc #doc-root { display: block; }
     '<p class="cl-item"><b class="n">1.1.</b> O presente contrato tem por objeto a prestação de serviços educacionais pela CONTRATADA ao(à) aluno(a) <b>' + esc(al.nome) + '</b>, nascido(a) em ' + esc(fmtDataBR(al.nasc)) + ', matriculado(a) na turma ' + esc(al.turma) + (alunoPeriodo.length ? ', no período ' + esc(al.periodo || '') : '') + ', durante o ano letivo de ' + esc(ano) + ', cujos efeitos jurídicos ficam condicionados ao deferimento da matrícula.</p>' +
     '<p class="cl-item"><b class="n">1.2.</b> As atividades curriculares seguirão o Plano Escolar do ano letivo de ' + esc(ano) + ', homologado pela Diretoria de Ensino, em conformidade com a legislação educacional vigente, o Regimento Interno da instituição, as normas disciplinares e o Projeto Político Pedagógico.</p>' +
     '<p class="cl-item"><b class="n">1.3.</b> Deferida a matrícula, a prestação dos serviços será realizada no período escolar contratado, não sendo autorizada a permanência do(a) aluno(a) na instituição fora desse período. Fica(m) ciente(s) o(s) ' + nContr + ' de que não haverá aulas nos meses de janeiro e julho de ' + esc(ano) + ', em razão de férias e recesso escolar, respectivamente.</p>' +
-    '<p class="cl-item"><b class="n">1.4.</b> Não estão inclusos no objeto do presente contrato e no valor da anuidade escolar: a) material didático (apostilas físicas e digitais, livros didáticos e paradidáticos e demais materiais de uso individual do aluno); b) uniforme escolar; c) atividades extracurriculares e colônia de férias, que são cobradas em separado, por não fazerem parte da grade regular; d) deslocamento, transporte escolar, passeios e atividades externas.</p>' +
+    '<p class="cl-item"><b class="n">1.4.</b> Não estão inclusos no objeto do presente contrato e no valor da anuidade escolar: a) material didático (apostilas físicas e digitais, livros didáticos e paradidáticos e demais materiais de uso individual do aluno); b) uniforme escolar; c) atividades extracurriculares e colônia de férias, que são cobradas em separado, por não fazerem parte da grade regular; d) deslocamento, transporte escolar, passeios e atividades externas; e) alimentação, compreendendo desjejum, almoço, lanche da tarde e jantar, que não está incluída no valor da mensalidade, devendo o(a) CONTRATANTE providenciar as refeições do(a) aluno(a) ou contratar o serviço de alimentação oferecido pela CONTRATADA, mediante valor adicional informado na tabela de serviços vigente.</p>' +
     '<p class="cl-item"><b class="n">1.5.</b> A CONTRATADA mantém seu horário de funcionamento das 6h30 às 19h, de segunda a sexta-feira, podendo ser ajustado em caso de feriados, recessos ou comunicados oficiais, com informação prévia aos responsáveis. A programação de períodos pedagógicos obedece à seguinte carga horária: a) Berçário — Regular: das 7h às 12h ou das 13h às 18h; Semi-Integral: das 7h às 15h ou das 10h às 18h; Integral: das 7h às 18h; b) Educação Infantil — Regular: das 7h às 12h ou das 13h às 18h; Semi-Integral: das 7h às 15h ou das 10h às 18h; Integral: das 7h às 18h; c) Período contratado: ' + esc(al.periodo || '') + (al.horario ? ', com permanência ' + esc(al.horario) : '') + '.</p>' +
     '<p class="cl-item"><b class="n">1.6.</b> A permanência do(a) aluno(a) após 30 (trinta) minutos do término do período contratado acarretará cobrança adicional de <b>R$ 85,00 (oitenta e cinco reais)</b> pela primeira meia hora excedente e de <b>R$ 60,00 (sessenta reais)</b> por hora adicional, lançadas no boleto da mensalidade subsequente, com comunicação formal aos contatos cadastrados.</p>' +
 
@@ -1830,13 +1821,12 @@ body.printing-doc #doc-root { display: block; }
     '<p class="cl-item"><b class="n">3.1.</b> Pela prestação dos serviços, o(a) CONTRATANTE pagará à CONTRATADA: a) o valor de ' + (va.isencao ? 'R$ 0,00 (isenta)' : brl(va.matricula)) + ', a título de matrícula; e b) ' + mensTxt + ', a título de mensalidade, em ' + parcelaTxt + ', com vencimento no dia ' + va.venc + ' de cada mês.</p>' +
     isencaoTxt +
     descontoTxt +
-    '<p class="cl-item"><b class="n">3.4.</b> Os boletos das mensalidades serão enviados mês a mês, por e-mail e WhatsApp, aos contatos cadastrados.</p>' +
+    '<p class="cl-item"><b class="n">3.4.</b> Os boletos das mensalidades serão enviados mês a mês, exclusivamente por e-mail, aos contatos cadastrados.</p>' +
     pagParceiro +
-    '<p class="cl-item"><b class="n">3.6.</b> Por questões de segurança de todos os envolvidos, somente serão aceitos pagamentos efetuados por boleto bancário emitido pela CONTRATADA ou por cartão de crédito ou débito, diretamente na secretaria do Colégio.</p>' +
-    '<p class="cl-item"><b class="n">3.7.</b> Os valores e descontos poderão sofrer alterações nas hipóteses de: a) indicação de novo(s) aluno(s); b) saída do(a) aluno(a) indicado(a) e/ou de irmão(s); c) atraso nos pagamentos.</p>' +
-    '<p class="cl-item"><b class="n">3.8.</b> Os valores contratados poderão ser reajustados anualmente, observando-se os seguintes critérios: a) como índice principal, a variação acumulada do IPCA/IBGE (Índice Nacional de Preços ao Consumidor Amplo) nos 12 (doze) meses anteriores ao reajuste; b) na impossibilidade de apuração do IPCA/IBGE ou em caso de sua extinção, como índice substituto, a variação acumulada do IGP-M/FGV (Índice Geral de Preços do Mercado, da Fundação Getúlio Vargas) no mesmo período; c) na hipótese de superveniência de lei ou norma que imponha índice ou data de reajuste diverso, a CONTRATADA poderá adotá-los para preservar o equilíbrio econômico-financeiro do contrato, comunicando o(a) CONTRATANTE com a maior antecedência possível.</p>' +
-    '<p class="cl-item"><b class="n">3.8.1.</b> O reajuste nos termos deste item não configura alteração contratual e não exige a celebração de aditivo, tendo as partes desde já consentido com sua aplicação nas condições previstas.</p>' +
-    '<p class="cl-item"><b class="n">3.9.</b> O não comparecimento do(a) aluno(a) às atividades escolares contratadas não dispensa o(a) CONTRATANTE do pagamento das mensalidades nem dá direito à restituição das parcelas pagas, tendo em vista a disponibilidade do serviço oferecido pela CONTRATADA.</p>' +
+    '<p class="cl-item"><b class="n">3.9.</b> Os valores e descontos poderão sofrer alterações nas hipóteses de: a) indicação de novo(s) aluno(s); b) saída do(a) aluno(a) indicado(a) e/ou de irmão(s); c) atraso nos pagamentos.</p>' +
+    '<p class="cl-item"><b class="n">3.10.</b> Os valores contratados poderão ser reajustados anualmente, observando-se os seguintes critérios: a) como índice principal, a variação acumulada do IPCA/IBGE (Índice Nacional de Preços ao Consumidor Amplo) nos 12 (doze) meses anteriores ao reajuste; b) na impossibilidade de apuração do IPCA/IBGE ou em caso de sua extinção, como índice substituto, a variação acumulada do IGP-M/FGV (Índice Geral de Preços do Mercado, da Fundação Getúlio Vargas) no mesmo período; c) na hipótese de superveniência de lei ou norma que imponha índice ou data de reajuste diverso, a CONTRATADA poderá adotá-los para preservar o equilíbrio econômico-financeiro do contrato, comunicando o(a) CONTRATANTE com a maior antecedência possível.</p>' +
+    '<p class="cl-item"><b class="n">3.10.1.</b> O reajuste nos termos deste item não configura alteração contratual e não exige a celebração de aditivo, tendo as partes desde já consentido com sua aplicação nas condições previstas.</p>' +
+    '<p class="cl-item"><b class="n">3.11.</b> O não comparecimento do(a) aluno(a) às atividades escolares contratadas não dispensa o(a) CONTRATANTE do pagamento das mensalidades nem dá direito à restituição das parcelas pagas, tendo em vista a disponibilidade do serviço oferecido pela CONTRATADA.</p>' +
 
     '<div class="cl-title">CLÁUSULA QUARTA – DA INADIMPLÊNCIA</div>' +
     '<p class="cl-item"><b class="n">4.1.</b> A falta de pagamento de qualquer parcela acarretará a automática constituição em mora do(a) CONTRATANTE, nos termos do art. 397 do Código Civil, tratando-se de dívida líquida, certa e exigível.</p>' +
@@ -1922,7 +1912,7 @@ body.printing-doc #doc-root { display: block; }
     '<p class="cl-item"><b class="n">15.5.</b> Em caso de urgência ou emergência médica, a CONTRATADA adotará as medidas imediatas de primeiros socorros disponíveis e acionará os serviços de emergência competentes (SAMU/192 ou Bombeiros/193), notificando imediatamente o(a) CONTRATANTE pelos contatos cadastrados, independentemente de autorização prévia para tanto.</p>' +
 
     '<div class="cl-title">CLÁUSULA DÉCIMA SEXTA – DA ALIMENTAÇÃO</div>' +
-    '<p class="cl-item"><b class="n">16.1.</b> ' + alimTxt + ' O(a) CONTRATANTE deverá informar, obrigatoriamente, na Ficha Médica do Aluno (Anexo I), todas as alergias alimentares, intolerâncias, restrições dietéticas ou preferências de natureza médica ou religiosa do(a) aluno(a), responsabilizando-se civil e juridicamente pelas consequências decorrentes da omissão ou da prestação de informações incorretas ou incompletas.</p>' +
+    '<p class="cl-item"><b class="n">16.1.</b> A alimentação não está incluída no valor da mensalidade. O(a) CONTRATANTE deverá providenciar as refeições do(a) aluno(a) ou contratar o serviço de alimentação oferecido pela CONTRATADA, mediante valor adicional informado na tabela de serviços vigente, observado o cardápio elaborado com orientação nutricional adequada à faixa etária atendida.</p>' +
     '<p class="cl-item"><b class="n">16.2.</b> A CONTRATADA adotará as medidas razoavelmente possíveis para adequar a alimentação fornecida às restrições informadas pelo(a) CONTRATANTE, não podendo, contudo, garantir a ausência absoluta de traços de alérgenos nas refeições preparadas em cozinha coletiva.</p>' +
     '<p class="cl-item"><b class="n">16.3.</b> A CONTRATADA não se responsabiliza por reações alérgicas ou intercorrências alimentares decorrentes: a) de restrições não informadas na Ficha Médica; b) de alimentos trazidos pelo(a) aluno(a) ou entregues por terceiros; c) de contaminação cruzada não identificável em cozinha coletiva, desde que adotadas as cautelas informadas pelo(a) CONTRATANTE.</p>' +
 
@@ -2060,8 +2050,8 @@ body.printing-doc #doc-root { display: block; }
     var body = buildDocument(d, 'contrato');
     return '<!DOCTYPE html><html lang="pt-BR"><head><meta charset="UTF-8"><title>Contrato ' + esc(d.numero) + '</title><style>body{background:#fff;font-family:"Times New Roman",Georgia,serif}' +
       '.doc-wrap{max-width:210mm;margin:0 auto;padding:1.4cm 1.6cm;font-size:10.5pt;line-height:1.45;color:#222;text-align:justify}' +
-      '.doc-num{text-align:right;font-size:9pt;font-weight:700;color:#1B2A5E}.doc-logo{height:55px;display:block;margin:4px auto}.doc-brand{font-size:15pt;font-weight:700;color:#1B2A5E;text-align:center}' +
-      '.doc-rule{height:1.5px;background:#2E7D32;border:0}.doc-title{text-align:center;font-size:10.5pt;font-weight:700;text-transform:uppercase;color:#1B2A5E;margin-bottom:14px}' +
+      '.doc-num{text-align:right;font-size:9pt;font-weight:700;color:#1B2A5E}.doc-logo{height:95px;width:auto;display:block;margin:4px auto;object-fit:contain}.doc-brand{font-size:17pt;font-weight:700;color:#1B2A5E;text-align:center;letter-spacing:0.08em}' +
+      '.doc-rule{height:1.5px;background:#2E7D32;border:0;margin:8px 0 12px}.doc-title{text-align:center;font-size:12pt;font-weight:700;text-transform:uppercase;color:#1B2A5E;margin-bottom:14px}' +
       '.cl-title{font-weight:700;text-transform:uppercase;color:#1B2A5E;margin:14px 0 6px}.cl-item{text-indent:.6cm;margin:0 0 6px}' +
       '.sig-block{text-align:center;margin-top:30px}.sig-line{width:280px;border-top:1px solid #222;margin:70px auto 0}.sig-name{font-weight:700;margin-top:4px}.sig-gap{height:60px}' +
       '.doc-foot{text-align:center;font-size:8.5pt;color:#777;border-top:1px solid #2E7D32;padding-top:4px;margin-top:30px}' +
